@@ -20,6 +20,7 @@ async function fetchFromExternalApi ( req: NextRequest ) {
 
 		const queryString = queryParams.toString()
 		const externalUrl = `${ dbApiUrl }/${ routes.join( '/' ) }${ queryString ? '?' + queryString : '' }`
+		
 		const method = req.method as string
 		let body: any = null
 		
