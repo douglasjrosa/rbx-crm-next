@@ -18,7 +18,7 @@ export default async function Home () {
 				>Wellcome</Button>
 			</Box>
 			{ users && 
-				users.map( (user: any) => <p>{ user.username }</p> ) 
+				users.map( (user: any, key: number) => <p key={key}>{ user.username }</p> ) 
 			}
 		</main>
 	)
