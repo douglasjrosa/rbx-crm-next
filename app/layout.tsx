@@ -1,17 +1,13 @@
-import { Inter } from "next/font/google"
-import { Providers } from './providers'
+import { Comfortaa } from 'next/font/google'
+import '@/app/globals.css'
 
-const inter = Inter( { subsets: [ "latin" ] } )
+const comfortaa = Comfortaa( { subsets: [ 'latin' ] } )
 
-export default function RootLayout ( {
-	children,
-}: {
-	children: React.ReactNode,
-} ) {
+export default function RootLayout ( { children }: { children: React.ReactNode } ) {
 	return (
-		<html lang='en'>
-			<body className={ inter.className }>
-				<Providers>{ children }</Providers>
+		<html lang="pt-BR">
+			<body className={ `${ comfortaa.className } text-sky-900 dark:text-white` } >
+				{ children }
 			</body>
 		</html>
 	)

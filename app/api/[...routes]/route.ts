@@ -23,7 +23,7 @@ async function fetchFromExternalApi ( req: NextRequest ) {
 		
 		const method = req.method as string
 		let body: any = null
-		
+
 		if ( [ 'POST', 'PUT', 'PATCH' ].includes( method ) ) {
 			try {
 				if ( req.headers.get( 'content-length' ) && parseInt( req.headers.get( 'content-length' ) || '0' ) > 0 ) {
@@ -46,18 +46,15 @@ async function fetchFromExternalApi ( req: NextRequest ) {
 			},
 			body
 		} )
-
+		
 		const responseData = await response.json()
 		
-		if ( !response.ok ) {
-			console.error( 'Error from external API:', responseData )
-			return NextResponse.json( { error: 'Internal Server Error' }, { status: 500 } )
-		}
-
+		if ( !response.ok ) console.error( 'Error from external API:', responseData )
+		
 		return NextResponse.json( responseData, { status: response.status, statusText: response.statusText } )
 
 	} catch ( error: any ) {
-		console.error( 'Error in handler:', error )
+		console.error( 'Error in handler:', { error } )
 		return NextResponse.json( { error: error.message || 'Internal Server Error' }, { status: 500 } )
 	}
 }
