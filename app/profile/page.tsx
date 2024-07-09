@@ -10,7 +10,7 @@ const Profile = async () => {
 	console.log({user})
 	return (
 		<div>
-			<h1 className="text-3xl font-bold mb-6">Perfil</h1>
+			<h1 className="text-3xl font-bold mb-6">{ t( 'Profile' ) }</h1>
 
 			<Card>
 				<div className="flex flex-col gap-5">
