@@ -24,9 +24,8 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 
 	const translation = translations.find( t => t.en === text )
 
-	if ( translation && translation[ locale ] ) {
+	if ( translation && translation[ locale ] )
 		return translation[ locale ]
-	} else {
+	else
 		return text
-	}
 }

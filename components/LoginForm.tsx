@@ -37,7 +37,7 @@ const LoginForm = () => {
 			localStorage.setItem( 'userId', id )
 			localStorage.setItem( 'username', username )
 
-			const userSettingsResponse = await fetch( `/api/user-settings?filters[user]=${ id }` )
+			const userSettingsResponse = await fetch( `/api/user-settings?filters[username]=${ username }` )
 			const userSettings = await userSettingsResponse.json()
 
 			const theme = userSettings.data?.[ 0 ]?.attributes?.themeMode || "light"
@@ -46,8 +46,16 @@ const LoginForm = () => {
 			localStorage.setItem( "theme", theme )
 			localStorage.setItem( "userSettingsId", userSettingsId )
 
-
-			router.push( '/dashboard' )
+			await fetch( `/api/user-settings/${ userSettingsId }`, {
+				method: 'PUT',
+				body: JSON.stringify( {
+					data: {
+						jwt
+					}
+				})
+			} )
+			
+			router.push( `/${ username }/dashboard` )
 		} catch ( error: any ) {
 			setError( t( error.message || 'An error occurred.' ) )
 		}

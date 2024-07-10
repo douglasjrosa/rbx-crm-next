@@ -11,11 +11,12 @@ interface PageProps {
 }
 
 const Profile: React.FC<PageProps> = async ( { params } ) => {
+	
 	const { username } = params;
 	const response = await fetch( `${ baseUrl }/api/user-settings?filters[username]=${ username }` )
 	const userSettingsData = await response.json()
 	const userSettings = userSettingsData.data?.[ 0 ]?.attributes
-	console.log( { userSettings })
+	
 	return (
 		<div>
 			<h1 className="text-3xl font-bold mb-6">{ t( 'Profile' ) }</h1>
