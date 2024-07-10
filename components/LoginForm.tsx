@@ -15,27 +15,37 @@ const LoginForm = () => {
 		setError( '' )
 
 		try {
-			const response = await fetch( '/api/auth/local', {
+			const authResponse = await fetch( '/api/auth/local', {
 				method: 'POST',
 				body: JSON.stringify( { identifier, password } ),
 			} )
 
-			const data = await response.json()
+			const userData = await authResponse.json()
 
-			if ( !response.ok ) {
-				const message = response.status === 400
+			if ( !authResponse.ok ) {
+				const message = authResponse.status === 400
 					? 'Invalid credentials. Please try again.'
 					: 'Login failed. Try again later.'
 
 				setError( message )
 				return
 			}
+			const { jwt, user } = userData
+			const { id, username } = user
 
-			const { jwt, user } = data
-			localStorage.setItem( 'jwt', jwt )
-			localStorage.setItem( 'username', user.username )
-			localStorage.setItem( 'phone', user.phone )
-			localStorage.setItem( 'email', user.email )
+			localStorage.setItem( 'rbxjwt', jwt )
+			localStorage.setItem( 'userId', id )
+			localStorage.setItem( 'username', username )
+
+			const userSettingsResponse = await fetch( `/api/user-settings?filters[user]=${ id }` )
+			const userSettings = await userSettingsResponse.json()
+
+			const theme = userSettings.data?.[ 0 ]?.attributes?.themeMode || "light"
+			const userSettingsId = userSettings.data?.[ 0 ]?.id
+			
+			localStorage.setItem( "theme", theme )
+			localStorage.setItem( "userSettingsId", userSettingsId )
+
 
 			router.push( '/dashboard' )
 		} catch ( error: any ) {
@@ -44,7 +54,7 @@ const LoginForm = () => {
 	}
 
 	return (
-		<form onSubmit={ handleSubmit } className="max-w-md mx-auto p-10 shadow-md">
+		<form onSubmit={ handleSubmit } className="max-w-md mx-auto">
 			<div className="mb-6">
 				<label htmlFor="identifier" className="block text-sm font-medium">
 					Email
@@ -54,7 +64,7 @@ const LoginForm = () => {
 					id="identifier"
 					value={ identifier }
 					onChange={ ( e ) => setIdentifier( e.target.value ) }
-					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-lg"
+					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-xl rounded border-sky-500"
 				/>
 			</div>
 			<div className="mb-6">
@@ -66,11 +76,11 @@ const LoginForm = () => {
 					id="password"
 					value={ password }
 					onChange={ ( e ) => setPassword( e.target.value ) }
-					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-lg"
+					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-xl rounded border-sky-500"
 				/>
 			</div>
 			{ error && <div className="mb-4 text-red-500 text-sm">{ error }</div> }
-			<button type="submit" className="w-full py-2 px-4 bg-sky-600">
+			<button type="submit" className="w-full py-2 px-4 my-4 bg-sky-600 text-white rounded">
 				Login
 			</button>
 		</form>

@@ -1,15 +1,22 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export const IsAuthenticated = () => {
+	
 	const router = useRouter()
+	const params = useParams()
 	const [ isAuthenticated, setIsauthenticated ] = useState( false )
 
 	useEffect( () => {
-		const jwt = localStorage.getItem( 'jwt' )
-		if ( !jwt ) {
+
+		const username = localStorage.getItem( 'username' )
+		const routeIsAllowed = username === params.username
+
+		const rbxjwt = localStorage.getItem( 'rbxjwt' )
+
+		if ( !rbxjwt || !routeIsAllowed ) {
 			router.push( '/login' )
 		}
 		else setIsauthenticated( true )
