@@ -1,5 +1,8 @@
 export const baseUrl = process.env.BASE_URL
 
+export const dbApiUrl = process.env.DB_API_URL as string
+export const dbApiToken = process.env.DB_API_TOKEN as string
+
 export const formatPhone = ( phone: number | string ) => {
 	const n = String( phone ).replace( /\D/g, '' )
 	let formatted = n[ 0 ] !== undefined ? '(' + n[ 0 ] : ""
