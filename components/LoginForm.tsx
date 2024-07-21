@@ -33,7 +33,7 @@ const LoginForm = () => {
 			const { jwt, user } = userData
 			const { id, username } = user
 
-			localStorage.setItem( 'rbxjwt', jwt )
+			localStorage.setItem( 'userJwt', jwt )
 			localStorage.setItem( 'userId', id )
 			localStorage.setItem( 'username', username )
 
@@ -72,7 +72,7 @@ const LoginForm = () => {
 					id="identifier"
 					value={ identifier }
 					onChange={ ( e ) => setIdentifier( e.target.value ) }
-					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-xl rounded border-sky-500"
+					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-xl rounded border-sky-500 text-gray-800"
 				/>
 			</div>
 			<div className="mb-6">
@@ -84,7 +84,7 @@ const LoginForm = () => {
 					id="password"
 					value={ password }
 					onChange={ ( e ) => setPassword( e.target.value ) }
-					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-xl rounded border-sky-500"
+					className="mt-1 block w-full border focus:outline-none focus:ring focus:ring-sky-500 px-4 py-2 text-xl rounded border-sky-500 text-gray-800"
 				/>
 			</div>
 			{ error && <div className="mb-4 text-red-500 text-sm">{ error }</div> }

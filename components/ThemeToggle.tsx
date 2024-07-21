@@ -40,7 +40,7 @@ export default function ThemeToggle () {
 			onClick={ toggleTheme }
 			className="w-fit flex"
 		>
-			<span className={ `${ textColor } ${ borderColor } border p-2 text-2xl rounded-full` } >{ theme === 'light' ? <CiDark /> : <CiLight /> }</span>
+			<span className={ `${ textColor } ${ borderColor } border text-2xl rounded-full size-11 flex items-center justify-center` } >{ theme === 'light' ? <CiDark /> : <CiLight /> }</span>
 			<span className='text-md p-3'>{ t( themeText[ theme ] ) }</span>
 		</button>
 	)

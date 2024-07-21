@@ -1,3 +1,5 @@
+// tailwind.config.js
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: [
@@ -12,11 +14,36 @@ module.exports = {
 			backgroundImage: theme => ( {
 				'porto1': "url('/porto1.jpg')",
 				'porto2': "url('/porto2.jpg')",
-				'porto3': "url('/porto3.jpg')",
-				'mapamundi1': "url('/mapamundi1.webp')"
+				'porto3': "url('/mapamundi1.webp')"
 			} )
 		},
 	},
 	darkMode: 'class', // This enables dark mode based on the 'dark' class
-	plugins: [],
+	variants: {
+		extend: {
+			backgroundColor: [ 'locked', 'show-menu' ],
+			textColor: [ 'locked', 'show-menu' ],
+			opacity: [ 'locked', 'show-menu' ],
+			pointerEvents: [ 'locked', 'show-menu' ],
+		},
+	},
+	plugins: [
+		function ( { addVariant, e } )
+		{
+			addVariant( 'locked', ( { modifySelectors, separator } ) =>
+			{
+				modifySelectors( ( { className } ) =>
+				{
+					return `.locked .${ e( `locked${ separator }${ className }` ) }`
+				} )
+			} ),
+				addVariant( 'show-menu', ( { modifySelectors, separator } ) =>
+				{
+					modifySelectors( ( { className } ) =>
+					{
+						return `.show-menu .${ e( `show-menu${ separator }${ className }` ) }`
+					} )
+				} )
+		},
+	],
 }

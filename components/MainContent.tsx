@@ -1,7 +1,9 @@
 export default function MainContent ( { children }: { children: React.ReactNode } ) {
 	return (
-		<main className="flex-1 p-6 h-screen bg-gradient-to-tr from-sky-200 to-cyan-50 dark:from-black dark:to-blue-950 dark:text-white " >
-			{ children }
-		</main>
+		<div className="relative h-[calc(100vh-4rem)] w-screen sm:w-[calc(100vw-65px)] bg-gradient-to-tl from-blue-200 to-sky-100 dark:from-black dark:to-blue-950 scrollbar">
+			<main className="flex-1 pb-6 pt-5 px-5 dark:text-white min-h-full" >
+				{ children }
+			</main>
+		</div>
 	)
 }

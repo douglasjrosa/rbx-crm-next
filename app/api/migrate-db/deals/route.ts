@@ -43,7 +43,6 @@ export const GET = async ( req: NextRequest ) => {
 		for ( const deal of responseData.data ) {
 			
 			count++
-			console.log( count )
 			
 			if ( !!deal && !deal.hasOwnProperty( "attributes" ) )
 				return NextResponse.json( { deal } )

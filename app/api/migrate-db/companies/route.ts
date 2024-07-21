@@ -122,7 +122,6 @@ export const GET = async ( req: NextRequest ) => {
 						locale: "pt-BR"
 					}
 				}
-				console.log( { newData, companyData: newData.data.companyData } )
 
 				const newCompanyUrl = `${ dbApiUrl }/companies`
 				const response = await fetch( newCompanyUrl, {

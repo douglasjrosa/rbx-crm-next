@@ -14,9 +14,9 @@ export const IsAuthenticated = () => {
 		const username = localStorage.getItem( 'username' )
 		const routeIsAllowed = username === params.username
 
-		const rbxjwt = localStorage.getItem( 'rbxjwt' )
+		const userJwt = localStorage.getItem( 'userJwt' )
 
-		if ( !rbxjwt || !routeIsAllowed ) {
+		if ( !userJwt || !routeIsAllowed ) {
 			router.push( '/login' )
 		}
 		else setIsauthenticated( true )

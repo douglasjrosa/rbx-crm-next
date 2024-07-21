@@ -1,14 +1,34 @@
-import t from "@/lib/translations"
 
-const Companies = () => {
+import t from "@/lib/translations"
+import { baseUrl, getSellerIdByUsername } from "@/lib/utils"
+
+interface CompaniesProps {
+	params: {
+		username: string
+	}
+}
+
+const Companies = async ( { params }: CompaniesProps ) => {
+
+	const { username } = params
+	const sellerId = await getSellerIdByUsername( username )
+
+	const filters = `?filters[seller][$eq]=${ sellerId }`
+	const response = await fetch( `${ baseUrl }/api/companies${ filters }&populate=*&sort=companyData.displayName:asc` )
+	const responseData = await response.json()
+
+	if ( !response.ok ) {
+		console.error( { username, response, responseData } )
+		throw new Error( "Error fetching companies: " )
+	}
+
+	const companies = responseData.data
+	const { pagination } = responseData.meta
+
 	return (
 		<div>
-			<h1 className="text-3xl font-bold mb-6">{ t( 'Companies' ) }</h1>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-				<div className="bg-white p-6 rounded shadow">
-					<h2 className="text-xl font-semibold mb-2">Empresas</h2>
-					<p className="text-gray-600">Total: 25</p>
-				</div>
+			<div className="flex">
+				<h1 className="text-3xl font-bold mb-6">{ t( 'Companies' ) }</h1>
 			</div>
 		</div>
 	)

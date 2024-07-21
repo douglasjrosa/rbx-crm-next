@@ -17,7 +17,7 @@ export default function LogoutButton () {
 			onClick={ handleLogout }
 			className="w-fit flex"
 		>
-			<span className='p-2 text-2xl border  border-sky-900 dark:border-white rounded-full'>{ <CiLogout /> }</span>
+			<span className='p-2 text-2xl border  border-sky-900 dark:border-white rounded-full size-11 flex items-center justify-center'>{ <CiLogout /> }</span>
 			<span className='text-md p-3'>{ t( "Logout" ) }</span>
 		</button>
 	)

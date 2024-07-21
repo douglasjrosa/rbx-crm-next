@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { fetchFromExternalApi } from '@/app/api/utils'
 
 export const GET = async ( req: NextRequest ) => await fetchFromExternalApi( req )
