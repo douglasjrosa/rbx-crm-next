@@ -83,15 +83,15 @@ export const GET = async ( req: NextRequest ) => {
 			const newIssuerResponseData = await newIssuerResponse.json()
 
 
-			
+
 			if ( newIssuerResponseData.meta.pagination.total === 0 ) {
-				
+
 				const newIssuerData: any = {
 					data: {
 						companyData: {
 							cnpj: CNPJ?.replace( /\D/g, '' ) || "0",
 							displayName: nome || fantasia,
-							oficialName: razao,
+							corporateReason: razao,
 							email: email,
 							ie: Ie?.replace( /\D/g, '' ) || "0",
 							country: pais,
@@ -121,7 +121,7 @@ export const GET = async ( req: NextRequest ) => {
 					},
 					body: JSON.stringify( newIssuerData )
 				} )
-				
+
 				const responseData = await response.json()
 				return NextResponse.json( { responseData } )
 				if ( response.ok ) success++

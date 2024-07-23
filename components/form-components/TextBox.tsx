@@ -1,5 +1,5 @@
 export default function (
-	{ id, label, defaultValue, placeholder, pattern, title, required, size }: {
+	{ id, label, defaultValue, placeholder, pattern, title, required, size, className }: {
 		id: string
 		label: string
 		defaultValue?: string
@@ -8,6 +8,7 @@ export default function (
 		title?: string
 		required?: boolean
 		size?: "sm" | "md" | "lg"
+		className?: string
 	}
 ) {
 
@@ -17,9 +18,10 @@ export default function (
 		lg: "w-5/6 md:w-2/3 lg:w-1/2 xl:w-2/5 2xl:w-1/3"
 	}
 
+	const classes = className ?? responsiveClasses[ size || "md" ]
 
 	return (
-		<div className={ `p-3 relative locked:opacity-70 ${ responsiveClasses[ size || "md" ] }` } >
+		<div className={ `p-3 relative locked:opacity-70 ${ classes }` } >
 			<label
 				htmlFor={ id }
 				className="absolute text-[12px] top-4 left-5 text-gray-400"

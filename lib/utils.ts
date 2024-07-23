@@ -99,7 +99,7 @@ export const getSellerIdByUsername = async ( username: string ) => {
 }
 
 export const truncateString = ( str: string, maxLength: number ) => {
-	if ( str.length > maxLength ) {
+	if ( String(str).length > maxLength ) {
 		return str.substring( 0, maxLength - 3 ) + '...'
 	}
 	return str

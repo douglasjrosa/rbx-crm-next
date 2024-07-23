@@ -15,15 +15,16 @@ interface PageProps {
 }
 
 export default async function Page ( { params }: PageProps ) {
-	
+
 	const { companyId, username } = params
 
 	const response = await fetch( `${ baseUrl }/api/companies/${ companyId }?populate=*` )
 	const responseData = await response.json()
 
 	const company = responseData.data as CompanyProps
-	const companyData = company?.attributes?.companyData || null
-	const sellerId = company?.attributes?.seller?.data?.id
+	const displayName = company.attributes?.displayName
+	const companyData = company.attributes?.companyData || null
+	const sellerId = company.attributes?.seller?.data?.id
 
 
 	return (
@@ -31,9 +32,9 @@ export default async function Page ( { params }: PageProps ) {
 			<div className="">
 				<CompanyTitle
 					companyId={ companyId }
-					displayName={ companyData.displayName }
-					oficialName={ companyData.oficialName }
-					edit={true}
+					displayName={ displayName }
+					corporateReason={ companyData.corporateReason }
+					edit={ true }
 				/>
 			</div>
 		</>

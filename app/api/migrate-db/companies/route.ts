@@ -6,9 +6,11 @@ export const GET = async ( req: NextRequest ) => {
 		let savedNow = 0
 		let savedBefore = 0
 		let pagination
+		let updatedNow = 0
+		let errors = 0
 		const year = '2024'
 		const toYear = '2024'
-		const month = '07'
+		const month = '05'
 		const toMonth = '08'
 
 		const oldCrmDbUrl = process.env.OLD_CRM_DB_URL as string
@@ -63,15 +65,65 @@ export const GET = async ( req: NextRequest ) => {
 				fantasia
 			} = company.attributes
 
-
 			const dbApiUrl = process.env.DB_API_URL as string
 			const dbApiToken = process.env.DB_API_TOKEN as string
 
+
+
+/* 
+			const companiesUrl = `${ dbApiUrl }/companies`
+
+			const responseUpdate = await fetch( `${ companiesUrl }?filters[displayName][$null]=true&pagination[page]=${ 1 }&pagination[pageSize]=10&populate=*`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${ dbApiToken }`,
+				}
+			} )
+
+			const responseUpdateData = await responseUpdate.json()
+			pagination = responseUpdateData.meta?.pagination
+			console.log( { responseUpdateData } )
+
+			for ( const company of responseUpdateData.data ) {
+				if ( !!company?.attributes?.companyData?.cnpj ) {
+
+					if ( !company.attributes?.cnpj ) {
+						const id = company?.id
+						const cnpj = company?.attributes?.companyData?.cnpj
+						const displayName = company?.attributes?.companyData?.displayName
+
+						const data = { cnpj, displayName, ...company.data?.attributes }
+
+						const responseUpdate = await fetch( `${ companiesUrl }/${ id }`, {
+							method: 'PUT',
+							headers: {
+								'Content-Type': 'application/json',
+								'Authorization': `Bearer ${ dbApiToken }`,
+							},
+							body: JSON.stringify( { data } )
+						} )
+						const responseUpdateData = await responseUpdate.json()
+						console.log( { id: responseUpdateData.data.id } )
+						savedNow++
+					}
+					else savedBefore++
+				}
+				else errors++
+			}
+
+ */
+
+
+
+
 			if ( !CNPJ ) continue
 
-			const newCompanyUrl = `${ dbApiUrl }/companies?filters[companyData][cnpj][$eq]=${ CNPJ?.replace( /\D/g, '' ) }`
+			const newCompanyUrl = `${ dbApiUrl }/companies`
 
-			const response = await fetch( newCompanyUrl, {
+
+			const response = await fetch( `${ newCompanyUrl }?filters[cnpj][$eq]=${ CNPJ?.replace( /\D/g, '' ) }&populate=*`, {
+
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -81,7 +133,29 @@ export const GET = async ( req: NextRequest ) => {
 
 			const responseData = await response.json()
 
-			if ( responseData.meta.pagination.total > 0 ) savedBefore++
+			const id = responseData.data?.[ 0 ]?.id
+			
+			if ( id ) {
+				const corporateReason = responseData.data?.[ 0 ]?.attributes?.companyData?.corporateReason
+				if ( !corporateReason ) {
+					const data = responseData.data?.[ 0 ]?.attributes
+					data.companyData.corporateReason = razao
+					const responseUpdate = await fetch( `${ newCompanyUrl }/${ id }`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${ dbApiToken }`,
+						},
+						body: JSON.stringify( { data } )
+					} )
+					const responseUpdateData = await responseUpdate.json()
+					if ( responseUpdate.ok ) {
+						updatedNow++
+						console.log( { id: responseUpdateData.data.id } )
+					} else errors++
+				}
+				else savedBefore++
+			}
 			else {
 
 				const sellerId = vendedor === "Antonio Carlos" ? 3 : (
@@ -92,10 +166,10 @@ export const GET = async ( req: NextRequest ) => {
 
 				const newData = {
 					data: {
+						cnpj: CNPJ?.replace( /\D/g, '' ) || "0",
+						displayName: nome || fantasia,
 						companyData: {
-							cnpj: CNPJ?.replace( /\D/g, '' ) || "0",
-							displayName: nome || fantasia,
-							oficialName: razao,
+							corporateReason: razao,
 							email: email,
 							ie: Ie?.replace( /\D/g, '' ) || "0",
 							country: pais,
@@ -137,7 +211,7 @@ export const GET = async ( req: NextRequest ) => {
 			}
 		}
 
-		return NextResponse.json( { savedNow, savedBefore, pagination }, { status: 200, statusText: "ok" } )
+		return NextResponse.json( { savedNow, savedBefore, updatedNow, errors, pagination }, { status: 200, statusText: "ok" } )
 
 	} catch ( error: any ) {
 		console.error( 'Error in handler:', { error } )
