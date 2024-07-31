@@ -12,9 +12,8 @@ interface DashboardPageProps {
 export default function Layout ( { children, params }: DashboardPageProps ) {
 	const { username } = params
 	return (
-		<>
+		<IsAuthenticated>
 			<ThemeScript />
-			<IsAuthenticated />
 			<div className="flex flex-col ">
 				<div className="relative w-full h-16 z-50" >
 					<Header username={ username } />
@@ -30,6 +29,6 @@ export default function Layout ( { children, params }: DashboardPageProps ) {
 					</div>
 				</div>
 			</div>
-		</>
+		</IsAuthenticated>
 	)
 }
