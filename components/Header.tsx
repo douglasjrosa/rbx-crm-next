@@ -7,7 +7,7 @@ interface SidebarProps {
 	username: string
 }
 
-export default function ( { username }: SidebarProps ) {
+export default function Header ( { username }: SidebarProps ) {
 	return (
 		<div className="w-full fixed flex items-center justify-between pl-20 bg-sky-500 dark:bg-sky-900 shadow-lg h-16">
 			<div className="bg-black bg-opacity-20 absolute left-0 w-[65px] h-full flex items-center justify-center">

@@ -37,7 +37,15 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 		{ en: "ICMS Tax payer", 'pt-BR': "Contribuinte do ICMS" },
 		{ en: "Company size", 'pt-BR': "Porte" },
 		{ en: "Save", 'pt-BR': "Salvar" },
+		{ en: "Active", 'pt-BR': "Ativo" },
 		{ en: "Complement", 'pt-BR': "Complemento" },
+		{ en: "Power to close a deal", 'pt-BR': "Poder para fechar negócio" },
+		{ en: "I don't know", 'pt-BR': "Eu não sei" },
+		{ en: "None", 'pt-BR': "Nenhum" },
+		{ en: "Influence", 'pt-BR': "Influência" },
+		{ en: "Buyer", 'pt-BR': "Comprador" },
+		{ en: "Add", 'pt-BR': "Adicionar" },
+		{ en: "Decision", 'pt-BR': "Decisão" },
 	]
 
 	const translation = translations.find( t => t.en === text )

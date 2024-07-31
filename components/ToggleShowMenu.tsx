@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { FiMenu, FiX } from "react-icons/fi"
 
 export default function ToggleShowMenu () {
@@ -14,12 +14,12 @@ export default function ToggleShowMenu () {
 		document.documentElement.classList.toggle( "show-menu", savedShowMenu )
 	}, [] )
 
-	const toggleShowMenu = () => {
+	const toggleShowMenu = useCallback( () => {
 		const newShowMenu = !showMenu
 		setShowMenu( newShowMenu )
 		localStorage.setItem( "show-menu", newShowMenu.toString() )
 		document.documentElement.classList.toggle( "show-menu", newShowMenu )
-	}
+	}, [ showMenu ] )
 
 	useEffect( () => {
 		const handleRouteChange = () => {

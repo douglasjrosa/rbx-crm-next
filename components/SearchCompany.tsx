@@ -1,14 +1,9 @@
 'use client'
 
-import { ApiCompanyCompany } from '@/lib/strapi-types/contentTypes'
+import { getSellerIdByUsername } from '@/app/api/utils'
 import t from '@/lib/translations'
-import { getSellerIdByUsername } from '@/lib/utils'
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-
-interface CompanyProps extends ApiCompanyCompany {
-	id: string | number
-}
 
 interface SearchCompanyProps {
 	username: string
@@ -17,7 +12,7 @@ interface SearchCompanyProps {
 
 const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 	const [ query, setQuery ] = useState( '' )
-	const [ companies, setCompanies ] = useState<CompanyProps[]>( [] )
+	const [ companies, setCompanies ] = useState<any[]>( [] )
 	const [ isFocused, setIsFocused ] = useState( false )
 	const dropdownRef = useRef<HTMLDivElement | null>( null )
 
@@ -27,10 +22,10 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 			if ( query.length > 2 ) {
 				const sellerId = await getSellerIdByUsername( username )
 
-				const filters = `filters[seller][$eq]=${ sellerId }&filters[companyData][displayName][$containsi]=${ query }`
-				const response = await fetch( `/api/companies?${ filters }&populate=*&sort=companyData.displayName:asc` )
+				const filters = `filters[seller][$eq]=${ sellerId }&filters[displayName][$containsi]=${ query }`
+				const response = await fetch( `/api/companies?${ filters }&populate=*&sort=displayName:asc` )
 				const responseData = await response.json()
-				const result = responseData.data as CompanyProps[]
+				const result = responseData.data
 
 				setCompanies( result )
 			} else {
@@ -39,7 +34,7 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 		}
 
 		fetchData()
-	}, [ query ] )
+	}, [ query, username ] )
 
 	const handleChange = ( e: any ) => {
 		setQuery( e.target.value )
@@ -95,7 +90,7 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 									className="group-hover:bg-violet-200 group-focus-visible:bg-violet-200 dark:group-hover:bg-slate-800 dark:group-focus-visible:bg-slate-800 dark:text-gray-400 dark:group-hover:text-white dark:group-focus-visible:text-white"
 								>
 									<div className="p-2">
-										{ company.attributes.companyData.displayName }
+										{ company.attributes.displayName }
 									</div>
 								</div>
 							</Link>

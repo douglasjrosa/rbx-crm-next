@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import t from '@/lib/translations'
 
@@ -10,7 +10,7 @@ const LoginForm = () => {
 	const [ error, setError ] = useState( '' )
 	const router = useRouter()
 
-	const handleSubmit = async ( e: React.FormEvent ) => {
+	const handleSubmit = useCallback( async ( e: React.FormEvent ) => {
 		e.preventDefault()
 		setError( '' )
 
@@ -59,7 +59,7 @@ const LoginForm = () => {
 		} catch ( error: any ) {
 			setError( t( error.message || 'An error occurred.' ) )
 		}
-	}
+	}, [ identifier, password, router ] )
 
 	return (
 		<form onSubmit={ handleSubmit } className="max-w-md mx-auto">

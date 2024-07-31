@@ -4,7 +4,7 @@ import EditButton from "./EditButton"
 export default function CompanyTitle ( { companyId, displayName, corporateReason, edit }: {
 	companyId: string
 	displayName: string
-	corporateReason: string
+	corporateReason?: string
 	edit?: boolean
 } ) {
 	return (

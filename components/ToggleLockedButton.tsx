@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { FiLock, FiUnlock } from "react-icons/fi"
 
 export default function LockedToggle () {
@@ -14,12 +14,12 @@ export default function LockedToggle () {
 		document.documentElement.classList.toggle( "locked", savedLocked )
 	}, [] )
 
-	const toggleLocked = () => {
+	const toggleLocked = useCallback( () => {
 		const newLocked = !locked
 		setLocked( newLocked )
 		localStorage.setItem( "locked", newLocked.toString() )
 		document.documentElement.classList.toggle( "locked", newLocked )
-	}
+	}, [locked] )
 
 	useEffect( () => {
 		const handleRouteChange = () => {

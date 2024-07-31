@@ -1,8 +1,8 @@
-export default function TextBox (
+export default function NumberBox (
 	{ id, label, defaultValue, placeholder, pattern, title, required, size, className }: {
 		id: string
 		label: string
-		defaultValue?: string
+		defaultValue?: number
 		placeholder?: string
 		pattern?: string
 		title?: string
@@ -30,7 +30,7 @@ export default function TextBox (
 			</label>
 			<input
 				id={ id }
-				type="text"
+				type="number"
 				className={ `px-4 pt-5 pb-2 w-full rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right` }
 				name={ id }
 				defaultValue={ defaultValue }

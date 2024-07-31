@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { CiDark, CiLight } from "react-icons/ci"
 import t from '@/lib/translations'
 
@@ -23,14 +23,14 @@ export default function ThemeToggle () {
 				} )
 			} )
 		} )()
-	}, [theme] )
+	}, [ theme ] )
 
-	const toggleTheme = () => {
+	const toggleTheme = useCallback( () => {
 		const newTheme = theme === 'light' ? 'dark' : 'light'
 		setTheme( newTheme )
 		localStorage.setItem( 'theme', newTheme )
 		document.documentElement.classList.toggle( 'dark', newTheme === 'dark' )
-	}
+	}, [ theme ] )
 
 	const textColor = theme === 'light' ? "text-sky-900" : "text-white"
 	const borderColor = theme === 'light' ? "border-sky-900" : "border-white"

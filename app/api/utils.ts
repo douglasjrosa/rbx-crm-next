@@ -1,98 +1,27 @@
-import { dbApiToken, dbApiUrl } from "@/lib/utils"
-import { NextRequest, NextResponse } from "next/server"
+import { CompanyAttributes } from "@/lib/strapi-types/companyAttributes"
+import { baseUrl, dbApiToken, dbApiUrl } from "@/lib/utils"
 
-export async function fetchFromExternalApi ( req: NextRequest ) {
-	try {
-		const { pathname, searchParams } = req.nextUrl
-		const routes = pathname.split( '/' ).filter( ( route ) => route && route !== "api" )
+export const getSellerIdByEmail = async ( email: string ): Promise<number | null> => {
 
-		const params: Record<string, string> = {}
-		searchParams.forEach( ( value, key ) => {
-			params[ key ] = value
-		} )
+	const companiesEndpoint = `${ baseUrl }/api/user-settings?filters[email][$eq]=${ email }`
 
-		const dbApiUrl = process.env.DB_API_URL as string
-		const dbApiToken = process.env.DB_API_TOKEN as string
-
-		const queryParams = new URLSearchParams()
-		for ( const [ key, value ] of Object.entries( params ) ) {
-			queryParams.append( key, value )
-		}
-
-		const queryString = queryParams.toString()
-		const externalUrl = `${ dbApiUrl }/${ routes.join( '/' ) }${ queryString ? '?' + queryString : '' }`
-
-		const method = req.method as string
-		let body: any = null
-
-		if ( [ 'POST', 'PUT', 'PATCH' ].includes( method ) ) {
-			try {
-				if ( req.headers.get( 'content-length' ) && parseInt( req.headers.get( 'content-length' ) || '0' ) > 0 ) {
-					body = await req.json()
-					body = JSON.stringify( body )
-				} else {
-					return NextResponse.json( { error: 'No body JSON received.' }, { status: 400 } )
-				}
-			} catch ( error ) {
-				console.error( 'Failed to parse JSON:', error )
-				return NextResponse.json( { error: 'Invalid JSON' }, { status: 400 } )
-			}
-		}
-
-		const response = await fetch( externalUrl, {
-			method,
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${ dbApiToken }`,
-			},
-			body
-		} )
-
-		const responseData = await response.json()
-
-		if ( !response.ok ) console.error( 'Error from external API:', responseData )
-
-		return NextResponse.json( responseData, { status: response.status, statusText: response.statusText } )
-
-	} catch ( error: any ) {
-		console.error( 'Error in handler:', { error } )
-		return NextResponse.json( { error: error.message || 'Internal Server Error' }, { status: 500 } )
-	}
-}
-
-export const getSellerIdByEmail = async ( email: string ) => {
-
-	const companiesEndpoint = `${ dbApiUrl }/user-settings?filters[email][$eq]=${ email }`
-
-	const response = await fetch( companiesEndpoint, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': `Bearer ${ dbApiToken }`,
-		}
-	} )
+	const response = await fetch( companiesEndpoint )
 	const responseData = await response.json()
 	if ( !response.ok ) console.error( 'Error from external API:', responseData )
-	return responseData.data?.[0]?.id
+	return responseData.data?.[0]?.id || null
 }
 
-export const getCompanyIdByCnpj = async ( cnpj: string | number ) => {
+export const getCompanyIdByCnpj = async ( cnpj: string | number ): Promise<number | null> => {
 	const cleanedCnpj = String( cnpj ).replace( /\D/g, '' )
 
-	const companiesEndpoint = `${ dbApiUrl }/companies?filters[companyData][cnpj][$eq]=${ cleanedCnpj }`
+	const companiesEndpoint = `${ baseUrl }/api/companies?filters[companyData][cnpj][$eq]=${ cleanedCnpj }`
 
-	const response = await fetch( companiesEndpoint, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': `Bearer ${ dbApiToken }`,
-		}
-	} )
+	const response = await fetch( companiesEndpoint )
 
 	const responseData = await response.json()
 	if ( !response.ok ) console.error( 'Error from external API:', responseData )
 
-	return responseData.data?.[ 0 ]?.id
+	return responseData.data?.[ 0 ]?.id || null
 }
 
 export const isExpired = ( datetime: string, daysToExpire: number ): boolean => {
@@ -111,21 +40,40 @@ export const parseToFloat = ( number: string | number ) => {
 	return typeof number === "number" ? number : parseFloat( String( number ).replace( /[^\d,]/g, '' ).replace( ',', '.' ) )
 }
 
-export const getIssuerByCnpj = async ( cnpj: string | number ) => {
+export const getIssuerIdByCnpj = async ( cnpj: string | number ): Promise<number | null> => {
 	const cleanedCnpj = String( cnpj ).replace( /\D/g, '' )
 
-	const issuersEndpoint = `${ dbApiUrl }/issuers?filters[company][companyData][cnpj][$eq]=${ cleanedCnpj }`
+	const issuersEndpoint = `${ baseUrl }/api/issuers?filters[company][companyData][cnpj][$eq]=${ cleanedCnpj }`
 
-	const response = await fetch( issuersEndpoint, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': `Bearer ${ dbApiToken }`,
-		}
-	} )
+	const response = await fetch( issuersEndpoint )
 
 	const responseData = await response.json()
 	if ( !response.ok ) console.error( 'Error from external API:', responseData )
 
-	return responseData.data?.[ 0 ]?.id
+	return responseData.data?.[ 0 ]?.id || null
+}
+
+
+export const getSellerIdByUsername = async ( username: string ): Promise<number | null> => {
+	const filters = `?filters[username][$eq]=${ username }`
+	const response = await fetch( `${ baseUrl }/api/user-settings${ filters }` )
+	const responseData = await response.json()
+
+	if ( !response.ok ) {
+		console.error( { username, response, responseData } )
+		throw new Error( "Error fetching user-settings: ", responseData )
+	}
+	return responseData.data?.[ 0 ]?.id || null
+}
+
+export const getCompanyAttributes = async ( companyId: string | number ): Promise<CompanyAttributes | null> => {
+
+	const response = await fetch( `${ baseUrl }/api/companies/${ companyId }?populate=*`, {
+		next: {
+			tags: [ `company-data-${ companyId }` ]
+		}
+	} )
+	const responseData = await response.json()
+
+	return responseData.data?.id ? responseData.data.attributes : null
 }

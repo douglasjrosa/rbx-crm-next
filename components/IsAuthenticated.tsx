@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export const IsAuthenticated = () => {
-	
+
 	const router = useRouter()
 	const params = useParams()
 	const [ isAuthenticated, setIsauthenticated ] = useState( false )
@@ -17,10 +17,10 @@ export const IsAuthenticated = () => {
 		const userJwt = localStorage.getItem( 'userJwt' )
 
 		if ( !userJwt || !routeIsAllowed ) {
-			router.push( '/login' )
+			router.push( '/' )
 		}
 		else setIsauthenticated( true )
-	}, [] )
+	}, [ params.username, router ] )
 
 	return (
 		<>

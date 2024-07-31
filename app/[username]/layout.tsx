@@ -9,7 +9,7 @@ interface DashboardPageProps {
 	params: { username: string }
 }
 
-export default function ( { children, params }: DashboardPageProps ) {
+export default function Layout ( { children, params }: DashboardPageProps ) {
 	const { username } = params
 	return (
 		<>

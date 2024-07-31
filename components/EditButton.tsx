@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { CiEdit } from "react-icons/ci"
 
-export default function ( { href }: { href: string } ) {
+export default function EditButton ( { href }: { href: string } ) {
 
 	const bgColors = "bg-sky-500 hover:bg-sky-600 active:bg-sky-700"
 	const darkBgColors = "dark:bg-sky-800 dark:hover:bg-sky-900 dark:active:bg-sky-950"

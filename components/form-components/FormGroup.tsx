@@ -1,4 +1,4 @@
-export default function ( { title, children }: { title: string, children: React.ReactNode } ) {
+export default function FormGroup ( { title, children }: { title: string, children: React.ReactNode } ) {
 
 	const lightTitleClasses = "border-blue-500 text-slate-100 bg-blue-500"
 	const darkTitleClasses = "dark:border-gray-500 dark:text-gray-300 dark:bg-blue-950"

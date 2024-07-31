@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { CiSquareChevLeft } from "react-icons/ci"
 
-export default function () {
+export default function GoBackButton () {
 	return (
 		<Link
 			href="./"

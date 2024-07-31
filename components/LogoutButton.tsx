@@ -2,15 +2,16 @@
 
 import t from '@/lib/translations'
 import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 import { CiLogout } from 'react-icons/ci'
 
 export default function LogoutButton () {
 	const router = useRouter()
 
-	const handleLogout = () => {
+	const handleLogout = useCallback( () => {
 		localStorage.clear()
-		router.push( '/login' )
-	}
+		router.push( '/' )
+	}, [ router ] )
 
 	return (
 		<button

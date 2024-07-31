@@ -1,6 +1,7 @@
 
+import { getSellerIdByUsername } from "@/app/api/utils"
 import t from "@/lib/translations"
-import { baseUrl, getSellerIdByUsername } from "@/lib/utils"
+import { baseUrl } from "@/lib/utils"
 
 interface CompaniesProps {
 	params: {
@@ -11,10 +12,10 @@ interface CompaniesProps {
 const Companies = async ( { params }: CompaniesProps ) => {
 
 	const { username } = params
-	const sellerId = await getSellerIdByUsername( username )
+	const sellerId = 2//await getSellerIdByUsername( username )
 
 	const filters = `?filters[seller][$eq]=${ sellerId }`
-	const response = await fetch( `${ baseUrl }/api/companies${ filters }&populate=*&sort=companyData.displayName:asc` )
+	const response = await fetch( `${ baseUrl }/api/companies${ filters }&populate=*&sort=displayName:asc` )
 	const responseData = await response.json()
 
 	if ( !response.ok ) {
