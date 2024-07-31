@@ -19,7 +19,7 @@ const SwitchButton = ( { id, label, checked, size }: SwitchButtonProps ) => {
 	}
 
 	return (
-		<div className={ `p-3 relative locked:opacity-70 flex items-center gap-2 ${ responsiveClasses[ size || "md" ] }` } >
+		<div className={ `p-3 relative locked:opacity-60 flex items-center gap-2 ${ responsiveClasses[ size || "md" ] }` } >
 			<span className="relative">
 				<input
 					id={ id }
@@ -31,9 +31,9 @@ const SwitchButton = ( { id, label, checked, size }: SwitchButtonProps ) => {
 				<label htmlFor={ id } >
 					<span
 						onClick={ () => setEnabled( !enabled ) }
-						className={ `pointer block bg-gray-600 w-12 h-6 rounded-full shadow-[inset_2px_5px_3px_0.5px_rgba(0,0,0,0.3)] ${ enabled ? "bg-green-600 locked:bg-green-900" : "bg-gray-400" }` }
+						className={ `pointer block bg-gray-600 w-12 h-6 rounded-full shadow-[inset_2px_5px_3px_0.5px_rgba(0,0,0,0.3)] ${ enabled ? "bg-green-600" : "bg-gray-400" }` }
 					>
-						<span className={ `absolute left-1 top-1 bg-white locked:bg-slate-400 w-5 h-4 rounded-full shadow-[inset_-3px_-5px_2px_0.05px_rgba(0,0,0,0.15)] transition ${ enabled ? "transform translate-x-full" : "" }` }></span>
+						<span className={ `absolute left-1 top-1 bg-white w-5 h-4 rounded-full shadow-[inset_-3px_-5px_2px_0.05px_rgba(0,0,0,0.15)] transition ${ enabled ? "transform translate-x-full" : "" }` }></span>
 					</span>
 				</label>
 			</span>

@@ -21,7 +21,7 @@ export default function NumberBox (
 	const classes = className ?? responsiveClasses[ size || "md" ]
 
 	return (
-		<div className={ `p-3 relative locked:opacity-70 ${ classes }` } >
+		<div className={ `p-3 relative ${ classes }` } >
 			<label
 				htmlFor={ id }
 				className="absolute text-[12px] top-4 left-5 text-sky-700 dark:text-sky-200"
@@ -31,7 +31,7 @@ export default function NumberBox (
 			<input
 				id={ id }
 				type="number"
-				className={ `px-4 pt-5 pb-2 w-full rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right` }
+				className={ `appearance-none px-4 pt-5 pb-2 w-full rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right` }
 				name={ id }
 				defaultValue={ defaultValue }
 				placeholder={ placeholder }

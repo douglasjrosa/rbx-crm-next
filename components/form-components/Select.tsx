@@ -26,7 +26,7 @@ export default function Select ( {
 	const classes = className ?? responsiveClasses[ size || "md" ]
 
 	return (
-		<div className={ `p-3 relative locked:opacity-70 ${ classes }` }>
+		<div className={ `p-3 relative ${ classes }` }>
 			<label htmlFor={ id } >
 				<span className="absolute text-[12px] top-4 left-5 text-sky-700 dark:text-sky-200">
 					{ label }:

@@ -1,5 +1,6 @@
 import { getCompanyAttributes } from "@/app/api/utils"
 import CompanyTitle from "@/components/CompanyTitle"
+import LocableContainer from "@/components/LockableContainer"
 import ToggleLockedButton from "@/components/ToggleLockedButton"
 
 
@@ -32,7 +33,7 @@ export default async function Layout ( { children, params }: PageProps ) {
 				/>
 			</div>
 			<div className=" my-10 relative w-full" >
-				{ children }
+				<LocableContainer>{ children }</LocableContainer>
 			</div>
 			<ToggleLockedButton />
 		</div>

@@ -12,7 +12,7 @@ import TextBox from "@/components/form-components/TextBox"
 import { CompanyAttributes } from "@/lib/strapi-types/companyAttributes"
 import t from "@/lib/translations"
 import { baseUrl, formatCEP, formatCnpj, formatIE, formatNumber, formatPhone, states } from "@/lib/utils"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { revalidateTag } from "next/cache"
 import { redirect, RedirectType } from "next/navigation"
 
 
@@ -55,8 +55,6 @@ async function updateCompanyData ( formData: FormData ) {
 	if ( !response.ok ) console.error( { responseData } )
 
 	revalidateTag( `company-data-${ id }` )
-	//revalidatePath( `/${ username }/companies/${ id }` )
-	//revalidatePath( `/${ username }/companies` )
 
 	redirect( `/${ username }/companies/${ id }`, RedirectType.replace )
 }
