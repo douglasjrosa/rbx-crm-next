@@ -24,10 +24,11 @@ const LoginForm = () => {
 
 			if ( !authResponse.ok ) {
 				const message = authResponse.status === 400
-					? 'Invalid credentials. Please try again.'
-					: 'Login failed. Try again later.'
+					? t( 'Invalid credentials. Please try again.' )
+					: t( 'Login failed. Try again later.' )
 
 				setError( message )
+				console.error( { authResponse, userData } )
 				return
 			}
 			const { jwt, user } = userData

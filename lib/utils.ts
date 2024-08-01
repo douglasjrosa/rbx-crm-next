@@ -1,7 +1,8 @@
 export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
 export const dbApiUrl = process.env.DB_API_URL as string
 export const dbApiToken = process.env.DB_API_TOKEN as string
+
+export const capitalize = ( str: string ) => ( str.charAt( 0 ).toUpperCase() + str.slice( 1 ) )
 
 export const formatNumber = ( str: number | string | undefined ) => {
 	return Number( String( str ).replace( /[^\d,]/g, "" ).replace( ",", "." ) )
@@ -11,11 +12,14 @@ export const formatPhone = ( phone: number | string | undefined ) => {
 	const n = String( formatNumber( phone ) )
 	let formatted = n[ 0 ] !== undefined ? '(' + n[ 0 ] : ""
 	formatted += n[ 1 ] !== undefined ? n[ 1 ] + ") " : ""
-	formatted += n[ 2 ] !== undefined ? n[ 2 ] + " " : ""
+	formatted += n[ 2 ] !== undefined ? n[ 2 ] : ""
+	formatted += n[ 10 ] !== undefined ? " " : ""
 	formatted += n[ 3 ] !== undefined ? n[ 3 ] : ""
 	formatted += n[ 4 ] !== undefined ? n[ 4 ] : ""
 	formatted += n[ 5 ] !== undefined ? n[ 5 ] : ""
-	formatted += n[ 6 ] !== undefined ? n[ 6 ] + "-" : ""
+	formatted += n[ 10 ] === undefined ? "-" : ""
+	formatted += n[ 6 ] !== undefined ? n[ 6 ] : ""
+	formatted += n[ 10 ] !== undefined ? "-" : ""
 	formatted += n[ 7 ] !== undefined ? n[ 7 ] : ""
 	formatted += n[ 8 ] !== undefined ? n[ 8 ] : ""
 	formatted += n[ 9 ] !== undefined ? n[ 9 ] : ""
@@ -87,7 +91,7 @@ export const formatCEP = ( cep: number | string | undefined ) => {
 }
 
 export const truncateString = ( str: string, maxLength: number ) => {
-	if ( String(str).length > maxLength ) {
+	if ( String( str ).length > maxLength ) {
 		return str.substring( 0, maxLength - 3 ) + '...'
 	}
 	return str

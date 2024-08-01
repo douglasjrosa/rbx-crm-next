@@ -1,5 +1,6 @@
-import { CompanyAttributes } from "@/lib/strapi-types/companyAttributes"
-import { baseUrl, dbApiToken, dbApiUrl } from "@/lib/utils"
+import { CompanyAttributes } from "@/lib/strapi-types/company"
+import { ContactAttributes } from "@/lib/strapi-types/contact"
+import { baseUrl } from "@/lib/utils"
 
 export const getSellerIdByEmail = async ( email: string ): Promise<number | null> => {
 
@@ -76,4 +77,16 @@ export const getCompanyAttributes = async ( companyId: string | number ): Promis
 	const responseData = await response.json()
 
 	return responseData.data?.id ? responseData.data.attributes : null
+}
+
+export const getContacts = async ( companyId: string | number ): Promise<{ id: string, attributes: ContactAttributes }[]> => {
+
+	const response = await fetch( `${ baseUrl }/api/contacts?filters[companyId]=${ companyId }`, {
+		next: {
+			tags: [ `get-contacts-${ companyId }` ]
+		}
+	} )
+	const responseData = await response.json()
+
+	return responseData.data || []
 }

@@ -1,5 +1,4 @@
 import { getCompanyAttributes } from "@/app/api/utils"
-import ContactsForm from "@/components/ContactsForm"
 import BreakRow from "@/components/form-components/BreakRow"
 import Form from "@/components/form-components/Form"
 import FormGroup from "@/components/form-components/FormGroup"
@@ -9,14 +8,15 @@ import SaveButton from "@/components/form-components/SaveButton"
 import Select from "@/components/form-components/Select"
 import SwitchButton from "@/components/form-components/SwitchButton"
 import TextBox from "@/components/form-components/TextBox"
-import { CompanyAttributes } from "@/lib/strapi-types/companyAttributes"
+import LocableContainer from "@/components/LockableContainer"
+import { CompanyAttributes } from "@/lib/strapi-types/company"
 import t from "@/lib/translations"
 import { baseUrl, formatCEP, formatCnpj, formatIE, formatNumber, formatPhone, states } from "@/lib/utils"
 import { revalidateTag } from "next/cache"
 import { redirect, RedirectType } from "next/navigation"
 
 
-async function updateCompanyData ( formData: FormData ) {
+async function handleUpdateCompanyData ( formData: FormData ) {
 	"use server"
 
 	const username = formData.get( "username" ) as string
@@ -73,7 +73,7 @@ const Page = async ( { params }: PageProps ) => {
 
 	const companyAttributes = await getCompanyAttributes( companyId )
 	if ( !companyAttributes ) throw new Error( "Error fetching company data by Id." )
-	
+
 	const {
 		displayName,
 		cnpj,
@@ -99,142 +99,136 @@ const Page = async ( { params }: PageProps ) => {
 
 
 	return (
-		<>
-			<div className="flex flex-wrap">
-				<div className="w-full lg:w-1/4 p-3">
-					<ContactsForm />
-				</div>
-				<div className="w-full lg:w-3/4 p-3">
-					<Form action={ updateCompanyData } >
-						<FormGroup title={ t( "Registration data" ) } >
-							<Hidden id="username" value={ username } />
-							<Hidden id="id" value={ companyId } />
-							<Hidden id="icmsTaxpayer" value="0" />
-							<TextBox
-								label={ t( "Name" ) }
-								id="displayName"
-								defaultValue={ displayName }
-								required={ true }
-							/>
-							<TextBox
-								label={ t( "Corporate reason" ) }
-								id="corporateReason"
-								defaultValue={ corporateReason }
-								size="lg"
-							/>
-							<TextBox
-								label="CNPJ"
-								id="cnpj"
-								placeholder="xx.xxx.xxx/xxxx-xx"
-								defaultValue={ formatCnpj( cnpj ) }
-								pattern="(\d{2}|\d{3})\.\d{3}\.\d{3}\/\d{4}-\d{2}"
-								title="Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx"
-								required={ true }
-							/>
-							<TextBox
-								label={ t( "IE" ) }
-								id="ie"
-								defaultValue={ formatIE( ie ) }
-								pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-								title="Digite um CNPJ válido no formato xxx.xxx.xxx-xx"
-							/>
-							<TextBox
-								label={ t( "CNAE" ) }
-								id="cnae"
-								defaultValue={ cnae }
-							/>
-							<TextBox
-								label={ t( "Company size" ) }
-								id="companySize"
-								defaultValue={ companySize }
-							/>
-							<SwitchButton
-								id="simplesNacional"
-								label={ t( "Simples Nacional" ) }
-								checked={ simplesNacional }
-								size="sm"
-							/>
-							<BreakRow size="xl" />
-							<TextBox
-								label={ t( "Address" ) }
-								id="address"
-								defaultValue={ address }
-							/>
-							<NumberBox
-								label={ t( "Number" ) }
-								id="addressNumber"
-								defaultValue={ addressNumber }
-								size="sm"
-							/>
-							<TextBox
-								label={ t( "Complement" ) }
-								id="addressComplement"
-								defaultValue={ addressComplement }
-								size="sm"
-							/>
-							<TextBox
-								label={ t( "Neighborhood" ) }
-								id="neighborhood"
-								defaultValue={ neighborhood }
-								size="sm"
-							/>
-							<TextBox
-								label={ t( "PostalCode" ) }
-								id="postalCode"
-								defaultValue={ formatCEP( postalCode ) }
-								size="sm"
-							/>
-							<BreakRow size="sm" />
-							<TextBox
-								label={ t( "City" ) }
-								id="city"
-								defaultValue={ city }
-							/>
-							<Select
-								label={ t( "State" ) }
-								id="state"
-								defaultValue={ state }
-								options={ states }
-							/>
-							<NumberBox
-								label={ t( "Country code" ) }
-								id="countryCode"
-								defaultValue={ countryCode }
-								size="sm"
-							/>
-							<TextBox
-								label={ t( "Country" ) }
-								id="country"
-								defaultValue={ country }
-							/>
-							<BreakRow size="xl" />
-							<TextBox
-								label={ t( "Phone" ) }
-								id="phone"
-								defaultValue={ formatPhone( phone ) }
-							/>
-							<TextBox
-								label={ t( "E-mail" ) }
-								id="email"
-								defaultValue={ email }
-							/>
-							<TextBox
-								label={ t( "Nf-e E-mail" ) }
-								id="nfeEmail"
-								defaultValue={ nfeEmail }
-							/>
-							<TextBox
-								label={ t( "Website" ) }
-								id="website"
-								defaultValue={ website }
-							/>
-							<BreakRow size="xl" />
-							<SaveButton className="mx-auto my-4" >{ t( "Save" ) }</SaveButton>
-						</FormGroup>
-					</Form>
-				</div>
-			</div>
-		</>
+
+		<LocableContainer>
+			<Form action={ handleUpdateCompanyData } >
+				<FormGroup title={ t( "Registration data" ) } >
+					<Hidden id="username" value={ username } />
+					<Hidden id="id" value={ companyId } />
+					<Hidden id="icmsTaxpayer" value="0" />
+					<TextBox
+						label={ t( "Name" ) }
+						id="displayName"
+						defaultValue={ displayName }
+						required={ true }
+					/>
+					<TextBox
+						label={ t( "Corporate reason" ) }
+						id="corporateReason"
+						defaultValue={ corporateReason }
+						size="lg"
+					/>
+					<TextBox
+						label="CNPJ"
+						id="cnpj"
+						placeholder="xx.xxx.xxx/xxxx-xx"
+						defaultValue={ formatCnpj( cnpj ) }
+						pattern="(\d{2}|\d{3})\.\d{3}\.\d{3}\/\d{4}-\d{2}"
+						title="Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx"
+						required={ true }
+					/>
+					<TextBox
+						label={ t( "IE" ) }
+						id="ie"
+						defaultValue={ formatIE( ie ) }
+						pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+						title="Digite um CNPJ válido no formato xxx.xxx.xxx-xx"
+					/>
+					<TextBox
+						label={ t( "CNAE" ) }
+						id="cnae"
+						defaultValue={ cnae }
+					/>
+					<TextBox
+						label={ t( "Company size" ) }
+						id="companySize"
+						defaultValue={ companySize }
+					/>
+					<SwitchButton
+						id="simplesNacional"
+						label={ t( "Simples Nacional" ) }
+						checked={ simplesNacional }
+						size="sm"
+					/>
+					<BreakRow size="xl" />
+					<TextBox
+						label={ t( "Address" ) }
+						id="address"
+						defaultValue={ address }
+					/>
+					<NumberBox
+						label={ t( "Number" ) }
+						id="addressNumber"
+						defaultValue={ addressNumber }
+						size="sm"
+					/>
+					<TextBox
+						label={ t( "Complement" ) }
+						id="addressComplement"
+						defaultValue={ addressComplement }
+						size="sm"
+					/>
+					<TextBox
+						label={ t( "Neighborhood" ) }
+						id="neighborhood"
+						defaultValue={ neighborhood }
+						size="sm"
+					/>
+					<TextBox
+						label={ t( "PostalCode" ) }
+						id="postalCode"
+						defaultValue={ formatCEP( postalCode ) }
+						size="sm"
+					/>
+					<BreakRow size="sm" />
+					<TextBox
+						label={ t( "City" ) }
+						id="city"
+						defaultValue={ city }
+					/>
+					<Select
+						label={ t( "State" ) }
+						id="state"
+						defaultValue={ state }
+						options={ states }
+					/>
+					<NumberBox
+						label={ t( "Country code" ) }
+						id="countryCode"
+						defaultValue={ countryCode }
+						size="sm"
+					/>
+					<TextBox
+						label={ t( "Country" ) }
+						id="country"
+						defaultValue={ country }
+					/>
+					<BreakRow size="xl" />
+					<TextBox
+						label={ t( "Phone" ) }
+						id="phone"
+						defaultValue={ formatPhone( phone ) }
+					/>
+					<TextBox
+						label={ t( "E-mail" ) }
+						id="email"
+						defaultValue={ email }
+					/>
+					<TextBox
+						label={ t( "Nf-e E-mail" ) }
+						id="nfeEmail"
+						defaultValue={ nfeEmail }
+					/>
+					<TextBox
+						label={ t( "Website" ) }
+						id="website"
+						defaultValue={ website }
+					/>
+					<BreakRow size="xl" />
+					<SaveButton className="mx-auto my-4" >{ t( "Save" ) }</SaveButton>
+				</FormGroup>
+			</Form>
+		</LocableContainer>
 	)
 }
 export default Page

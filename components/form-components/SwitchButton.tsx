@@ -2,24 +2,27 @@
 
 import { useState } from "react"
 
+type Sizes = "xs" | "sm" | "md" | "lg"
+
 interface SwitchButtonProps {
 	id: string
 	label: string
 	checked: boolean
-	size?: "sm" | "md" | "lg"
+	size?: Sizes
 }
 
 const SwitchButton = ( { id, label, checked, size }: SwitchButtonProps ) => {
 	const [ enabled, setEnabled ] = useState( checked )
 
-	const responsiveClasses: { sm: string, md: string, lg: string } = {
+	const responsiveClasses = {
+		xs: "w-fit",
 		sm: "w-2/5 sm:w-1/4 md:w-32 lg:w-44",
 		md: "w-5/6 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6",
 		lg: "w-5/6 md:w-2/3 lg:w-1/2 xl:w-2/5 2xl:w-1/3"
 	}
 
 	return (
-		<div className={ `p-3 relative locked:opacity-60 flex items-center gap-2 ${ responsiveClasses[ size || "md" ] }` } >
+		<div className={ `p-3 relative locked:opacity-60 flex items-center gap-2 ${ responsiveClasses[ ( size || "md" ) ] }` } >
 			<span className="relative">
 				<input
 					id={ id }

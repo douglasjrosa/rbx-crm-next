@@ -1,6 +1,6 @@
 import { getCompanyAttributes } from "@/app/api/utils"
 import CompanyTitle from "@/components/CompanyTitle"
-import LocableContainer from "@/components/LockableContainer"
+import ContactsForm from "@/components/ContactsForm"
 import ToggleLockedButton from "@/components/ToggleLockedButton"
 
 
@@ -14,7 +14,7 @@ interface PageProps {
 
 export default async function Layout ( { children, params }: PageProps ) {
 
-	const { companyId, username } = params
+	const { companyId } = params
 	const companyAttributes = await getCompanyAttributes( companyId )
 	if ( !companyAttributes ) throw new Error( "Error fetching company data by Id." )
 
@@ -33,9 +33,17 @@ export default async function Layout ( { children, params }: PageProps ) {
 				/>
 			</div>
 			<div className=" my-10 relative w-full" >
-				<LocableContainer>{ children }</LocableContainer>
+				<div className="flex flex-wrap">
+					<div className="w-full lg:w-1/4 p-3">
+						<ContactsForm companyId={ companyId } />
+					</div>
+					<div className="w-full lg:w-3/4 p-3">
+						{ children }
+					</div>
+				</div>
 			</div>
 			<ToggleLockedButton />
 		</div>
 	)
 }
+
