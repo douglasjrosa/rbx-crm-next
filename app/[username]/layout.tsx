@@ -14,19 +14,11 @@ export default function Layout ( { children, params }: DashboardPageProps ) {
 	return (
 		<IsAuthenticated>
 			<ThemeScript />
-			<div className="flex flex-col ">
-				<div className="relative w-full h-16 z-50" >
-					<Header username={ username } />
-				</div>
-				<div className="relative flex w-full z-40" >
-					<div className="w-[65px] hidden sm:block show-menu:block absolute sm:relative z-39">
-						<Sidebar username={ username } />
-					</div>
-					<div className="w-full sm:max-w-[calc(100%-65px)] z-38 w-100vw" >
-						<MainContent>
-							{ children }
-						</MainContent>
-					</div>
+			<div className="flex flex-col bg-gradient-to-tl from-blue-200 to-sky-100 dark:from-black dark:to-blue-950">
+				<Header username={ username } />
+				<div className="relative flex flex-row w-full h-fit z-40" >
+					<Sidebar username={ username } />
+					<MainContent>{ children }</MainContent>
 				</div>
 			</div>
 		</IsAuthenticated>

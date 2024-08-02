@@ -37,3 +37,14 @@ input::-webkit-inner-spin-button {
 input[type=number] {
 	-moz-appearance: textfield;
 }
+
+.zoom div > * {
+	font-size: 20pt;
+	width: 100% !important;
+	max-width: 600px;
+	margin: 20px auto
+}
+
+.zoom div > * > label {
+	font-size: 15pt;
+}

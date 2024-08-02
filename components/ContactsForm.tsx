@@ -43,27 +43,6 @@ export default async function ContactsForm ( { companyId }: { companyId: string 
 
 	return (
 		<>
-			{ contacts.length > 0 && (
-				<>
-					<FormGroup title={ t( "Contacts" ) } >
-						{ contacts.map( ( contact: { attributes: ContactAttributes }, index: number ) => {
-
-							const { isActive } = contact.attributes
-							
-							if ( isActive ) {
-								return (
-									<>
-										<ContactCard index={ index } contactAttributes={ contact.attributes } />
-										<BreakRow size="sm" />
-									</>
-								)
-							}
-						} ) }
-					</FormGroup>
-					<BreakRow size="xl" />
-				</>
-			) }
-
 			<LocableContainer>
 				<form action={ handleAddContact } >
 					<FormGroup title={ t( "New Contact" ) } >
@@ -117,6 +96,61 @@ export default async function ContactsForm ( { companyId }: { companyId: string 
 					</FormGroup>
 				</form>
 			</LocableContainer>
+
+			{ contacts.length > 0 && (
+				<>
+					{ contacts.map( contact => {
+
+
+						const {
+							name,
+							phone,
+							email,
+							decisionRole,
+							isActive
+						} = contact.attributes
+
+						if ( isActive ) {
+							return (
+								<div key={ `contact-${ contact.id }` } className="mt-10" >
+									<LocableContainer>
+										<form>
+											<FormGroup title={ name } className="pt-8 pb-6 px-4" >
+												<input
+													type="text"
+													name="phone"
+													placeholder={ t( "Phone" ) }
+													defaultValue={ formatPhone( phone ) }
+													className="px-4 py-1 w-full my-1 rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right"
+												/>
+												<input
+													type="text"
+													name="email"
+													placeholder={ t( "E-mail" ) }
+													defaultValue={ email }
+													className="px-4 py-1 w-full my-1 rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right"
+												/>
+												<select
+													name="decisionRole"
+													defaultValue={ decisionRole }
+													className="px-4 py-1 w-full my-1 rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right"
+												>
+													<option className="dark:bg-sky-900" value=""> { t( "I don't know" ) }</option>
+													<option className="dark:bg-sky-900" value="none"> { t( "None" ) }</option>
+													<option className="dark:bg-sky-900" value="influence"> { t( "Influence" ) }</option>
+													<option className="dark:bg-sky-900" value="decision"> { t( "Decision" ) }</option>
+												</select>
+											</FormGroup>
+										</form>
+									</LocableContainer>
+								</div>
+							)
+						}
+					} ) }
+					<BreakRow size="xl" />
+				</>
+			) }
+
 		</>
 	)
 }

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { useState, useEffect, useCallback } from "react"
 import { FiMenu, FiX } from "react-icons/fi"
 
-export default function ToggleShowMenu () {
+export default function ToggleShowMenu ( { scale }: { scale: number } ) {
 	const pathname = usePathname()
 	const [ showMenu, setShowMenu ] = useState( false )
 
@@ -38,7 +38,10 @@ export default function ToggleShowMenu () {
 			onClick={ toggleShowMenu }
 			className={ `flex block sm:hidden` }
 		>
-			<span className={ `text-white p-[5px] text-2xl rounded shadow-lg ${ bgColor }` }>
+			<span
+				className={ `text-white rounded shadow-lg ${ bgColor }` }
+				style={ { fontSize: `${ 25 * scale }px`, padding: `${ 5 * scale }px` } }
+			>
 				{ showMenu ? <FiX /> : <FiMenu /> }
 			</span>
 		</button>
