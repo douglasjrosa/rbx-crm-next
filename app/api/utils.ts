@@ -9,7 +9,7 @@ export const getSellerIdByEmail = async ( email: string ): Promise<number | null
 	const response = await fetch( companiesEndpoint )
 	const responseData = await response.json()
 	if ( !response.ok ) console.error( 'Error from external API:', responseData )
-	return responseData.data?.[0]?.id || null
+	return responseData.data?.[ 0 ]?.id || null
 }
 
 export const getCompanyIdByCnpj = async ( cnpj: string | number ): Promise<number | null> => {
@@ -79,9 +79,15 @@ export const getCompanyAttributes = async ( companyId: string | number ): Promis
 	return responseData.data?.id ? responseData.data.attributes : null
 }
 
-export const getContacts = async ( companyId: string | number ): Promise<{ id: string, attributes: ContactAttributes }[]> => {
+export const getContacts = async ( companyId: string | number, filters?: any ): Promise<{ id: string, attributes: ContactAttributes }[]> => {
 
-	const response = await fetch( `${ baseUrl }/api/contacts?filters[companyId]=${ companyId }`, {
+	let str = `filters[companyId]=${ companyId }`
+	for ( const filter in filters ) {
+		if ( filters.hasOwnProperty( filter ) ) {
+			str += `&filters[${ filter }]=${ filters[ filter ] }`
+		}
+	}
+	const response = await fetch( `${ baseUrl }/api/contacts?${ str }`, {
 		next: {
 			tags: [ `get-contacts-${ companyId }` ]
 		}

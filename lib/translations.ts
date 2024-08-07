@@ -50,6 +50,7 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 		{ en: "New Contact", 'pt-BR': "Novo contato" },
 		{ en: "Contacts", 'pt-BR': "Contatos" },
 		{ en: "Registration data", 'pt-BR': "Dados cadastrais" },
+		{ en: "Loading", 'pt-BR': "Carregando" },
 	]
 
 	const translation = translations.find( t => t.en === text )

@@ -1,4 +1,5 @@
 import { getCompanyAttributes } from "@/app/api/utils"
+import Div from "@/components/Div"
 import BreakRow from "@/components/form-components/BreakRow"
 import Form from "@/components/form-components/Form"
 import FormGroup from "@/components/form-components/FormGroup"
@@ -102,133 +103,170 @@ const Page = async ( { params }: PageProps ) => {
 
 		<LocableContainer>
 			<Form action={ handleUpdateCompanyData } >
-				<FormGroup title={ t( "Registration data" ) } >
-					<Hidden id="username" value={ username } />
-					<Hidden id="id" value={ companyId } />
-					<Hidden id="icmsTaxpayer" value="0" />
-					<TextBox
-						label={ t( "Name" ) }
-						id="displayName"
-						defaultValue={ displayName }
-						required={ true }
-					/>
-					<TextBox
-						label={ t( "Corporate reason" ) }
-						id="corporateReason"
-						defaultValue={ corporateReason }
-						size="lg"
-					/>
-					<TextBox
-						label="CNPJ"
-						id="cnpj"
-						placeholder="xx.xxx.xxx/xxxx-xx"
-						defaultValue={ formatCnpj( cnpj ) }
-						pattern="(\d{2}|\d{3})\.\d{3}\.\d{3}\/\d{4}-\d{2}"
-						title="Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx"
-						required={ true }
-					/>
-					<TextBox
-						label={ t( "IE" ) }
-						id="ie"
-						defaultValue={ formatIE( ie ) }
-						pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-						title="Digite um CNPJ válido no formato xxx.xxx.xxx-xx"
-					/>
-					<TextBox
-						label={ t( "CNAE" ) }
-						id="cnae"
-						defaultValue={ cnae }
-					/>
-					<TextBox
-						label={ t( "Company size" ) }
-						id="companySize"
-						defaultValue={ companySize }
-					/>
-					<SwitchButton
-						id="simplesNacional"
-						label={ t( "Simples Nacional" ) }
-						checked={ simplesNacional }
-						size="sm"
-					/>
+				<FormGroup title={ t( "Registration data" ) } className="bg-white bg-opacity-60" >
+					<Hidden name="username" value={ username } />
+					<Hidden name="id" value={ companyId } />
+					<Hidden name="icmsTaxpayer" value="0" />
+
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Name" ) }
+							name="displayName"
+							defaultValue={ displayName }
+							required={ true }
+						/>
+					</Div>
+					<Div size="md" className="p-3" readonly >
+						<TextBox
+							label="CNPJ"
+							name="cnpj"
+							placeholder="xx.xxx.xxx/xxxx-xx"
+							defaultValue={ formatCnpj( cnpj ) }
+							pattern="(\d{2}|\d{3})\.\d{3}\.\d{3}\/\d{4}-\d{2}"
+							title="Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx"
+							required={ true }
+						/>
+					</Div>
+					<Div size="lg" className="p-3" >
+						<TextBox
+							label={ t( "Corporate reason" ) }
+							name="corporateReason"
+							defaultValue={ corporateReason }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "IE" ) }
+							name="ie"
+							defaultValue={ formatIE( ie ) }
+							pattern="\d{3}\.\d{3}\.\d{3}.\d{3}"
+							title="Digite um CNPJ válido no formato xxx.xxx.xxx-xx"
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "CNAE" ) }
+							name="cnae"
+							defaultValue={ cnae }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Company size" ) }
+							name="companySize"
+							defaultValue={ companySize }
+						/>
+					</Div>
+					<Div size="md" className="p-3 flex items-center" >
+						<SwitchButton
+							name="simplesNacional"
+							label={ t( "Simples Nacional" ) }
+							checked={ simplesNacional }
+							size="sm"
+						/>
+					</Div>
 					<BreakRow size="xl" />
-					<TextBox
-						label={ t( "Address" ) }
-						id="address"
-						defaultValue={ address }
-					/>
-					<NumberBox
-						label={ t( "Number" ) }
-						id="addressNumber"
-						defaultValue={ addressNumber }
-						size="sm"
-					/>
-					<TextBox
-						label={ t( "Complement" ) }
-						id="addressComplement"
-						defaultValue={ addressComplement }
-						size="sm"
-					/>
-					<TextBox
-						label={ t( "Neighborhood" ) }
-						id="neighborhood"
-						defaultValue={ neighborhood }
-						size="sm"
-					/>
-					<TextBox
-						label={ t( "PostalCode" ) }
-						id="postalCode"
-						defaultValue={ formatCEP( postalCode ) }
-						size="sm"
-					/>
+					<Div size="lg" className="p-3" >
+						<TextBox
+							label={ t( "Address" ) }
+							name="address"
+							defaultValue={ address }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<NumberBox
+							label={ t( "Number" ) }
+							name="addressNumber"
+							defaultValue={ addressNumber }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Complement" ) }
+							name="addressComplement"
+							defaultValue={ addressComplement }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Neighborhood" ) }
+							name="neighborhood"
+							defaultValue={ neighborhood }
+						/>
+					</Div>
 					<BreakRow size="sm" />
-					<TextBox
-						label={ t( "City" ) }
-						id="city"
-						defaultValue={ city }
-					/>
-					<Select
-						label={ t( "State" ) }
-						id="state"
-						defaultValue={ state }
-						options={ states }
-					/>
-					<NumberBox
-						label={ t( "Country code" ) }
-						id="countryCode"
-						defaultValue={ countryCode }
-						size="sm"
-					/>
-					<TextBox
-						label={ t( "Country" ) }
-						id="country"
-						defaultValue={ country }
-					/>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "PostalCode" ) }
+							name="postalCode"
+							defaultValue={ formatCEP( postalCode ) }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "City" ) }
+							name="city"
+							defaultValue={ city }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<Select
+							label={ t( "State" ) }
+							name="state"
+							defaultValue={ state }
+							options={ states }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<NumberBox
+							label={ t( "Country code" ) }
+							name="countryCode"
+							defaultValue={ countryCode }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Country" ) }
+							name="country"
+							defaultValue={ country }
+						/>
+					</Div>
 					<BreakRow size="xl" />
-					<TextBox
-						label={ t( "Phone" ) }
-						id="phone"
-						defaultValue={ formatPhone( phone ) }
-					/>
-					<TextBox
-						label={ t( "E-mail" ) }
-						id="email"
-						defaultValue={ email }
-					/>
-					<TextBox
-						label={ t( "Nf-e E-mail" ) }
-						id="nfeEmail"
-						defaultValue={ nfeEmail }
-					/>
-					<TextBox
-						label={ t( "Website" ) }
-						id="website"
-						defaultValue={ website }
-					/>
-					<BreakRow size="xl" />
-					<SaveButton className="mx-auto my-4" >{ t( "Save" ) }</SaveButton>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Phone" ) }
+							name="phone"
+							defaultValue={ formatPhone( phone ) }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "E-mail" ) }
+							name="email"
+							defaultValue={ email }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Nf-e E-mail" ) }
+							name="nfeEmail"
+							defaultValue={ nfeEmail }
+						/>
+					</Div>
+					<Div size="md" className="p-3" >
+						<TextBox
+							label={ t( "Website" ) }
+							name="website"
+							defaultValue={ website }
+						/>
+					</Div>
+					<BreakRow size="md" />
+					<Div className="p-3 w-full flex justify-end" >
+						<SaveButton className="" >{ t( "Save" ) }</SaveButton>
+					</Div>
 				</FormGroup>
 			</Form>
-		</LocableContainer>
+		</LocableContainer >
 	)
 }
 export default Page

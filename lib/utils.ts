@@ -10,14 +10,14 @@ export const formatNumber = ( str: number | string | undefined ) => {
 
 export const formatPhone = ( phone: number | string | undefined ) => {
 	const n = String( formatNumber( phone ) )
-	let formatted = n[ 0 ] !== undefined ? '(' + n[ 0 ] : ""
+	let formatted = n[ 0 ] !== undefined && n[ 1 ] !== undefined ? '(' + n[ 0 ] : ""
 	formatted += n[ 1 ] !== undefined ? n[ 1 ] + ") " : ""
 	formatted += n[ 2 ] !== undefined ? n[ 2 ] : ""
 	formatted += n[ 10 ] !== undefined ? " " : ""
 	formatted += n[ 3 ] !== undefined ? n[ 3 ] : ""
 	formatted += n[ 4 ] !== undefined ? n[ 4 ] : ""
 	formatted += n[ 5 ] !== undefined ? n[ 5 ] : ""
-	formatted += n[ 10 ] === undefined ? "-" : ""
+	formatted += n[ 9 ] !== undefined && n[ 10 ] === undefined ? "-" : ""
 	formatted += n[ 6 ] !== undefined ? n[ 6 ] : ""
 	formatted += n[ 10 ] !== undefined ? "-" : ""
 	formatted += n[ 7 ] !== undefined ? n[ 7 ] : ""
@@ -71,9 +71,10 @@ export const formatIE = ( ie: number | string | undefined ) => {
 	formatted += n[ 5 ] !== undefined ? n[ 5 ] + "." : ""
 	formatted += n[ 6 ] !== undefined ? n[ 6 ] : ""
 	formatted += n[ 7 ] !== undefined ? n[ 7 ] : ""
-	formatted += n[ 8 ] !== undefined ? n[ 8 ] + "-" : ""
+	formatted += n[ 8 ] !== undefined ? n[ 8 ] + "." : ""
 	formatted += n[ 9 ] !== undefined ? n[ 9 ] : ""
 	formatted += n[ 10 ] !== undefined ? n[ 10 ] : ""
+	formatted += n[ 11 ] !== undefined ? n[ 11 ] : ""
 	return formatted
 }
 
@@ -126,3 +127,10 @@ export const states: Array<{ value: string; text: string }> = [
 	{ value: 'SE', text: 'Sergipe' },
 	{ value: 'TO', text: 'Tocantins' },
 ]
+
+export const refreshKey = ( name: string ) => {
+	const random = Math.floor( Math.random() * 100000000000 )
+	const date = new Date()
+	const time = date.getTime()
+	return `${ name }-${ time % random }`
+}

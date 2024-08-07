@@ -1,10 +1,11 @@
-import { truncateString } from "@/lib/utils"
+import { formatCnpj, truncateString } from "@/lib/utils"
 import EditButton from "./EditButton"
 
-export default function CompanyTitle ( { companyId, displayName, corporateReason, edit }: {
+export default function CompanyTitle ( { companyId, displayName, corporateReason, cnpj, edit }: {
 	companyId: string
 	displayName: string
 	corporateReason?: string
+	cnpj: string
 	edit?: boolean
 } ) {
 	return (
@@ -14,6 +15,7 @@ export default function CompanyTitle ( { companyId, displayName, corporateReason
 				<span className="text-xs dark:opacity-60 ml-4" >{ `Id: ${ companyId }` }</span>
 			</h1>
 			<div className="text-xs dark:opacity-80" >{ corporateReason }</div>
+			<div className="text-xs dark:opacity-80" >{ formatCnpj( cnpj ) }</div>
 			{ edit && <EditButton href={ `${ companyId }/edit` } /> }
 		</div>
 	)

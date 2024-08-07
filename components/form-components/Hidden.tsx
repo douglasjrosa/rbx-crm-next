@@ -1,5 +1,5 @@
-export default function Hidden ( { id, value }: { id: string, value: string} ) {
+export default function Hidden ( { name, value }: { name: string, value: string} ) {
 	return (
-		<input type="hidden" id={ id } name={ id } value={ value } />
+		<input type="hidden" name={ name } value={ value } />
 	)
 }

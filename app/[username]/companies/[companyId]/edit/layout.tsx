@@ -20,16 +20,18 @@ export default async function Layout ( { children, params }: PageProps ) {
 
 	const {
 		displayName,
-		corporateReason
+		corporateReason,
+		cnpj
 	} = companyAttributes
 
 	return (
-		<div className="container">
+		<div className="mx-auto">
 			<div className="">
 				<CompanyTitle
 					companyId={ companyId }
 					displayName={ displayName }
 					corporateReason={ corporateReason }
+					cnpj={ cnpj }
 				/>
 			</div>
 			<div className=" my-10 relative w-full" >
