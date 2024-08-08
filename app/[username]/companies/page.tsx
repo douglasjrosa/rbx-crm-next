@@ -1,5 +1,7 @@
 
 import { getSellerIdByUsername } from "@/app/api/utils"
+import NewCompanyForm from "@/components/NewCompanyForm"
+import ToggleLockedButton from "@/components/ToggleLockedButton"
 import t from "@/lib/translations"
 import { baseUrl } from "@/lib/utils"
 
@@ -12,7 +14,7 @@ interface CompaniesProps {
 const Companies = async ( { params }: CompaniesProps ) => {
 
 	const { username } = params
-	const sellerId = 2//await getSellerIdByUsername( username )
+	const sellerId = await getSellerIdByUsername( username )
 
 	const filters = `?filters[seller][$eq]=${ sellerId }`
 	const response = await fetch( `${ baseUrl }/api/companies${ filters }&populate=*&sort=displayName:asc` )
@@ -27,10 +29,20 @@ const Companies = async ( { params }: CompaniesProps ) => {
 	const { pagination } = responseData.meta
 
 	return (
-		<div>
-			<div className="flex">
-				<h1 className="text-3xl font-bold mb-6">{ t( 'Companies' ) }</h1>
+		<div className="mx-auto">
+			<div className="w-full flex justify-between">
+				<h1 className="text-2xl">{ t( "Companies" ) }</h1>
+				<NewCompanyForm username={ username } sellerId={ sellerId } />
 			</div>
+			<div className=" my-10 relative w-full" >
+				<div className="flex flex-wrap">
+					<div className="w-full lg:w-3/4 p-3">
+					</div>
+					<div className="w-full lg:w-1/4 p-3">
+					</div>
+				</div>
+			</div>
+			<ToggleLockedButton />
 		</div>
 	)
 }

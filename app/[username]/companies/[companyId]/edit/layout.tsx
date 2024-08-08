@@ -1,4 +1,4 @@
-import { getCompanyAttributes } from "@/app/api/utils"
+import { getCompanyAttributesById } from "@/app/api/utils"
 import CompanyTitle from "@/components/CompanyTitle"
 import ContactsForm from "@/components/ContactsForm"
 import ToggleLockedButton from "@/components/ToggleLockedButton"
@@ -15,7 +15,7 @@ interface PageProps {
 export default async function Layout ( { children, params }: PageProps ) {
 
 	const { companyId } = params
-	const companyAttributes = await getCompanyAttributes( companyId )
+	const companyAttributes = await getCompanyAttributesById( companyId )
 	if ( !companyAttributes ) throw new Error( "Error fetching company data by Id." )
 
 	const {

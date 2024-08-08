@@ -1,9 +1,11 @@
+import { ContactAttributes } from "./contact"
+
 export interface CompanyAttributes {
 	displayName: string
-	cnpj: string
-	ie?: string
-	postalCode?: string
-	contacts?: any // Defina o tipo correto se necessário
+	cnpj: `${ number }`
+	ie?: `${ number }`
+	postalCode?: `${ number }`
+	contacts?: ContactAttributes
 	isActive?: boolean
 	seller?: any // Defina o tipo correto se necessário
 	creditLimit?: number
@@ -21,9 +23,9 @@ export interface CompanyAttributes {
 	state?: string
 	website?: string
 	nfeEmail?: string
-	phone?: string
+	phone?: `${ number }`
 	icmsTaxpayer?: string
-	cnae?: string
+	cnae?: `${ number }`
 	companySize?: string
-	simplesNacional: boolean
+	simplesNacional?: boolean
 }

@@ -6,8 +6,13 @@ export default function FormGroup ( { title, className, children }: { title: str
 	const lightBorderClasses = "border-blue-500"
 	const darkBorderClasses = "dark:border-gray-500"
 
+	const lightBgClasses = "bg-white bg-opacity-60"
+	const darkBgClasses = "dark:bg-violet-950 dark:bg-opacity-30"
+
+	const defaultClasses = "relative pt-12 pb-6 shadow-xl w-full border rounded-lg"
+
 	return (
-		<div className={ `relative pt-12 pb-6 shadow-xl w-full border rounded-lg ${ lightBorderClasses } ${ darkBorderClasses } ${ className }` } >
+		<div className={ `${ defaultClasses } ${ lightBgClasses } ${ darkBgClasses } ${ lightBorderClasses } ${ darkBorderClasses } ${ className }` } >
 			<h2 className={ `absolute top-[-20px] left-8 py-1 px-4 rounded-lg border text-lg ${ lightTitleClasses } ${ darkTitleClasses }` } >{ title }</h2>
 			<div className="flex flex-wrap justify-start h-fit">
 				{ children }

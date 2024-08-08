@@ -1,8 +1,7 @@
 import t from "@/lib/translations"
 import Select from "./form-components/Select"
-import TextBox from "./form-components/TextBox"
+import Input from "./form-components/Input"
 import SaveButton from "./form-components/SaveButton"
-import EmailBox from "./form-components/EmailBox"
 import { baseUrl, formatNumber, formatPhone, refreshKey } from "@/lib/utils"
 import { ContactAttributes } from "@/lib/strapi-types/contact"
 import { revalidateTag } from "next/cache"
@@ -68,30 +67,30 @@ export default async function ContactsForm ( { companyId }: { companyId: string 
 						]
 
 						return (
-							<div key={ `contact-${index}` } className="w-full max-w-xs p-3 lg:p-0" >
+							<div key={ `contact-${ index }` } className="w-full max-w-xs p-3 lg:p-0" >
 								<LocableContainer>
 									<form action={ handleUpdateContact } >
 										<Hidden name="id" value={ contact.id } />
 										<Card className="" >
 											<Div className="w-full" readonly={ true } >
-												<TextBox
-													index={ index }
+												<Input
+													type="text"
 													name="name"
 													placeholder={ t( "Name" ) }
 													defaultValue={ name }
 												/>
 											</Div>
 											<Div className="w-full" readonly={ true } >
-												<TextBox
-													index={ index }
+												<Input
+													type="text"
 													name="phone"
 													placeholder={ t( "Phone" ) }
 													defaultValue={ formatPhone( phone ) }
 												/>
 											</Div>
 											<Div className="w-full" readonly={ true } >
-												<EmailBox
-													index={ index }
+												<Input
+													type="email"
 													name="email"
 													placeholder={ t( "E-mail" ) }
 													defaultValue={ email }
@@ -99,7 +98,6 @@ export default async function ContactsForm ( { companyId }: { companyId: string 
 											</Div>
 											<Div className="w-full" readonly={ true } >
 												<Select
-													index={ index }
 													name="decisionRole"
 													defaultValue={ decisionRole }
 													options={ options }
@@ -108,7 +106,6 @@ export default async function ContactsForm ( { companyId }: { companyId: string 
 											<BreakRow size="sm" />
 											<Div className="flex" >
 												<SwitchButton
-													index={ refreshKey( "isActive" ) }
 													name="isActive"
 													label={ t( "Active" ) }
 													checked={ !!isActive }

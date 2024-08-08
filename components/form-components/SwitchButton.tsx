@@ -1,4 +1,5 @@
 "use client"
+import { refreshKey } from "@/lib/utils"
 import { useState, useEffect, useCallback } from "react"
 
 type Sizes = "xs" | "sm" | "md" | "lg"
@@ -25,6 +26,8 @@ const SwitchButton = ( { index, name, label, checked, size }: SwitchButtonProps 
 		lg: ""
 	}
 
+	const uid = refreshKey( name )
+
 	return (
 		<div
 			key={ index }
@@ -32,14 +35,14 @@ const SwitchButton = ( { index, name, label, checked, size }: SwitchButtonProps 
 		>
 			<span className="relative">
 				<input
-					id={ `${ name }-${ index ?? "" }` }
+					id={ uid }
 					name={ name }
 					type="checkbox"
 					className="sr-only"
 					checked={ enabled }
 					onChange={ () => setEnabled( !enabled ) }
 				/>
-				<label htmlFor={ `${ name }-${ index ?? "" }` }>
+				<label htmlFor={ uid }>
 					<span
 						className={ `pointer block bg-gray-600 w-12 h-6 rounded-full shadow-[inset_2px_5px_3px_0.5px_rgba(0,0,0,0.3)] ${ enabled ? "bg-green-600" : "bg-gray-400" }` }
 					>

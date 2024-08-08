@@ -2,9 +2,9 @@ export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 export const dbApiUrl = process.env.DB_API_URL as string
 export const dbApiToken = process.env.DB_API_TOKEN as string
 
-export const capitalize = ( str: string ) => ( str.charAt( 0 ).toUpperCase() + str.slice( 1 ) )
+export const capitalize = ( str: string ): string => ( str.charAt( 0 ).toUpperCase() + str.slice( 1 ) )
 
-export const formatNumber = ( str: number | string | undefined ) => {
+export const formatNumber = ( str: number | string | undefined ): number => {
 	return Number( String( str ).replace( /[^\d,]/g, "" ).replace( ",", "." ) )
 }
 
@@ -27,7 +27,7 @@ export const formatPhone = ( phone: number | string | undefined ) => {
 	return formatted
 }
 
-export const formatCnpj = ( cnpj: number | string | undefined ) => {
+export const formatCnpj = ( cnpj: number | string | undefined ): string => {
 	const n = String( formatNumber( cnpj ) )
 	let formatted = ''
 	formatted += n.length === 13 ? '0' : ''
@@ -61,7 +61,7 @@ export const formatCnpj = ( cnpj: number | string | undefined ) => {
 	return formatted
 }
 
-export const formatIE = ( ie: number | string | undefined ) => {
+export const formatIE = ( ie: number | string | undefined ): string => {
 	const n = String( formatNumber( ie ) )
 	let formatted = n[ 0 ] !== undefined ? n[ 0 ] : ""
 	formatted += n[ 1 ] !== undefined ? n[ 1 ] : ""
@@ -78,7 +78,7 @@ export const formatIE = ( ie: number | string | undefined ) => {
 	return formatted
 }
 
-export const formatCEP = ( cep: number | string | undefined ) => {
+export const formatCEP = ( cep: number | string | undefined ): string => {
 	const n = String( formatNumber( cep ) )
 	let formatted = n[ 0 ] !== undefined ? n[ 0 ] : ""
 	formatted += n[ 1 ] !== undefined ? n[ 1 ] + "." : ""
@@ -91,7 +91,7 @@ export const formatCEP = ( cep: number | string | undefined ) => {
 	return formatted
 }
 
-export const truncateString = ( str: string, maxLength: number ) => {
+export const truncateString = ( str: string, maxLength: number ): string => {
 	if ( String( str ).length > maxLength ) {
 		return str.substring( 0, maxLength - 3 ) + '...'
 	}
@@ -128,7 +128,7 @@ export const states: Array<{ value: string; text: string }> = [
 	{ value: 'TO', text: 'Tocantins' },
 ]
 
-export const refreshKey = ( name: string ) => {
+export const refreshKey = ( name: string ): string => {
 	const random = Math.floor( Math.random() * 100000000000 )
 	const date = new Date()
 	const time = date.getTime()

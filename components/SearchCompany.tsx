@@ -59,6 +59,7 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route, scale }
 	return (
 		<div className="relative max-w-xs mx-3 justify-self-end">
 			<input
+				id="searchCompany"
 				type="text"
 				value={ query }
 				onChange={ handleChange }

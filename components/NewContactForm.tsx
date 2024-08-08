@@ -1,9 +1,8 @@
 import t from "@/lib/translations"
 import Div from "./Div"
 import BreakRow from "./form-components/BreakRow"
-import EmailBox from "./form-components/EmailBox"
 import FormGroup from "./form-components/FormGroup"
-import TextBox from "./form-components/TextBox"
+import Input from "./form-components/Input"
 import Select from "./form-components/Select"
 import SaveButton from "./form-components/SaveButton"
 import { ContactAttributes } from "@/lib/strapi-types/contact"
@@ -37,9 +36,10 @@ export default async function NewContactForm ( { companyId }: { companyId: strin
 	return (
 		<Div className="max-w-xs" >
 			<form action={ handleAddContact } >
-				<FormGroup title={ t( "New Contact" ) } className="pt-8 pb-6 px-4 bg-white bg-opacity-60" >
+				<FormGroup title={ t( "New Contact" ) } className="pt-8 pb-6 px-4" >
 					<Div className="w-full" >
-						<TextBox
+						<Input
+							type="text"
 							label={ t( "Name" ) }
 							name="name"
 							className="w-full"
@@ -48,7 +48,8 @@ export default async function NewContactForm ( { companyId }: { companyId: strin
 					</Div>
 					<BreakRow size="sm" />
 					<Div className="w-full" >
-						<TextBox
+						<Input
+							type="text"
 							label={ t( "Phone" ) }
 							name="phone"
 							className="w-full"
@@ -58,7 +59,8 @@ export default async function NewContactForm ( { companyId }: { companyId: strin
 					</Div>
 					<BreakRow size="sm" />
 					<Div className="w-full" >
-						<EmailBox
+						<Input
+							type="email"
 							label={ t( "E-mail" ) }
 							name="email"
 							className="w-full"
