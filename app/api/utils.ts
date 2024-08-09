@@ -122,7 +122,6 @@ export const getCompanyDataFromReceitaByCnpj = async (
 	cnpj: `${ number }`
 ): Promise<CompanyAttributes | { error: string }> => {
 
-	console.log({cnpj})
 	const receitaData = await fetchReceitaByCnpj( cnpj )
 
 	if ( !receitaData ) {

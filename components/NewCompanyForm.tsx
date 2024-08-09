@@ -73,13 +73,20 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 		}
 	}, [ username, sellerId ] )
 
+	const buttonClasses = formIsVisible
+		? "bg-red-700 rounded-lg"
+		: "bg-green-500 rounded-full"
+
 	return (
 		<Div>
 			<div className="max-w-xs fixed right-4 top-20" >
 				<div className="w-full flex justify-end mb-4">
-					<button className="text-[32pt]" onClick={ () => setFormIsVisible( !formIsVisible ) } >
-						{ formIsVisible && <IoMdClose className="bg-red-700 rounded-lg border border-4 border-white" /> }
-						{ !formIsVisible && <IoMdAdd className="bg-green-500 rounded-full border border-4 border-white" /> }
+					<button
+						className={ `${ buttonClasses } text-[32pt] text-white border border-4 border-white shadow-[3px_3px_8px_2px_rgba(0,0,0,0.3)]` }
+						onClick={ () => setFormIsVisible( !formIsVisible ) }
+					>
+						{ formIsVisible && <IoMdClose /> }
+						{ !formIsVisible && <IoMdAdd /> }
 					</button>
 				</div>
 				{ formIsVisible &&
