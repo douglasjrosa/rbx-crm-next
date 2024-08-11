@@ -55,8 +55,12 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 		}, 200 )
 	}
 
+	const layoutClasses = "w-full px-4 py-1"
+	const bgClasses = "bg-white bg-opacity-60 dark:bg-opacity-20 dark:focus:bg-opacity-10 focus:bg-opacity-100 placeholder-gray-500 dark:placeholder-gray-300"
+	const appearenceClasses = "rounded-md focus:outline-none text-xl"
+
 	return (
-		<div className="relative max-w-xs mx-3 justify-self-end">
+		<div className="relative max-w-xs mx-3 justify-self-end flex items-center">
 			<input
 				id="searchCompany"
 				type="text"
@@ -65,13 +69,11 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 				onFocus={ handleFocus }
 				onBlur={ handleBlur }
 				placeholder={ t( "Search company" ) }
-				className="w-full p-2 rounded-md focus:outline-none bg-white bg-opacity-60 dark:bg-opacity-20 dark:focus:bg-opacity-10 focus:bg-opacity-100 placeholder-gray-500 dark:placeholder-gray-300"
+				className={ `${ layoutClasses } ${ bgClasses } ${ appearenceClasses }` }
 				tabIndex={ 100 }
-				style={ {
-					fontSize: "20px", padding: "8px 20px" } }
 			/>
 			<svg
-				className="pointer-events-none absolute right-4 top-2 fill-sky-700 dark:fill-white"
+				className="pointer-events-none absolute right-2 top-1 sm:top-2 fill-sky-700 dark:fill-white"
 				xmlns="http://www.w3.org/2000/svg"
 				style={ { fontSize: "20px", height: "25px", width: "25px" } }
 			>
@@ -80,7 +82,7 @@ const SearchCompany: React.FC<SearchCompanyProps> = ( { username, route } ) => {
 			{ companies?.length > 0 && isFocused && (
 				<div
 					ref={ dropdownRef }
-					className="absolute left-0 right-0 z-10 mt-2 dark:bg-slate-950 bg-white bg-opacity-90 rounded-md shadow-lg max-h-60 overflow-y-auto"
+					className="absolute top-10 left-0 right-0 z-10 mt-2 dark:bg-slate-950 bg-white bg-opacity-90 rounded-md shadow-lg max-h-60 overflow-y-auto"
 				>
 					{ companies.map( ( company, index ) => {
 						return (

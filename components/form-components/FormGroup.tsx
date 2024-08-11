@@ -6,8 +6,8 @@ export default function FormGroup ( { title, className, children }: { title: str
 	const lightBorderClasses = "border-blue-500"
 	const darkBorderClasses = "dark:border-gray-500"
 
-	const lightBgClasses = "bg-white bg-opacity-60"
-	const darkBgClasses = "dark:bg-violet-950 dark:bg-opacity-30"
+	const lightBgClasses = "bg-gray-100"
+	const darkBgClasses = "dark:bg-gradient-to-tl from-slate-900 to-sky-900"
 
 	const defaultClasses = "relative pt-12 pb-6 shadow-xl w-full border rounded-lg"
 

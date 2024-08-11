@@ -62,6 +62,7 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 		{ en: "Enter the I.E. in the format xxx.xxx.xxx.xxx.", 'pt-BR': "Digite a I.E. no formato xxx.xxx.xxx.xxx." },
 		{ en: "Enter a valid CNPJ in the format xx.xxx.xxx/xxxx-xx.", 'pt-BR': "Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx." },
 		{ en: "Choose an option.", 'pt-BR': "Escolha uma opção" },
+		{ en: "Short Name", 'pt-BR': "Nome Curto" },
 		{ en: "Reason", 'pt-BR': "Motivo" },
 	]
 

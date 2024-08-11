@@ -14,7 +14,7 @@ export default function Input ( {
 			{ label &&
 				<label
 					htmlFor={ uid }
-					className="absolute text-[12px] top-0 left-2 text-sky-700 dark:text-sky-200"
+					className="absolute text-[12px] top-0 left-2 text-sky-700 dark:text-sky-100"
 				>
 					{ label }:
 				</label>

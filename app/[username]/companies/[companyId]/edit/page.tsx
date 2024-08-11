@@ -14,6 +14,11 @@ import t from "@/lib/translations"
 import { baseUrl, formatCEP, formatCnpj, formatIE, formatNumber, formatPhone, states } from "@/lib/utils"
 import { revalidateTag } from "next/cache"
 import { redirect, RedirectType } from "next/navigation"
+import CNPJ from "@/components/form-components/CNPJ"
+import IE from "@/components/form-components/IE"
+import PHONE from "@/components/form-components/PHONE"
+import CNAE from "@/components/form-components/CNAE"
+import CEP from "@/components/form-components/CEP"
 
 
 async function handleUpdateCompanyData ( formData: FormData ) {
@@ -117,14 +122,8 @@ const Page = async ( { params }: PageProps ) => {
 						/>
 					</Div>
 					<Div size="md" className="p-3" readonly >
-						<Input
-							type="text"
-							label="CNPJ"
-							name="cnpj"
-							placeholder="xx.xxx.xxx/xxxx-xx"
-							defaultValue={ formatCnpj( cnpj ) }
-							pattern="(\d{2}|\d{3})\.\d{3}\.\d{3}\/\d{4}-\d{2}"
-							title={ t( "Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx." ) }
+						<CNPJ
+							defaultValue={ cnpj }
 							required={ true }
 						/>
 					</Div>
@@ -137,20 +136,13 @@ const Page = async ( { params }: PageProps ) => {
 						/>
 					</Div>
 					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "IE" ) }
-							name="ie"
-							defaultValue={ formatIE( ie ) }
-							pattern="\d{3}\.\d{3}\.\d{3}.\d{3}"
-							title={ t( "Enter the I.E. in the format xxx.xxx.xxx.xxx." ) }
+						<IE
+							defaultValue={ ie }
+							required={ true }
 						/>
 					</Div>
 					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "CNAE" ) }
-							name="cnae"
+						<CNAE
 							defaultValue={ cnae }
 						/>
 					</Div>
@@ -182,7 +174,7 @@ const Page = async ( { params }: PageProps ) => {
 					<Div size="md" className="p-3" >
 						<Input
 							type="number"
-label={ t( "Number" ) }
+							label={ t( "Number" ) }
 							name="addressNumber"
 							defaultValue={ addressNumber }
 						/>
@@ -205,11 +197,9 @@ label={ t( "Number" ) }
 					</Div>
 					<BreakRow size="sm" />
 					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "PostalCode" ) }
+						<CEP
 							name="postalCode"
-							defaultValue={ formatCEP( postalCode ) }
+							defaultValue={ postalCode }
 						/>
 					</Div>
 					<Div size="md" className="p-3" >
@@ -231,7 +221,7 @@ label={ t( "Number" ) }
 					<Div size="md" className="p-3" >
 						<Input
 							type="number"
-label={ t( "Country code" ) }
+							label={ t( "Country code" ) }
 							name="countryCode"
 							defaultValue={ countryCode }
 						/>
@@ -246,11 +236,8 @@ label={ t( "Country code" ) }
 					</Div>
 					<BreakRow size="xl" />
 					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Phone" ) }
-							name="phone"
-							defaultValue={ formatPhone( phone ) }
+						<PHONE
+							defaultValue={ phone }
 						/>
 					</Div>
 					<Div size="md" className="p-3" >

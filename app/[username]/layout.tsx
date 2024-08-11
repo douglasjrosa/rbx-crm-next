@@ -14,12 +14,14 @@ export default function Layout ( { children, params }: DashboardPageProps ) {
 	return (
 		<IsAuthenticated>
 			<ThemeScript />
-			<div className="flex flex-col bg-gradient-to-tl from-blue-200 to-sky-100 dark:from-black dark:to-blue-950">
+			<div className="fixed top-14 right-0 bottom-0 left-0 sm:left-14 overflow-auto scrollbar" >
+				<MainContent>{ children }</MainContent>
+			</div>
+			<div className="fixed top-14 bottom-0 w-14 hidden sm:block show-menu:block bg-sky-500 dark:bg-sky-950 text-gray-900 dark:text-white" >
+				<Sidebar username={ username } />
+			</div>
+			<div className="fixed top-0 left-0 right-0 h-14 bg-sky-500 dark:bg-sky-900 shadow-lg">
 				<Header username={ username } />
-				<div className="relative flex flex-row w-full h-fit z-40" >
-					<Sidebar username={ username } />
-					<MainContent>{ children }</MainContent>
-				</div>
 			</div>
 		</IsAuthenticated>
 	)

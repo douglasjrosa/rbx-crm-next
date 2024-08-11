@@ -39,8 +39,7 @@ export default function ToggleShowMenu () {
 			className={ `flex block sm:hidden` }
 		>
 			<span
-				className={ `text-white rounded shadow-lg ${ bgColor }` }
-				style={ { fontSize: "25px", padding: "5px" } }
+				className={ `text-white rounded shadow-lg p-[5px] text-[25px] ${ bgColor }` }
 			>
 				{ showMenu ? <FiX /> : <FiMenu /> }
 			</span>

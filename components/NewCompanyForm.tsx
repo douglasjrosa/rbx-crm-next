@@ -9,17 +9,16 @@ import { CompanyAttributes } from "@/lib/strapi-types/company"
 import { baseUrl, formatCnpj, formatNumber } from "@/lib/utils"
 import { redirect } from "next/navigation"
 import { getCompanyByCnpj, getCompanyDataFromReceitaByCnpj } from "@/app/api/utils"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import { IoMdAdd, IoMdClose } from "react-icons/io"
 import Input from "./form-components/Input"
+import CNPJ from "./form-components/CNPJ"
 
 export default function NewCompanyForm ( { username, sellerId }: { username: string, sellerId?: number | null } ) {
 
-	const dropdownRef = useRef<HTMLDivElement | null>( null )
 	const [ formIsVisible, setFormIsVisible ] = useState( false )
-	const [ cnpj, setCnpj ] = useState( "" )
 
 	const handleAddCompany = useCallback( async ( formData: FormData ): Promise<void> => {
 
@@ -79,10 +78,11 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 
 	return (
 		<Div>
-			<div className="max-w-xs fixed right-4 top-20" >
-				<div className="w-full flex justify-end mb-4">
+			{ formIsVisible && <div className="fixed bg-sky-200 opacity-80 dark:bg-slate-950 dark:opacity-90 top-0 bottom-0 left-0 right-0"></div> }
+			<div className="max-w-[90vw] w-64 fixed right-6 top-16" >
+				<div className="w-full flex justify-end mb-3">
 					<button
-						className={ `${ buttonClasses } text-[32pt] text-white border border-4 border-white shadow-[3px_3px_8px_2px_rgba(0,0,0,0.3)]` }
+						className={ `${ buttonClasses } text-4xl font-black text-white border border-2 border-white shadow-[3px_3px_8px_2px_rgba(0,0,0,0.3)]` }
 						onClick={ () => setFormIsVisible( !formIsVisible ) }
 					>
 						{ formIsVisible && <IoMdClose /> }
@@ -90,7 +90,7 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 					</button>
 				</div>
 				{ formIsVisible &&
-					<div ref={ dropdownRef } >
+					<div>
 						<form action={ handleAddCompany } >
 							<FormGroup title={ t( "New Company" ) } className="pt-8 pb-6 px-4" >
 								<Div className="w-full" >
@@ -98,26 +98,18 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 										label={ t( "Short name" ) }
 										name="displayName"
 										className="w-full"
+										placeholder={ t( "Short Name" ) }
 										required
 									/>
 								</Div>
 								<BreakRow size="sm" />
 								<Div className="w-full" >
-									<Input
-										type="text"
-										label={ t( "CNPJ" ) }
-										name="cnpj"
+									<CNPJ
 										className="w-full"
-										placeholder="xx.xxx.xxx/xxxx-xx"
-										value={  cnpj }
-										onChange={ ( e: any ) => setCnpj( formatCnpj( e.target.value ) ) }
-										pattern="(\d{2}|\d{3})\.\d{3}\.\d{3}\/\d{4}-\d{2}"
-										title={ t( "Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx." ) }
 										required
 									/>
-
 								</Div>
-								<BreakRow size="md" />
+								<BreakRow size="sm" />
 								<Div className="w-full flex justify-end" >
 									<SaveButton size="sm" lockable={ false } >{ t( "Add" ) }</SaveButton>
 								</Div>
