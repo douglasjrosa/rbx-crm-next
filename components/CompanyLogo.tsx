@@ -28,7 +28,7 @@ export default function CompanyLogo ( { displayName, website, email, nfeEmail, s
 	)
 	const invalidDomain = [ "yahoo.com", "yahoo.com.br", "gmail.com", "hotmail.com", "" ].includes( domain )
 
-	const logoUrl = invalidDomain ? "" : ""//`https://logo.clearbit.com/${ domain }`
+	const logoUrl = invalidDomain ? "" : `https://logo.clearbit.com/${ domain }`
 
 	useEffect( () => {
 		const img: HTMLImageElement = new Image( size )
