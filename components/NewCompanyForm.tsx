@@ -97,6 +97,7 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 							<FormGroup title={ t( "New Company" ) } className="pt-8 pb-6 px-4" >
 								<Div className="w-full" >
 									<Input
+										type="text"
 										label={ t( "Short name" ) }
 										name="displayName"
 										className="w-full"
