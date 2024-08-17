@@ -5,9 +5,9 @@ import FormGroup from "./form-components/FormGroup"
 import Input from "./form-components/Input"
 import Select from "./form-components/Select"
 import SaveButton from "./form-components/SaveButton"
-import { ContactAttributes } from "@/lib/strapi-types/Contact"
 import { baseUrl, formatNumber } from "@/lib/utils"
 import { revalidateTag } from "next/cache"
+import { ContactAttributes } from "@/lib/strapi-types/Contact"
 
 export default async function NewContactForm ( { companyId }: { companyId: string } ) {
 

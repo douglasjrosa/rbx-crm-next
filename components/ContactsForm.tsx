@@ -2,8 +2,7 @@ import t from "@/lib/translations"
 import Select from "./form-components/Select"
 import Input from "./form-components/Input"
 import SaveButton from "./form-components/SaveButton"
-import { baseUrl, formatNumber, formatPhone, refreshKey } from "@/lib/utils"
-import { ContactAttributes } from "@/lib/strapi-types/Contact"
+import { baseUrl, formatNumber, formatPhone } from "@/lib/utils"
 import { revalidateTag } from "next/cache"
 import BreakRow from "./form-components/BreakRow"
 import { getContacts } from "@/app/api/utils"
@@ -13,6 +12,7 @@ import Hidden from "./form-components/Hidden"
 import Div from "./Div"
 import NewContactForm from "./NewContactForm"
 import Card from "./Card"
+import { ContactAttributes } from "@/lib/strapi-types/Contact"
 
 export default async function ContactsForm ( { companyId }: { companyId: string } ) {
 

@@ -5,8 +5,7 @@ import Div from "./Div"
 import BreakRow from "./form-components/BreakRow"
 import FormGroup from "./form-components/FormGroup"
 import SaveButton from "./form-components/SaveButton"
-import { CompanyAttributes, ResponseCompany } from "@/lib/strapi-types/Company"
-import { baseUrl, formatCnpj, formatFutureDate, formatNumber } from "@/lib/utils"
+import { baseUrl, formatFutureDate, formatNumber } from "@/lib/utils"
 import { redirect } from "next/navigation"
 import { getCompanyByCnpj, getCompanyDataFromReceitaByCnpj } from "@/app/api/utils"
 import { useCallback, useState } from "react"
@@ -16,6 +15,7 @@ import { IoMdAdd, IoMdClose } from "react-icons/io"
 import Input from "./form-components/Input"
 import CNPJ from "./form-components/CNPJ"
 import { ResponseError } from "@/lib/strapi-types/Error"
+import { CompanyAttributes, ResponseCompany } from "@/lib/strapi-types/Company"
 
 export default function NewCompanyForm ( { username, sellerId }: { username: string, sellerId: string | number } ) {
 
