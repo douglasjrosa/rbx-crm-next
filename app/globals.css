@@ -20,6 +20,7 @@
 	background-color: #00244d;
 	border-radius: 10px;
 	border: 1px solid #ccdff5;
+	cursor: default
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
@@ -38,3 +39,69 @@ input[type=number] {
 	-moz-appearance: textfield;
 }
 
+.text-info {
+	@apply text-blue-500 dark:text-blue-400;
+}
+
+.text-warning {
+	@apply text-yellow-500 dark:text-yellow-300;
+}
+
+.text-danger {
+	@apply text-red-500 dark:text-rose-500;
+}
+
+.text-success {
+	@apply text-green-700 dark:text-lime-400;
+}
+
+.text-secondary {
+	@apply text-slate-500/20 dark:text-slate-300/30;
+}
+
+.bg-info {
+	@apply bg-blue-500 dark:bg-blue-400;
+}
+
+.bg-warning {
+	@apply bg-yellow-500 dark:bg-yellow-300;
+}
+
+.bg-danger {
+	@apply bg-red-500 dark:bg-rose-500;
+}
+
+.bg-success {
+	@apply bg-green-600 dark:bg-green-600;
+}
+
+.bg-secondary {
+	@apply bg-slate-500 bg-opacity-20 dark:bg-slate-100 dark:bg-opacity-50;
+}
+
+.shadow-cover {
+	box-shadow: 3px 3px 13px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Webkit Browsers (Chrome, Edge, Safari) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: block;
+  margin-left: 8px;
+}
+
+/* Edge (via CSS supports) */
+@supports (-ms-ime-align: auto) {
+  input[type="date"]::-ms-clear {
+    opacity: 0;
+    display: block;
+    margin-left: 8px;
+  }
+}
+
+/* Aplicando também ao Firefox via hack @-moz-document */
+@-moz-document url-prefix() {
+  .invisible-to-firefox {
+	display: none !important;
+  }
+}

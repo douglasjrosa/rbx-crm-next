@@ -45,18 +45,29 @@ export default function CompanyLogo ( { displayName, website, email, nfeEmail, s
 
 	useEffect( () => {
 
-		const colors = [ "bg-gray-500", "bg-cyan-600", "bg-sky-600", "bg-indigo-600", "bg-teal-500", "bg-cyan-400", "bg-indigo-400", "bg-slate-500", "bg-blue-500", "bg-sky-400" ]
+		const colors = [
+			"bg-gray-500",
+			"bg-cyan-600",
+			"bg-sky-600",
+			"bg-indigo-600",
+			"bg-teal-500",
+			"bg-cyan-400",
+			"bg-indigo-400",
+			"bg-slate-500",
+			"bg-blue-500",
+			"bg-sky-400"
+		]
 
 		const bgColor = colors[ Math.floor( Math.random() * 10 ) ]
 
-		const initialsClasses = `text-bold text-[${ size / 12 }px] text-white ${ bgColor }`
+		const initialsClasses = `text-bold text-white ${ bgColor }`
 		setInitialsClasses( initialsClasses )
 
 	}, [ attemptedLoad ] )
 
 	if ( !attemptedLoad || !initialsClasses ) return null
 
-	const defaultClasses = `rounded-full w-[50px] h-[50px] flex items-center justify-center`
+	const defaultClasses = `rounded-full flex items-center justify-center`
 	const shadowClass = "shadow-[inset_-3px_-5px_3px_0.1px_rgba(0,0,0,0.3)]"
 	if ( logoLoaded ) {
 		return (
@@ -74,7 +85,14 @@ export default function CompanyLogo ( { displayName, website, email, nfeEmail, s
 	} else {
 		const initials = getInitials( displayName )
 		return (
-			<div className={ `${ defaultClasses } ${ initialsClasses } ${ shadowClass }` } >
+			<div
+				className={ `${ defaultClasses } ${ initialsClasses } ${ shadowClass }` }
+				style={ {
+					fontSize: `${ Math.round( size / 2.5 ) }px`,
+					width: `${ size }px`,
+					height: `${ size }px`
+				}}
+			>
 				{ initials }
 			</div>
 		)

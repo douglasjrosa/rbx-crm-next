@@ -5,15 +5,13 @@ export default function Select ( {
 	label,
 	className,
 	name,
-	size,
 	options,
 	...props
 }: React.SelectHTMLAttributes<HTMLSelectElement> & {
 	label?: string
 	className?: string
 	name: string
-	size?: 'sm' | 'md' | 'lg'
-	options: Array<{ value: string, text: string }>
+	options: { value: string | number, text: string }[]
 } ) {
 
 	const uid = refreshKey( name )
@@ -29,23 +27,18 @@ export default function Select ( {
 				<select
 					id={ uid }
 					name={ name }
-					className={ `p-1 w-full rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 text-right scrollbar outline-none ${ !!label ? "pt-4 h-[44px]" : "h-[32px]" }` }
+					className={ `p-1 pr-0 w-full rounded bg-white bg-opacity-30 dark:bg-violet-400 dark:bg-opacity-10 shadow-cover focus:outline-none focus:ring-2 focus:ring-violet-500 text-right outline-none ${ !!label ? "pt-4 h-[44px]" : "h-[32px]" }` }
 					{ ...props }
 				>
-					<optgroup key="optionHeader" className="text-[7px] bg-sky-200 dark:bg-sky-900" label="">
-						<option value="" className="text-[10pt] italic bg-sky-200 text-sky-900 dark:bg-sky-900 dark:text-white p-2 text-bold" disabled>
-							{ t( "Choose an option." ) }&nbsp;&nbsp;&nbsp;&nbsp;
-						</option>
-					</optgroup>
-					<optgroup className="text-[7px] bg-sky-200 dark:bg-sky-900" label=""></optgroup>
+					<optgroup className="text-[7px] bg-white dark:bg-sky-950" label=""></optgroup>
 					{ options.map( ( option, optionIndex ) => (
-						<optgroup key={ optionIndex } className="text-[7px] dark:bg-sky-950" label="">
+						<optgroup key={ optionIndex } className="text-[7px] bg-white dark:bg-sky-950" label="">
 							<option value={ option.value } className="text-[12pt] dark:bg-sky-950 focus-visible:bg-black" >
-								{ option.text }&nbsp;&nbsp;&nbsp;&nbsp;
+								{ option.text }&nbsp;&nbsp;
 							</option>
 						</optgroup>
 					) ) }
-					<optgroup key="optionFooter" className="text-[7px] dark:bg-sky-950" label=""></optgroup>
+					<optgroup key="optionFooter" className="text-[7px] bg-white dark:bg-sky-950" label=""></optgroup>
 				</select>
 			</label>
 		</div>

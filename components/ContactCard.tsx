@@ -3,7 +3,7 @@ import Card from "./Card"
 import { IoLogoWhatsapp } from "react-icons/io"
 import { capitalize, formatPhone } from "@/lib/utils"
 import t from "@/lib/translations"
-import { ContactAttributes } from "@/lib/strapi-types/contact"
+import { ContactAttributes } from "@/lib/strapi-types/Contact"
 
 export default function ContactCard ( { contactAttributes }: { contactAttributes: ContactAttributes } ) {
 

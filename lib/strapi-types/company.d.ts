@@ -1,31 +1,54 @@
-import { ContactAttributes } from "./contact"
-
+// Company Attributes
 export interface CompanyAttributes {
 	displayName: string
-	cnpj: `${ number }`
-	ie?: `${ number }`
-	postalCode?: `${ number }`
-	contacts?: ContactAttributes
+	cnpj: string
 	isActive?: boolean
-	seller?: any // Defina o tipo correto se necessário
+	seller?: string | number | {
+		data: Seller
+	}
 	creditLimit?: number
 	maximumPaymentTerm?: number
 	seasonality?: number
 	corporateReason?: string
-	email?: string
+	ie?: string
 	country?: string
 	address?: string
 	countryCode?: number
 	addressNumber?: number
 	addressComplement?: string
 	neighborhood?: string
+	postalCode?: string
 	city?: string
 	state?: string
 	website?: string
-	nfeEmail?: string
-	phone?: `${ number }`
+	phone?: string
 	icmsTaxpayer?: string
-	cnae?: `${ number }`
+	cnae?: string
 	companySize?: string
 	simplesNacional?: boolean
+	nfeEmail?: string
+	email?: string
+	expiresAt?: string
+	createdAt?: string
+	updatedAt?: string
+	createdBy?: User | null
+	updatedBy?: User | null
+	localizations?: {
+		data: string[]
+	}
+	locale?: string
+}
+
+// Company Interface
+export interface Company {
+	id: number
+	attributes: CompanyAttributes
+}
+
+export interface ResponseCompanies {
+	data: Company[]
+}
+
+export interface ResponseCompany {
+	data: Company
 }

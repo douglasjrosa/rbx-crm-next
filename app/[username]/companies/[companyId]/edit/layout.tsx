@@ -34,7 +34,7 @@ export default async function Layout ( { children, params }: PageProps ) {
 					cnpj={ cnpj }
 				/>
 			</div>
-			<div className=" my-10 relative w-full" >
+			<div className="my-10 relative w-full" >
 				<div className="flex flex-wrap">
 					<div className="w-full lg:w-1/4 p-3">
 						<ContactsForm companyId={ companyId } />

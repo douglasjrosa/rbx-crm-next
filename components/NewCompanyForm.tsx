@@ -5,8 +5,8 @@ import Div from "./Div"
 import BreakRow from "./form-components/BreakRow"
 import FormGroup from "./form-components/FormGroup"
 import SaveButton from "./form-components/SaveButton"
-import { CompanyAttributes } from "@/lib/strapi-types/company"
-import { baseUrl, formatCnpj, formatNumber } from "@/lib/utils"
+import { CompanyAttributes, ResponseCompany } from "@/lib/strapi-types/Company"
+import { baseUrl, formatCnpj, formatFutureDate, formatNumber } from "@/lib/utils"
 import { redirect } from "next/navigation"
 import { getCompanyByCnpj, getCompanyDataFromReceitaByCnpj } from "@/app/api/utils"
 import { useCallback, useState } from "react"
@@ -15,8 +15,9 @@ import "react-toastify/dist/ReactToastify.css"
 import { IoMdAdd, IoMdClose } from "react-icons/io"
 import Input from "./form-components/Input"
 import CNPJ from "./form-components/CNPJ"
+import { ResponseError } from "@/lib/strapi-types/Error"
 
-export default function NewCompanyForm ( { username, sellerId }: { username: string, sellerId?: number | null } ) {
+export default function NewCompanyForm ( { username, sellerId }: { username: string, sellerId: string | number } ) {
 
 	const [ formIsVisible, setFormIsVisible ] = useState( false )
 
@@ -38,6 +39,7 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 				countryCode: 1058,
 				simplesNacional: true,
 				seller: sellerId,
+				expiresAt: formatFutureDate( 180 )
 			}
 
 			const queryString = "&fields[0]=displayName&populate[seller][fields][0]=displayName"
@@ -57,13 +59,13 @@ export default function NewCompanyForm ( { username, sellerId }: { username: str
 					body: JSON.stringify( { data } )
 				} )
 
-				const responseData = await response.json()
+				const responseData: ResponseCompany | ResponseError = await response.json()
 				if ( !response.ok ) {
 					console.error( { responseData } )
 					throw new Error( `Error creating new company.` )
 				}
 
-				const companyId = responseData.data?.id
+				const companyId = responseData.data.id
 
 				if ( companyId ) {
 					redirect( `/${ username }/companies/${ companyId }/edit` )

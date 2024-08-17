@@ -1,6 +1,9 @@
 import { ReceitaCompanyData } from "@/lib/receitaws-types/company"
-import { CompanyAttributes } from "@/lib/strapi-types/company"
-import { ContactAttributes } from "@/lib/strapi-types/contact"
+import { CompanyAttributes } from "@/lib/strapi-types/Company"
+import { ContactAttributes } from "@/lib/strapi-types/Contact"
+import { Deal, ResponseDeal } from "@/lib/strapi-types/Deal"
+import { ResponseError } from "@/lib/strapi-types/Error"
+import { Issuer, ResponseIssuers } from "@/lib/strapi-types/Issuer"
 import t from "@/lib/translations"
 import { baseUrl, formatNumber } from "@/lib/utils"
 
@@ -162,4 +165,69 @@ export const getCompanyDataFromReceitaByCnpj = async (
 		cnae: `${ formatNumber( receitaData.atividade_principal[ 0 ]?.code ) }`
 	}
 	return companyData
+}
+
+export const getDealById = async ( dealId: string | number ): Promise<Deal | null> => {
+
+	const response = await fetch( `${ baseUrl }/api/deals/${ dealId }?populate[company]=*&populate[order][populate][issuer][populate][company][fields][0]=displayName`, {
+		next: {
+			tags: [ `deal-data-${ dealId }` ]
+		}
+	} )
+	const responseData: ResponseDeal = await response.json()
+
+	if ( !response.ok || responseData.hasOwnProperty( "error" ) ) {
+		console.error( { responseData } )
+		throw new Error( "Error fetching deal." )
+	}
+
+	return responseData.data.id ? responseData.data : null
+
+}
+
+export type AllPaymentMethodsSelectOptionsType = {
+	value: string
+	text: string
+	paymentMethodsOptions?: {
+		value: string
+		text: string
+	}[]
+}[]
+export const getAllPaymentMethodsSelectOptions = async (): Promise<AllPaymentMethodsSelectOptionsType> => {
+
+	const response = await fetch( `${ baseUrl }/api/issuers?populate[payment_methods]=*&populate[company][fields][0]=displayName` )
+	const responseIssuers: ResponseIssuers | ResponseError = await response.json()
+
+	if ( typeof responseIssuers !== "object" || !( "data" in responseIssuers ) ) {
+		console.error( { responseIssuers } )
+		throw new Error( "Fail to fetch the list of issuers." )
+	}
+
+	let issuersOptions: any[] = []
+	
+	responseIssuers.data.map( ( issuer: Issuer ) => {
+		const { company, payment_methods } = issuer.attributes
+		
+		if ( typeof company === "object" && ( "data" in company ) && !!company.data?.id ) {
+			
+			const companyId = String( company.data.id )
+			const companyName = company.data.attributes.displayName
+			
+			let paymentMethodsOptions: any[] = []
+			if ( typeof payment_methods === "object" && ( "data" in payment_methods ) && payment_methods.data.length > 0 ) {
+				payment_methods.data.map( paymentMethod => {
+					const { id, attributes } = paymentMethod
+					const { description } = attributes
+					paymentMethodsOptions.push( { value: String( id ), text: description } )
+				} )
+			}
+
+			issuersOptions.push( {
+				value: companyId,
+				text: companyName,
+				paymentMethodsOptions
+			} )
+		}
+	} )
+	return issuersOptions
 }

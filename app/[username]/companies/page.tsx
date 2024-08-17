@@ -1,11 +1,11 @@
-
 import { getSellerIdByUsername } from "@/app/api/utils"
 import CompanyLogo from "@/components/CompanyLogo"
 import NewCompanyForm from "@/components/NewCompanyForm"
-import { CompanyAttributes } from "@/lib/strapi-types/company"
+import { Company } from "@/lib/strapi-types/Company"
 import t from "@/lib/translations"
 import { baseUrl, truncateString } from "@/lib/utils"
 import Link from "next/link"
+import { CiWarning } from "react-icons/ci"
 import { FaMoneyBill1Wave } from "react-icons/fa6"
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5"
 import { RxLapTimer } from "react-icons/rx"
@@ -21,6 +21,13 @@ const Companies = async ( { params }: CompaniesProps ) => {
 	const { username } = params
 	const sellerId = await getSellerIdByUsername( username )
 
+	if ( !sellerId ) return (
+		<div className="p-6 rounded bg-red-500 text-white w-fit shadow font-black flex gap-4 items-center">
+			<span><CiWarning className="text-5xl text-black bg-yellow-500 rounded" /></span>
+			<span> { t( "ERROR! Unable to locate seller ID." ) }</span>
+		</div>
+	)
+
 	const filters = `?filters[seller][$eq]=${ sellerId }`
 	const response = await fetch( `${ baseUrl }/api/companies${ filters }&pagination[pageSize]=100&populate=*&sort=displayName:asc` )
 	const responseData = await response.json()
@@ -30,8 +37,7 @@ const Companies = async ( { params }: CompaniesProps ) => {
 		throw new Error( "Error fetching companies: " )
 	}
 
-	const companies: { id: number, attributes: CompanyAttributes }[] = responseData.data
-	const { pagination } = responseData.meta
+	const companies: Company[] = responseData.data
 
 	let alternate = true
 

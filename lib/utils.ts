@@ -103,6 +103,22 @@ export const formatCEP = ( cep: number | string | undefined ): string => {
 	return formatted
 }
 
+export const formatCurrency = ( value: number | string | undefined, currency?: string ): string => {
+	if ( value === undefined || value === null ) return `${ currency } 0,00`
+
+	// Converte o valor para número
+	const numericValue = typeof value === 'string' ? parseFloat( value.replace( /[^\d,-]/g, '' ).replace( ',', '.' ) ) : value
+
+	// Verifica se o valor é um número válido
+	if ( isNaN( numericValue ) ) return `${ currency } 0,00`
+
+	// Formata o valor para o formato brasileiro (R$ x.xxx.xxx,xx)
+	let formatted = currency ?? ""
+	formatted += currency ? " " : ""
+	formatted += numericValue.toFixed( 2 ).replace( '.', ',' ).replace( /\B(?=(\d{3})+(?!\d))/g, '.' )
+	return formatted
+}
+
 export const truncateString = ( str: string, maxLength: number ): string => {
 	if ( String( str ).length > maxLength ) {
 		return str.substring( 0, maxLength - 3 ) + '...'
@@ -145,4 +161,28 @@ export const refreshKey = ( name: string ): string => {
 	const date = new Date()
 	const time = date.getTime()
 	return `${ name }-${ time % random }`
+}
+
+export const formatFutureDate = ( daysFromToday = 0 ): string => {
+	const today = new Date()
+	const futureDate = new Date( today )
+	futureDate.setDate( today.getDate() + daysFromToday )
+
+	return futureDate.toISOString().split( 'T' )[ 0 ]
+}
+
+export const formatDateToBR = ( date: string ): string => {
+	const [ year, month, day ] = date.split( '-' )
+	return `${ day }/${ month }/${ year }`
+}
+
+export const daysToDate = ( date: string ): number => {
+	const today = new Date()
+	const targetDate = new Date( date )
+
+	const timeDifference = targetDate.getTime() - today.getTime()
+
+	const daysDifference = Math.ceil( timeDifference / ( 1000 * 60 * 60 * 24 ) )
+
+	return daysDifference
 }

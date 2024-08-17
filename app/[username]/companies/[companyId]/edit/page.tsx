@@ -1,6 +1,5 @@
 import { getCompanyAttributesById } from "@/app/api/utils"
 import Div from "@/components/Div"
-import BreakRow from "@/components/form-components/BreakRow"
 import Form from "@/components/form-components/Form"
 import FormGroup from "@/components/form-components/FormGroup"
 import Hidden from "@/components/form-components/Hidden"
@@ -9,9 +8,9 @@ import Select from "@/components/form-components/Select"
 import SwitchButton from "@/components/form-components/SwitchButton"
 import Input from "@/components/form-components/Input"
 import LocableContainer from "@/components/LockableContainer"
-import { CompanyAttributes } from "@/lib/strapi-types/company"
+import { CompanyAttributes } from "@/lib/strapi-types/Company"
 import t from "@/lib/translations"
-import { baseUrl, formatCEP, formatCnpj, formatIE, formatNumber, formatPhone, states } from "@/lib/utils"
+import { baseUrl, formatNumber, states } from "@/lib/utils"
 import { revalidateTag } from "next/cache"
 import { redirect, RedirectType } from "next/navigation"
 import CNPJ from "@/components/form-components/CNPJ"
@@ -19,6 +18,8 @@ import IE from "@/components/form-components/IE"
 import PHONE from "@/components/form-components/PHONE"
 import CNAE from "@/components/form-components/CNAE"
 import CEP from "@/components/form-components/CEP"
+import Card from "@/components/Card"
+import BreakRow from "@/components/form-components/BreakRow"
 
 
 async function handleUpdateCompanyData ( formData: FormData ) {
@@ -102,173 +103,181 @@ const Page = async ( { params }: PageProps ) => {
 		simplesNacional
 	} = companyAttributes
 
-
 	return (
-
 		<LocableContainer>
 			<Form action={ handleUpdateCompanyData } >
-				<FormGroup title={ t( "Registration data" ) } >
-					<Hidden name="username" value={ username } />
-					<Hidden name="id" value={ companyId } />
-					<Hidden name="icmsTaxpayer" value="0" />
-
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Name" ) }
-							name="displayName"
-							defaultValue={ displayName }
-							required={ true }
-						/>
+				<Hidden name="username" value={ username } />
+				<Hidden name="id" value={ companyId } />
+				<Hidden name="icmsTaxpayer" value="0" />
+				<Card className="py-10" >
+					<Div className="flex flex-wrap justify-evenly">
+						<Div size="lg" className="p-3" >
+							<FormGroup title={ t( "Registration data" ) } >
+								<Div className="p-3 w-full" >
+									<Input
+										type="text"
+										label={ t( "Name" ) }
+										name="displayName"
+										defaultValue={ displayName }
+										required={ true }
+									/>
+								</Div>
+								<Div className="p-3 w-full" readonly >
+									<CNPJ
+										defaultValue={ cnpj }
+										required={ true }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<IE
+										defaultValue={ ie }
+										required={ true }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<Input
+										type="text"
+										label={ t( "Corporate reason" ) }
+										name="corporateReason"
+										defaultValue={ corporateReason }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<Input
+										type="text"
+										label={ t( "Company size" ) }
+										name="companySize"
+										defaultValue={ companySize }
+									/>
+								</Div>
+								<Div className="p-3 w-1/2" >
+									<CNAE
+										defaultValue={ cnae }
+									/>
+								</Div>
+								<Div className="p-3 flex items-center w-1/2" >
+									<SwitchButton
+										name="simplesNacional"
+										label={ t( "Simples Nacional" ) }
+										checked={ !!simplesNacional }
+										size="sm"
+									/>
+								</Div>
+							</FormGroup>
+						</Div>
+						<Div size="lg" className="p-3" >
+							<FormGroup title={ t( "Address data" ) } >
+								<Div className="p-3 w-full" >
+									<Input
+										type="text"
+										label={ t( "Address" ) }
+										name="address"
+										defaultValue={ address }
+									/>
+								</Div>
+								<Div className="p-3 w-1/3" >
+									<Input
+										type="number"
+										label={ t( "Number" ) }
+										name="addressNumber"
+										defaultValue={ addressNumber }
+									/>
+								</Div>
+								<Div className="p-3 w-2/3" >
+									<Input
+										type="text"
+										label={ t( "Complement" ) }
+										name="addressComplement"
+										defaultValue={ addressComplement }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<Input
+										type="text"
+										label={ t( "Neighborhood" ) }
+										name="neighborhood"
+										defaultValue={ neighborhood }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<CEP
+										name="postalCode"
+										defaultValue={ postalCode }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<Input
+										type="text"
+										label={ t( "City" ) }
+										name="city"
+										defaultValue={ city }
+									/>
+								</Div>
+								<Div className="p-3 w-full" >
+									<Select
+										label={ t( "State" ) }
+										name="state"
+										defaultValue={ state }
+										options={ states }
+									/>
+								</Div>
+								<Div className="p-3 w-1/2" >
+									<Input
+										type="number"
+										label={ t( "Country code" ) }
+										name="countryCode"
+										defaultValue={ countryCode }
+									/>
+								</Div>
+								<Div className="p-3 w-1/2" >
+									<Input
+										type="text"
+										label={ t( "Country" ) }
+										name="country"
+										defaultValue={ country }
+									/>
+								</Div>
+							</FormGroup>
+						</Div>
+						<Div className="p-3 w-full" >
+							<FormGroup title={ t( "Institutional contacts" ) } >
+								<Div size="md" className="p-3" >
+									<PHONE
+										defaultValue={ phone }
+									/>
+								</Div>
+								<Div size="md" className="p-3" >
+									<Input
+										type="text"
+										label={ t( "E-mail" ) }
+										name="email"
+										defaultValue={ email }
+									/>
+								</Div>
+								<Div size="md" className="p-3" >
+									<Input
+										type="text"
+										label={ t( "Nf-e E-mail" ) }
+										name="nfeEmail"
+										defaultValue={ nfeEmail }
+									/>
+								</Div>
+								<Div size="grow" className="p-3" >
+									<Input
+										type="text"
+										label={ t( "Website" ) }
+										name="website"
+										defaultValue={ website }
+									/>
+								</Div>
+							</FormGroup>
+						</Div>
 					</Div>
-					<Div size="md" className="p-3" readonly >
-						<CNPJ
-							defaultValue={ cnpj }
-							required={ true }
-						/>
-					</Div>
-					<Div size="lg" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Corporate reason" ) }
-							name="corporateReason"
-							defaultValue={ corporateReason }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<IE
-							defaultValue={ ie }
-							required={ true }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<CNAE
-							defaultValue={ cnae }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Company size" ) }
-							name="companySize"
-							defaultValue={ companySize }
-						/>
-					</Div>
-					<Div size="md" className="p-3 flex items-center" >
-						<SwitchButton
-							name="simplesNacional"
-							label={ t( "Simples Nacional" ) }
-							checked={ !!simplesNacional }
-							size="sm"
-						/>
-					</Div>
-					<BreakRow size="xl" />
-					<Div size="lg" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Address" ) }
-							name="address"
-							defaultValue={ address }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="number"
-							label={ t( "Number" ) }
-							name="addressNumber"
-							defaultValue={ addressNumber }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Complement" ) }
-							name="addressComplement"
-							defaultValue={ addressComplement }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Neighborhood" ) }
-							name="neighborhood"
-							defaultValue={ neighborhood }
-						/>
-					</Div>
-					<BreakRow size="sm" />
-					<Div size="md" className="p-3" >
-						<CEP
-							name="postalCode"
-							defaultValue={ postalCode }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "City" ) }
-							name="city"
-							defaultValue={ city }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Select
-							label={ t( "State" ) }
-							name="state"
-							defaultValue={ state }
-							options={ states }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="number"
-							label={ t( "Country code" ) }
-							name="countryCode"
-							defaultValue={ countryCode }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Country" ) }
-							name="country"
-							defaultValue={ country }
-						/>
-					</Div>
-					<BreakRow size="xl" />
-					<Div size="md" className="p-3" >
-						<PHONE
-							defaultValue={ phone }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "E-mail" ) }
-							name="email"
-							defaultValue={ email }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Nf-e E-mail" ) }
-							name="nfeEmail"
-							defaultValue={ nfeEmail }
-						/>
-					</Div>
-					<Div size="md" className="p-3" >
-						<Input
-							type="text"
-							label={ t( "Website" ) }
-							name="website"
-							defaultValue={ website }
-						/>
-					</Div>
-					<BreakRow size="md" />
-					<Div className="p-3 w-full flex justify-end" >
+					<BreakRow size="lg" />
+					<Div className="py-6 w-full flex justify-center" >
 						<SaveButton className="" >{ t( "Save" ) }</SaveButton>
 					</Div>
-				</FormGroup>
+				</Card>
 			</Form>
 		</LocableContainer >
 	)
