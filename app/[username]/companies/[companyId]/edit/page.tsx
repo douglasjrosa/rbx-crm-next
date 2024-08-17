@@ -8,7 +8,6 @@ import Select from "@/components/form-components/Select"
 import SwitchButton from "@/components/form-components/SwitchButton"
 import Input from "@/components/form-components/Input"
 import LocableContainer from "@/components/LockableContainer"
-import { CompanyAttributes } from "@/lib/strapi-types/Company"
 import t from "@/lib/translations"
 import { baseUrl, formatNumber, states } from "@/lib/utils"
 import { revalidateTag } from "next/cache"
@@ -20,6 +19,7 @@ import CNAE from "@/components/form-components/CNAE"
 import CEP from "@/components/form-components/CEP"
 import Card from "@/components/Card"
 import BreakRow from "@/components/form-components/BreakRow"
+import { CompanyAttributes } from "@/lib/strapi-types/Company"
 
 
 async function handleUpdateCompanyData ( formData: FormData ) {

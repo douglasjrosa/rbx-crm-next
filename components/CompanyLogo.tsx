@@ -41,7 +41,7 @@ export default function CompanyLogo ( { displayName, website, email, nfeEmail, s
 			setAttemptedLoad( true )
 		}
 		img.src = logoUrl
-	}, [ logoUrl ] )
+	}, [ logoUrl, size ] )
 
 	useEffect( () => {
 

@@ -17,7 +17,7 @@ const SwitchButton = ( { index, name, label, checked, size }: SwitchButtonProps 
 	
 	useEffect( () => {
 		setEnabled( checked )
-	}, [ index ] )
+	}, [ index, checked ] )
 	
 	const responsiveClasses = {
 		xs: "text-xs",
