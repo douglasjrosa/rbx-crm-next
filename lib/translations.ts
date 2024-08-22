@@ -89,6 +89,7 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 		{ en: "Client order code", 'pt-BR': "Nº pedido do cliente" },
 		{ en: "Observations", 'pt-BR': "Observações" },
 		{ en: "Reason", 'pt-BR': "Motivo" },
+		{ en: "Fragile", 'pt-BR': "Frágil" },
 	]
 
 	const translation = translations.find( t => t.en === text )
