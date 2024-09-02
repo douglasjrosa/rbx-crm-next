@@ -5,12 +5,13 @@ export const dbApiToken = process.env.DB_API_TOKEN as string
 export const capitalize = ( str: string ): string => ( str.charAt( 0 ).toUpperCase() + str.slice( 1 ) )
 
 export const formatNumber = ( str: number | string | undefined ): number => {
+	if ( typeof str === 'number' ) return str
 	return Number( String( str ).replace( /[^\d,]/g, "" ).replace( ",", "." ) )
 }
 
 export const formatPhone = ( phone: number | string | undefined ) => {
 	const n = String( formatNumber( phone ) )
-	let formatted = n[ 0 ] !== undefined && n[ 1 ] !== undefined ? '(' + n[ 0 ] : ( n[0] === "0" ? "" : n[0])
+	let formatted = n[ 0 ] !== undefined && n[ 1 ] !== undefined ? '(' + n[ 0 ] : ( n[ 0 ] === "0" ? "" : n[ 0 ] )
 	formatted += n[ 1 ] !== undefined ? n[ 1 ] : ""
 	formatted += n[ 2 ] !== undefined ? ") " + n[ 2 ] : ""
 	formatted += n[ 10 ] !== undefined ? " " : ""
@@ -103,7 +104,17 @@ export const formatCEP = ( cep: number | string | undefined ): string => {
 	return formatted
 }
 
-export const formatCurrency = ( value: number | string | undefined, currency?: string ): string => {
+export const formatNumberToBR = ( value: number | string = 0, decimals?: number ): string => {
+
+	let formatted: number | string = formatNumber( value )
+	
+	decimals = decimals === undefined && formatted !== Math.round( formatted ) ? 1 : 0
+	
+	formatted = formatted.toFixed( decimals )
+	return formatted.replace( ".", "," )
+}
+
+export const formatCurrency = ( value?: number | string, currency?: string ): string => {
 	if ( value === undefined || value === null ) return `${ currency } 0,00`
 
 	// Converte o valor para número

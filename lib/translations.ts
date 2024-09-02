@@ -90,12 +90,40 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 		{ en: "Observations", 'pt-BR': "Observações" },
 		{ en: "Reason", 'pt-BR': "Motivo" },
 		{ en: "Fragile", 'pt-BR': "Frágil" },
+		{ en: "sheets", 'pt-BR': "chapas" },
+		{ en: "pieces", 'pt-BR': "peças" },
+		{ en: "parts", 'pt-BR': "partes" },
+		{ en: "battens", 'pt-BR': "sarrafos" },
+		{ en: "top-left", 'pt-BR': "superior-esquerdo" },
+		{ en: "top-center", 'pt-BR': "superior-centro" },
+		{ en: "top-right", 'pt-BR': "superior-direito" },
+		{ en: "middle-left", 'pt-BR': "meio-esquerdo" },
+		{ en: "middle-center", 'pt-BR': "meio-centro" },
+		{ en: "middle-right", 'pt-BR': "meio-direito" },
+		{ en: "bottom-left", 'pt-BR': "inferior-esquerdo" },
+		{ en: "bottom-center", 'pt-BR': "inferior-centro" },
+		{ en: "bottom-right", 'pt-BR': "inferior-direito" },
+		{ en: "don't fit", 'pt-BR': "não cabem" },
+		{ en: "stickers", 'pt-BR': "adesivos" },
+		{ en: "woods", 'pt-BR': "madeiras" },
 	]
 
-	const translation = translations.find( t => t.en === text )
+	const isCapitalized = text[ 0 ] === text[ 0 ].toUpperCase()
+	const capitalized = text.charAt( 0 ).toUpperCase() + text.slice( 1 )
+	const uncapitalized = text.charAt( 0 ).toLowerCase() + text.slice( 1 )
 
-	if ( translation && translation[ locale ] )
-		return translation[ locale ]
+	let translation = translations.find( t => t.en === capitalized )
+
+	if ( !translation || !translation[ locale ] )
+		translation = translations.find( t => t.en === uncapitalized )
+
+	const response = translation?.[ locale ]
+
+	if ( !response ) return text
+
+	if ( isCapitalized )
+		return response.charAt( 0 ).toUpperCase() + response.slice( 1 )
+
 	else
-		return text
+		return response.charAt( 0 ).toLowerCase() + response.slice( 1 )
 }
