@@ -1,112 +1,89 @@
 "use client"
 
-import Input from "@/components/form-components/Input"
-import Select from "@/components/form-components/Select"
-import PlywoodFrame from "@/components/svg-components/PlywoodFrame"
-import { StickersProps } from "@/components/svg-components/utils"
+import FrameCard from "@/components/products-components/FrameCard"
+import FrameForm from "@/components/products-components/FrameForm"
+import { calculateScale, getPartTitle, PartNameType, PartProps, SelectedPieceType } from "@/components/products-components/utils"
+import { Tabs, Tab } from "@/components/Tabs"
 import t from "@/lib/translations"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { calculateFrameParams } from "@/components/products-components/utils/frameParams"
+import { productTest } from "@/components/products-components/utils/productTest"
+import getProductFormFields from "@/components/products-components/utils/productFields"
 
-const Products = () => {
+export default function Products () {
 
-	const [ frameWidth, setFrameWidth ] = useState( 1200 )
-	const [ frameHeight, setFrameHeight ] = useState( 200 )
-	const [ externalBattenPosition, setExternalBattenPosition ] = useState<"horizontal" | "vertical">( "horizontal" )
-	const [ internalBattenPosition, setInternalBattenPosition ] = useState<"horizontal" | "vertical">( "vertical" )
-	const [ battenWidth, setBattenWidth ] = useState( 30 )
-	const [ battenQtdyIn, setBattenQtdyIn ] = useState<number | undefined>()
-	const [ position, setPosition ] = useState<StickersProps[ "position" ]>( "top-left" )
-	const [ gapPositioning, setGapPositioning ] = useState( 0 )
+	const boxRef = useRef<HTMLDivElement>( null )
+	const [ scale, setScale ] = useState( 1 )
+	const [ selectedPiece, setSelectedPiece ] = useState<SelectedPieceType>( { name: "none" } )
+	const [ product, setProduct ] = useState( productTest )
 
-	let customGapExtensions
-	const plywoodThickness = 3
-	const battenThickness = 18
-	const hasExportStamp = true
-	const partQty = 2
 
-	const stickers: StickersProps[] = [
-		{
-			label: "Frágil",
-			labelCode: "0002",
-			color: "red",
-		},
-		{
-			label: "Logo",
-			labelCode: "0003",
-			color: "black",
-			gapPositioning,
-			position
+	useEffect( () => {
+		console.log( { product } )
+		console.log( { selectedPiece } )
+	}, [ selectedPiece ] )
+
+	useEffect( () => {
+		if ( !!boxRef.current ) {
+			const boxWidth = boxRef.current.offsetWidth
+			const partWidths = [
+				product.length + 300,
+				product.width + 300,
+				product.height + 300
+			]
+			const scale = calculateScale( boxWidth, partWidths )
+			setScale( scale )
 		}
-	]
+	}, [ boxRef ] )
 
-	const showListOfMaterials = true
-
+	const fields = getProductFormFields( selectedPiece )
+	
 	return (
-		<div>
+		<div onClick={ () => !!setSelectedPiece && setSelectedPiece( { name: "none" } ) }>
+
 			<h1 className="text-3xl font-bold mb-6">{ t( 'Products' ) }</h1>
-			<div className="flex gap-3">
-				<div className="w-1/5">
-					<Input type="number" name="frameWidth" label="Comprimento" value={ frameWidth } onChange={ e => setFrameWidth( Number( e.target.value ) ) } />
-				</div>
-				<div className="w-1/5">
-					<Input type="number" name="frameHeight" label="Largura" value={ frameHeight } onChange={ e => setFrameHeight( Number( e.target.value ) ) } />
-				</div>
-				<div className="w-1/5">
-					<Input type="number" name="battenWidth" label="Sarrafos" value={ battenWidth } onChange={ e => setBattenWidth( Number( e.target.value ) ) } />
-				</div>
-				<div className="w-1/5">
-					<Select name="position" label="Position" value={ position } onChange={ e => setPosition( e.target.value as StickersProps["position"] ) } options={ [
-						{ value: "top-left", text: t( "Top-left") },
-						{ value: "top-center", text: t( "Top-center") },
-						{ value: "top-right", text: t( "Top-right") },
-						{ value: "middle-left", text: t( "Middle-left") },
-						{ value: "middle-center", text: t( "Middle-center") },
-						{ value: "middle-right", text: t( "Middle-right") },
-						{ value: "bottom-left", text: t( "Bottom-left") },
-						{ value: "bottom-center", text: t( "Bottom-center") },
-						{ value: "bottom-right", text: t( "Bottom-right") },
-					]} />
-				</div>
-				<div className="w-1/5">
-					<Input type="number" name="gapPositioning" label="Gap Positioning" value={ gapPositioning } onChange={ e => setGapPositioning( Number( e.target.value ) ) } />
-				</div>
-				<div className="w-1/5">
-					<Input type="number" name="battenQtdyIn" label="Qtde sarrafos internos" value={ battenQtdyIn } onChange={ e => setBattenQtdyIn( Number( e.target.value ) ) } />
-				</div>
-				<div className="w-1/5">
-					<Select name="externalBattenPosition" label="Sarrafo externo" value={ externalBattenPosition } onChange={ e => setExternalBattenPosition( e.target.value as "horizontal" | "vertical" ) } options={ [
-					{ value: "horizontal", text: t( "Horizontal" ) },
-					{ value: "vertical", text: t( "Vertical" ) }
-				] } />
-				</div>
-				<div className="w-1/5">
-					<Select name="internalBattenPosition" label="Sarrafo interno" value={ internalBattenPosition } onChange={ e => setInternalBattenPosition( e.target.value as "horizontal" | "vertical" ) } options={ [
-						{ value: "auto", text: t( "Auto" ) },
-						{ value: "horizontal", text: t( "Horizontal" ) },
-						{ value: "vertical", text: t( "Vertical" ) }
-					] } />
-				</div>
-			</div>
-			<div className="p-6 rounded bg-sky-200 w-[800px]">
-				<PlywoodFrame
-					partTitle="Lateral"
-					externalBattenPosition={ externalBattenPosition }
-					internalBattenPosition={ internalBattenPosition }
-					frameWidth={ frameWidth }
-					frameHeight={ frameHeight }
-					battenQtdyIn={ battenQtdyIn }
-					battenWidth={ battenWidth }
-					customGapExtensions={ customGapExtensions }
-					plywoodThickness={ plywoodThickness }
-					battenThickness={ battenThickness }
-					hasExportStamp={ hasExportStamp }
-					maxGap={ 500 }
-					showListOfMaterials={ showListOfMaterials }
-					partQty={ partQty }
-					stickers={ stickers }
-				></PlywoodFrame>
+
+			<div>
+				<Tabs>
+					{
+						Object.entries( product.template.parts ).map( ([ partName, partDivs ]) => partDivs.map( ( partDiv: PartProps, index: number ) => {
+							
+							const frameParams = calculateFrameParams( { partDiv } )
+
+							const partTitle = getPartTitle( partName as PartNameType )
+							
+							return (
+								<Tab key={ index } title={ t( partTitle ) }>
+									<div className="flex">
+										<div className="w-1/6 px-3 flex flex-col gap-3 lg:flex-none">
+											<FrameForm
+												partName={ partName as PartNameType }
+												index={ index }
+												frameParams={ frameParams }
+												product={ product }
+												setProduct={ setProduct }
+												fields={ fields }
+											/>
+										</div>
+										<div ref={ boxRef } className="block lg:w-5/6" >
+											<FrameCard
+												frameParams={ frameParams }
+												scale={ scale }
+												selectedPiece={ selectedPiece }
+												setSelectedPiece={ setSelectedPiece }
+											/>
+										</div>
+									</div>
+								</Tab>
+							)
+						} ) )
+					}
+					<Tab title={ t( "Budget" ) }>
+						<div className="flex gap-3">
+						</div>
+					</Tab>
+				</Tabs>
 			</div>
 		</div>
 	)
 }
-export default Products

@@ -1,5 +1,6 @@
 import t from "@/lib/translations"
-import { alignStickersInTheGap, GapsProps, spreadStickersAlongTheGaps, StickersProps } from "./utils"
+import { GapsProps, StickersProps } from "../utils"
+import { alignStickersInTheGap, spreadStickersAlongTheGaps } from "../utils/frameStickers"
 
 export default function Stickers ( { x, y, stickers, gaps }: { x: number, y: number, stickers?: StickersProps[], gaps: GapsProps[] } ) {
 
@@ -8,7 +9,6 @@ export default function Stickers ( { x, y, stickers, gaps }: { x: number, y: num
 	stickers = alignStickersInTheGap( gaps, stickers )
 
 	return (
-
 		<g>
 			{ !!stickers && stickers.map( ( sticker, index ) => {
 
@@ -26,31 +26,31 @@ export default function Stickers ( { x, y, stickers, gaps }: { x: number, y: num
 							x={ x + 105 }
 							y={ y + 40 }
 							textAnchor="middle"
-							font-size="40px"
+							style={ { fontSize: "40px" } }
 							fill="yellow"
 							fontWeight="bolder"
 						>
-							{ t("Ooops!") }
+							{ t( "Ooops!" ) }
 						</text>
 						<text
 							x={ x + 105 }
 							y={ y + 85 }
 							textAnchor="middle"
-							font-size="33px"
+							style={ { fontSize: "33px" } }
 							fill="yellow"
 							fontWeight="bolder"
 						>
-							{ t("Stickers") }
+							{ t( "Stickers" ) }
 						</text>
 						<text
 							x={ x + 105 }
 							y={ y + 125 }
 							textAnchor="middle"
-							font-size="33px"
+							style={ { fontSize: "33px" } }
 							fill="yellow"
 							fontWeight="bolder"
 						>
-							{ t("don't fit") }.
+							{ t( "don't fit" ) }.
 						</text>
 					</g>
 				)
@@ -67,9 +67,9 @@ export default function Stickers ( { x, y, stickers, gaps }: { x: number, y: num
 						/>
 						<text
 							x={ x + ( sticker.x ?? 0 ) + 105 }
-							y={ y + ( sticker.y ?? 0 ) + 65}
+							y={ y + ( sticker.y ?? 0 ) + 65 }
 							textAnchor="middle"
-							font-size="60px"
+							style={ { fontSize: "60px" } }
 							fill={ sticker.color }
 							fontWeight="bolder"
 						>
@@ -79,7 +79,7 @@ export default function Stickers ( { x, y, stickers, gaps }: { x: number, y: num
 							x={ x + ( sticker.x ?? 0 ) + 105 }
 							y={ y + ( sticker.y ?? 0 ) + 130 }
 							textAnchor="middle"
-							font-size="45px"
+							style={ { fontSize: "45px" } }
 							fill={ sticker.color }
 							fontWeight="bolder"
 						>

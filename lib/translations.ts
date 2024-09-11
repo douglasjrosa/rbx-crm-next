@@ -4,92 +4,96 @@ interface Translation {
 	[ key: string ]: string
 }
 
-export default function t ( text: string, locale = "pt-BR" ): string {
+export default function t (
+	text: string,
+	{ locale = "pt-BR", isExpression = true }: { locale?: string, isExpression?: boolean } = {}
+): string {
+
 	const translations: Translation[] = [
-		{ en: "Dashboard", 'pt-BR': "Painel" },
-		{ en: "Deals", 'pt-BR': "Negócios" },
-		{ en: "Deal", 'pt-BR': "Negócio" },
-		{ en: "Companies", 'pt-BR': "Empresas" },
-		{ en: "Products", 'pt-BR': "Produtos" },
-		{ en: "Profile", 'pt-BR': "Perfil" },
-		{ en: "Login", 'pt-BR': "Entrar" },
-		{ en: "Logout", 'pt-BR': "Sair" },
-		{ en: "Change to dark mode.", 'pt-BR': "Mudar para o modo escuro." },
-		{ en: "Change to light mode.", 'pt-BR': "Mudar para o modo claro" },
-		{ en: "Invalid credentials. Please try again.", 'pt-BR': "Usuário e/ou senha incorretos. Tente novamente." },
-		{ en: "Login failed. Try again later.", 'pt-BR': "Erro ao fazer login. Tente novamente mais tarde." },
-		{ en: "An error occurred.", 'pt-BR': "Ocorreu um erro." },
-		{ en: "Name", 'pt-BR': "Nome" },
-		{ en: "Phone", 'pt-BR': "Fone" },
-		{ en: "Unlocked", 'pt-BR': "Liberado" },
-		{ en: "Locked", 'pt-BR': "Protegido" },
-		{ en: "Search company", 'pt-BR': "Pesquisar empresa" },
-		{ en: "Corporate reason", 'pt-BR': "Razão Social" },
-		{ en: "Country", 'pt-BR': "País" },
-		{ en: "Address", 'pt-BR': "Endereço" },
-		{ en: "Country code", 'pt-BR': "Código do país" },
-		{ en: "Number", 'pt-BR': "Número" },
-		{ en: "Neighborhood", 'pt-BR': "Bairro" },
-		{ en: "PostalCode", 'pt-BR': "CEP" },
-		{ en: "City", 'pt-BR': "Cidade" },
-		{ en: "State", 'pt-BR': "Estado" },
-		{ en: "Website", 'pt-BR': "Site" },
-		{ en: "Phone", 'pt-BR': "Fone" },
-		{ en: "ICMS Tax payer", 'pt-BR': "Contribuinte do ICMS" },
-		{ en: "Company size", 'pt-BR': "Porte" },
-		{ en: "Save", 'pt-BR': "Salvar" },
-		{ en: "Active", 'pt-BR': "Ativo" },
-		{ en: "Complement", 'pt-BR': "Complemento" },
-		{ en: "Power to close a deal", 'pt-BR': "Poder para fechar negócio" },
-		{ en: "I don't know", 'pt-BR': "Eu não sei" },
-		{ en: "None", 'pt-BR': "Nenhum" },
-		{ en: "Influence", 'pt-BR': "Influência" },
-		{ en: "Decision", 'pt-BR': "Decisão" },
-		{ en: "Buyer", 'pt-BR': "Comprador" },
-		{ en: "Add", 'pt-BR': "Adicionar" },
-		{ en: "Decision", 'pt-BR': "Decisão" },
-		{ en: "New Contact", 'pt-BR': "Novo contato" },
-		{ en: "New Company", 'pt-BR': "Nova Empresa" },
-		{ en: "Contacts", 'pt-BR': "Contatos" },
-		{ en: "Registration data", 'pt-BR': "Dados cadastrais" },
-		{ en: "Loading", 'pt-BR': "Carregando" },
-		{ en: "Short name", 'pt-BR': "Nome curto" },
-		{ en: "The company", 'pt-BR': "A empresa" },
+		{ en: "dashboard", 'pt-BR': "painel" },
+		{ en: "deals", 'pt-BR': "negócios" },
+		{ en: "deal", 'pt-BR': "negócio" },
+		{ en: "companies", 'pt-BR': "empresas" },
+		{ en: "products", 'pt-BR': "produtos" },
+		{ en: "profile", 'pt-BR': "perfil" },
+		{ en: "login", 'pt-BR': "entrar" },
+		{ en: "logout", 'pt-BR': "sair" },
+		{ en: "change to dark mode.", 'pt-BR': "mudar para o modo escuro." },
+		{ en: "change to light mode.", 'pt-BR': "mudar para o modo claro" },
+		{ en: "invalid credentials. Please try again.", 'pt-BR': "usuário e/ou senha incorretos. Tente novamente." },
+		{ en: "login failed. Try again later.", 'pt-BR': "erro ao fazer login. Tente novamente mais tarde." },
+		{ en: "an error occurred.", 'pt-BR': "ocorreu um erro." },
+		{ en: "name", 'pt-BR': "nome" },
+		{ en: "phone", 'pt-BR': "fone" },
+		{ en: "unlocked", 'pt-BR': "liberado" },
+		{ en: "locked", 'pt-BR': "protegido" },
+		{ en: "search company", 'pt-BR': "pesquisar empresa" },
+		{ en: "corporate reason", 'pt-BR': "razão Social" },
+		{ en: "country", 'pt-BR': "país" },
+		{ en: "address", 'pt-BR': "endereço" },
+		{ en: "country code", 'pt-BR': "código do país" },
+		{ en: "number", 'pt-BR': "número" },
+		{ en: "neighborhood", 'pt-BR': "bairro" },
+		{ en: "postalCode", 'pt-BR': "CEP" },
+		{ en: "city", 'pt-BR': "cidade" },
+		{ en: "state", 'pt-BR': "estado" },
+		{ en: "website", 'pt-BR': "site" },
+		{ en: "phone", 'pt-BR': "fone" },
+		{ en: "iCMS Tax payer", 'pt-BR': "contribuinte do ICMS" },
+		{ en: "company size", 'pt-BR': "porte" },
+		{ en: "save", 'pt-BR': "salvar" },
+		{ en: "active", 'pt-BR': "ativo" },
+		{ en: "complement", 'pt-BR': "complemento" },
+		{ en: "power to close a deal", 'pt-BR': "poder para fechar negócio" },
+		{ en: "i don't know", 'pt-BR': "eu não sei" },
+		{ en: "none", 'pt-BR': "nenhum" },
+		{ en: "influence", 'pt-BR': "influência" },
+		{ en: "decision", 'pt-BR': "decisão" },
+		{ en: "buyer", 'pt-BR': "comprador" },
+		{ en: "add", 'pt-BR': "adicionar" },
+		{ en: "decision", 'pt-BR': "decisão" },
+		{ en: "new Contact", 'pt-BR': "novo contato" },
+		{ en: "new Company", 'pt-BR': "nova Empresa" },
+		{ en: "contacts", 'pt-BR': "contatos" },
+		{ en: "registration data", 'pt-BR': "dados cadastrais" },
+		{ en: "loading", 'pt-BR': "carregando" },
+		{ en: "short name", 'pt-BR': "nome curto" },
+		{ en: "the company", 'pt-BR': "a empresa" },
 		{ en: "belongs to", 'pt-BR': "pertence a" },
 		{ en: "is already registered in the system.", 'pt-BR': "já está cadastrada no sistema." },
-		{ en: "Error fetching company from receitaws.com.br", 'pt-BR': "Erro ao consultar cadastro da empresa em receitaws.com.br" },
-		{ en: "ATTENTION! The company is not active in federal revenue.", 'pt-BR': "ATENÇÃO! A empresa não está ativa na receita federal." },
-		{ en: "ATTENTION! The company's status is not 'OK' with the IRS.", 'pt-BR': "ATENÇÃO! O status da empresa não está como 'OK' na receita federal." },
-		{ en: "Enter the I.E. in the format xxx.xxx.xxx.xxx.", 'pt-BR': "Digite a I.E. no formato xxx.xxx.xxx.xxx." },
-		{ en: "Enter a valid CNPJ in the format xx.xxx.xxx/xxxx-xx.", 'pt-BR': "Digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx." },
-		{ en: "Choose an option.", 'pt-BR': "Escolha uma opção" },
-		{ en: "Short Name", 'pt-BR': "Nome Curto" },
-		{ en: "ERROR! Unable to locate seller ID.", 'pt-BR': "ERRO! Não foi possível localizar o Id do vendedor." },
-		{ en: "Error creating new deal.", 'pt-BR': "Erro ao criar novo negócio." },
-		{ en: "Send proposal", 'pt-BR': "Enviar proposta" },
-		{ en: "Follow up", 'pt-BR': "Acompanhamento" },
-		{ en: "Negotiation", 'pt-BR': "Negociação" },
-		{ en: "Won", 'pt-BR': "Ganho" },
-		{ en: "Lost", 'pt-BR': "Perdido" },
-		{ en: "New Deal", 'pt-BR': "Novo Negócio" },
-		{ en: "Issuer", 'pt-BR': "Emitente" },
-		{ en: "Expires in", 'pt-BR': "Expira em" },
-		{ en: "Expires at", 'pt-BR': "Expira em" },
-		{ en: "Stage", 'pt-BR': "Etapa" },
+		{ en: "error fetching company from receitaws.com.br", 'pt-BR': "erro ao consultar cadastro da empresa em receitaws.com.br" },
+		{ en: "aTTENTION! The company is not active in federal revenue.", 'pt-BR': "aTENÇÃO! A empresa não está ativa na receita federal." },
+		{ en: "aTTENTION! The company's status is not 'OK' with the IRS.", 'pt-BR': "aTENÇÃO! O status da empresa não está como 'OK' na receita federal." },
+		{ en: "enter the I.E. in the format xxx.xxx.xxx.xxx.", 'pt-BR': "digite a I.E. no formato xxx.xxx.xxx.xxx." },
+		{ en: "enter a valid CNPJ in the format xx.xxx.xxx/xxxx-xx.", 'pt-BR': "digite um CNPJ válido no formato xx.xxx.xxx/xxxx-xx." },
+		{ en: "choose an option.", 'pt-BR': "escolha uma opção" },
+		{ en: "short Name", 'pt-BR': "nome Curto" },
+		{ en: "eRROR! Unable to locate seller ID.", 'pt-BR': "eRRO! Não foi possível localizar o Id do vendedor." },
+		{ en: "error creating new deal.", 'pt-BR': "erro ao criar novo negócio." },
+		{ en: "send proposal", 'pt-BR': "enviar proposta" },
+		{ en: "follow up", 'pt-BR': "acompanhamento" },
+		{ en: "negotiation", 'pt-BR': "negociação" },
+		{ en: "won", 'pt-BR': "ganho" },
+		{ en: "lost", 'pt-BR': "perdido" },
+		{ en: "new Deal", 'pt-BR': "novo Negócio" },
+		{ en: "issuer", 'pt-BR': "emitente" },
+		{ en: "expires in", 'pt-BR': "expira em" },
+		{ en: "expires at", 'pt-BR': "expira em" },
+		{ en: "stage", 'pt-BR': "etapa" },
 		{ en: "day", 'pt-BR': "dia" },
 		{ en: "days", 'pt-BR': "dias" },
-		{ en: "Institutional contacts", 'pt-BR': "Contatos institucionais" },
-		{ en: "Address data", 'pt-BR': "Dados de endereço" },
-		{ en: "Payment method", 'pt-BR': "Forma de pagamento" },
-		{ en: "Format", 'pt-BR': "Formato" },
-		{ en: "Enter a valid value", 'pt-BR': "Digite um valor válido" },
-		{ en: "Freight type", 'pt-BR': "Tipo de frete" },
-		{ en: "Freight value", 'pt-BR': "Valor do frete" },
-		{ en: "Deliver forecast", 'pt-BR': "Previsão de entrega" },
-		{ en: "Client order code", 'pt-BR': "Nº pedido do cliente" },
-		{ en: "Observations", 'pt-BR': "Observações" },
-		{ en: "Reason", 'pt-BR': "Motivo" },
-		{ en: "Fragile", 'pt-BR': "Frágil" },
+		{ en: "institutional contacts", 'pt-BR': "contatos institucionais" },
+		{ en: "address data", 'pt-BR': "dados de endereço" },
+		{ en: "payment method", 'pt-BR': "forma de pagamento" },
+		{ en: "format", 'pt-BR': "formato" },
+		{ en: "enter a valid value", 'pt-BR': "digite um valor válido" },
+		{ en: "freight type", 'pt-BR': "tipo de frete" },
+		{ en: "freight value", 'pt-BR': "valor do frete" },
+		{ en: "deliver forecast", 'pt-BR': "previsão de entrega" },
+		{ en: "client order code", 'pt-BR': "nº pedido do cliente" },
+		{ en: "observations", 'pt-BR': "observações" },
+		{ en: "reason", 'pt-BR': "motivo" },
+		{ en: "fragile", 'pt-BR': "frágil" },
 		{ en: "sheets", 'pt-BR': "chapas" },
 		{ en: "pieces", 'pt-BR': "peças" },
 		{ en: "parts", 'pt-BR': "partes" },
@@ -105,25 +109,68 @@ export default function t ( text: string, locale = "pt-BR" ): string {
 		{ en: "bottom-right", 'pt-BR': "inferior-direito" },
 		{ en: "don't fit", 'pt-BR': "não cabem" },
 		{ en: "stickers", 'pt-BR': "adesivos" },
+		{ en: "side", 'pt-BR': "lateral" },
+		{ en: "header", 'pt-BR': "cabeceira" },
+		{ en: "lid", 'pt-BR': "tampa" },
+		{ en: "measures", 'pt-BR': "medidas" },
 		{ en: "woods", 'pt-BR': "madeiras" },
+		{ en: "others", 'pt-BR': "outros" },
+		{ en: "plywood and accessories", 'pt-BR': "compensados e acessórios" },
+		{ en: "budget", 'pt-BR': "orçamento" },
+		{ en: "settings", 'pt-BR': "configurações" },
+		{ en: "external battens position", 'pt-BR': "posição dos sarrafos Externos" },
+		{ en: "internal battens position", 'pt-BR': "posição dos sarrafos Internos" },
+		{ en: "internal battens qty", 'pt-BR': "qtde. de sarrafos Internos" },
+		{ en: "frame width", 'pt-BR': "largura do quadro" },
+		{ en: "frame height", 'pt-BR': "altura do quadro" },
+		{ en: "batten width", 'pt-BR': "largura do sarrafo" },
+		{ en: "batten widths", 'pt-BR': "largura dos sarrafos" },
+		{ en: "export", 'pt-BR': "exportação" },
+		{ en: "yes", 'pt-BR': "sim" },
+		{ en: "no", 'pt-BR': "não" },
+		{ en: "plywood thickness", 'pt-BR': "espessura da chapa" },
+		{ en: "batten thickness", 'pt-BR': "espessura dos sarrafos" },
+		{ en: "frame qty", 'pt-BR': "quantidade de quadros" },
+		{ en: "gap widths", 'pt-BR': "larguras dos vãos" },
+		{ en: "left side", 'pt-BR': "lateral Esquerda" },
+		{ en: "in", 'pt-BR': "em" },
+		{ en: "left", 'pt-BR': "esquerda" },
+		{ en: "right", 'pt-BR': "direita" },
+		{ en: "left side", 'pt-BR': "lateral esquerda" },
+		{ en: "right side", 'pt-BR': "lateral direita" },
+		{ en: "left header", 'pt-BR': "cabeceira esquerda" },
+		{ en: "right header", 'pt-BR': "cabeceira direita" },
+		{ en: "sides", 'pt-BR': "laterais" },
+		{ en: "headers", 'pt-BR': "cabeceiras" },
+		{ en: "lid", 'pt-BR': "tampa" },
 	]
 
-	const isCapitalized = text[ 0 ] === text[ 0 ].toUpperCase()
-	const capitalized = text.charAt( 0 ).toUpperCase() + text.slice( 1 )
-	const uncapitalized = text.charAt( 0 ).toLowerCase() + text.slice( 1 )
+	if ( isExpression ) {
 
-	let translation = translations.find( t => t.en === capitalized )
+		const isCapitalized = !!text[ 0 ] && text[ 0 ] === text[ 0 ].toUpperCase()
+		const textUncapitalized = text.split( " " ).map( word => word.charAt( 0 ).toLowerCase() + word.slice( 1 ) ).join( " " )
+		const searchTranslation = translations.find( t => t.en === textUncapitalized )
+		const translation = searchTranslation?.[ locale ]
 
-	if ( !translation || !translation[ locale ] )
-		translation = translations.find( t => t.en === uncapitalized )
+		if ( !translation ) return text
 
-	const response = translation?.[ locale ]
+		return isCapitalized ? translation.charAt( 0 ).toUpperCase() + translation.slice( 1 ) : translation
+	}
+	else {
+		return text.split( " " ).map( word => {
 
-	if ( !response ) return text
+			const isCapitalized = !!word[ 0 ] && word[ 0 ] === word[ 0 ].toUpperCase()
+			const uncapitalized = word.charAt( 0 ).toLowerCase() + word.slice( 1 )
 
-	if ( isCapitalized )
-		return response.charAt( 0 ).toUpperCase() + response.slice( 1 )
+			const searchTranslation = translations.find( t => t.en === uncapitalized )
+			const translation = searchTranslation?.[ locale ]
 
-	else
-		return response.charAt( 0 ).toLowerCase() + response.slice( 1 )
+			if ( !translation ) return word
+
+			return isCapitalized
+				? translation.charAt( 0 ).toUpperCase() + translation.slice( 1 )
+				: translation.charAt( 0 ).toLowerCase() + translation.slice( 1 )
+			
+		} ).join( " " )
+	}
 }

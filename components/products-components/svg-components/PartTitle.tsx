@@ -4,5 +4,5 @@ export default function PartTitle ( { x, y, fontSize = "6em", children }: {
 	fontSize?: string
 	children: React.ReactNode
  }) {
-	return <text x={ x } y={ y } font-size={ fontSize } >{ children }</text>
+	return <text x={ x } y={ y } style={{ fontSize }} >{ children }</text>
 }

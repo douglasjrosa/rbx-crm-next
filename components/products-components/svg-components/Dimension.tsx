@@ -7,7 +7,8 @@ export default function Dimension ( {
 	dimension,
 	type,
 	auxiliaryDimensionLine = 140,
-	measureUnit = "cm"
+	measureUnit = "cm",
+	showMeasureUnit
 }: {
 	x: number
 	y: number
@@ -15,9 +16,12 @@ export default function Dimension ( {
 	type: "top" | "bottom" | "left" | "right"
 	auxiliaryDimensionLine?: number
 	measureUnit?: "cm" | "mm"
+	showMeasureUnit?: boolean
 } ) {
 
 	const dimensionLineDistance = auxiliaryDimensionLine - 20
+	const fontSize = "3rem"
+	
 	if ( type === "bottom" ) {
 		return (
 			<g>
@@ -51,9 +55,9 @@ export default function Dimension ( {
 					x={ x + ( dimension / 2 ) }
 					y={ y + dimensionLineDistance - 20 }
 					textAnchor="middle"
-					font-size="4em"
+					style={{ fontSize }}
 				>
-					{ measureUnit === "cm" ? formatNumberToBR( dimension / 10 ) : dimension }{ measureUnit }
+					{ measureUnit === "cm" ? formatNumberToBR( dimension / 10 ) : dimension }{ showMeasureUnit && measureUnit }
 				</text>
 			</g>
 		)
@@ -92,9 +96,9 @@ export default function Dimension ( {
 					y={ x + dimensionLineDistance - 20 }
 					transform="rotate(-90 0,0)"
 					textAnchor="middle"
-					font-size="4em"
+					style={{ fontSize }}
 				>
-					{ measureUnit === "cm" ? formatNumberToBR( dimension / 10 ) : dimension }{ measureUnit }
+					{ measureUnit === "cm" ? formatNumberToBR( dimension / 10 ) : dimension }{ showMeasureUnit && measureUnit }
 				</text>
 			</g>
 		)
@@ -132,9 +136,9 @@ export default function Dimension ( {
 					x={ x + dimension / 2 }
 					y={ y - dimensionLineDistance - 20 }
 					textAnchor="middle"
-					font-size="4em"
+					style={{ fontSize }}
 				>
-					{ measureUnit === "cm" ? formatNumberToBR( dimension / 10 ) : dimension }{ measureUnit }
+					{ measureUnit === "cm" ? formatNumberToBR( dimension / 10 ) : dimension }{ showMeasureUnit && measureUnit }
 				</text>
 			</g>
 		)

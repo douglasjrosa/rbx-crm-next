@@ -1,15 +1,6 @@
 import t from "@/lib/translations"
-import { PieceProps, StickersProps } from "./utils"
 import { formatNumberToBR } from "@/lib/utils"
-
-type Pc = {
-	name: string
-	length: number
-	wide: number
-	thickness: number
-	qty: number
-	unit: string
-}
+import { Pc, PieceProps, StickersProps } from "./utils/"
 
 export default function ListOfMaterials ( {
 	pieces,
