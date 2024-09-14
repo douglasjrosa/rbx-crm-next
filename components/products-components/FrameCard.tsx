@@ -3,7 +3,7 @@
 import t from "@/lib/translations"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import ZoomButtons from "./ZoomButtons"
-import { FrameParamsProps, SelectedPieceType } from "./utils/"
+import { FrameParamsProps, getPartTitle, SelectedPieceType } from "./utils/"
 import { mountFrameComponent } from "./utils/frameComponent"
 
 export default function FrameCard ( { frameParams, scale, selectedPiece, setSelectedPiece }: {
@@ -19,12 +19,14 @@ export default function FrameCard ( { frameParams, scale, selectedPiece, setSele
 		setZoom( scale )
 	}, [ scale ] )
 
-	const FrameComponent = mountFrameComponent( frameParams.frame )
+	const { frame, partName } = frameParams
+	const FrameComponent = mountFrameComponent( frame )
+	const partTitle = getPartTitle( partName )
 
 	return (
 		<div className="block lg:flex">
 			<FrameComponent
-				partTitle={ t( "Side" ) }
+				partTitle={ t( partTitle ) }
 				frameParams={ frameParams }
 				scale={ zoom }
 				selectedPiece={ selectedPiece }

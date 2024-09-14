@@ -3,7 +3,7 @@ import { FiZoomIn, FiZoomOut } from "react-icons/fi"
 
 export default function ZoomButtons ( { zoom, setZoom }: { zoom: number, setZoom: Dispatch<SetStateAction<number>> } ) {
 	return (
-		<div className="absolute text-2xl flex gap-2 right-3" onClick={ e => e.stopPropagation() } >
+		<div className="absolute text-white text-xl flex flex-col gap-2 left-2" onClick={ e => e.stopPropagation() } >
 			<button
 				type="button"
 				name="zoom+"

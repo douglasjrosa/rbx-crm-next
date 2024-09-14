@@ -1,138 +1,104 @@
 import { GapsProps, StickersProps } from "."
 
-export const spreadStickersAlongTheGaps = ( gaps: GapsProps[], stickers?: StickersProps[] ) => {
+export const spreadStickersAlongTheGaps = ( gaps: GapsProps[], stickers: StickersProps[], stickersQty: number ) => {
 
-	gaps.forEach( ( gap, index ) => {
+	const newStickers = []
+	for ( let i = 0; i < stickersQty; i++ ) {
+		if ( stickers[ i ] !== undefined ) {
+			newStickers.push( stickers[ i ] )
+		}
+		else {
+			stickers.push(
+				{
+					name: `sticker${ i + 1 }`,
+					label: "fragile",
+					labelCode: "0001",
+					color: "red",
+				} )
+		}
+	}
+	stickers = newStickers
+
+	gaps.forEach( ( gap, gapIndex ) => {
+
 		const margin = 20
-		let gapWidth = gap.width
-		let gapHeight = gap.height
-
+		let remainingGapHeight = gap.height
+		let remainingGapWidth = gap.width
 		let stickerCount = 0
-		stickers?.forEach( ( sticker, stickerIndex, array ) => {
 
-			const currentSticker = {
-				...sticker,
-				gapPositioning: sticker.gapPositioning ?? 0,
-				position: sticker.position || "top-left",
-				width: sticker.width || 210,
-				height: sticker.height || 148
-			}
+		stickers.forEach( ( sticker, stickerIndex, array ) => {
+			let gapPositioning = Math.min( ( sticker.gapPositioning ?? 1 ), gaps.length )
 
-			if ( currentSticker.gapPositioning === index ) {
+			const positionIndex = gapIndex + 1
+			if ( gapPositioning === positionIndex ) {
 
-				const widthNeeded = margin + currentSticker.width
+				const biggestStickerWidth = stickers.reduce( ( prev, current ) => {
+					const currentWidth = current.width ?? 210
+					const prevWidth = prev.width ?? 210
+					return currentWidth >= prevWidth && ( sticker.gapPositioning ?? 0 ) === positionIndex ? current : prev
+				}, stickers[ 0 ] )?.width ?? 210
+
+
+				const currentSticker = {
+					...sticker,
+					doesNotFit: false,
+					width: sticker.width ?? 210,
+					height: sticker.height ?? 148
+				}
+
+				let prevSticker
+				for ( let i = 0; i < stickerIndex; i++ ) {
+					if ( stickers[ i ].gapPositioning === positionIndex ) prevSticker = stickers[ i ]
+				}
+
+				const freeAlignment = !!sticker.freeAlignment ? 1 : 0
 				const heightNeeded = currentSticker.height + margin * 3
+				const widthNeeded = margin * 2 + currentSticker.width
+				const prevStickerHeight = stickerIndex > 0 ? ( prevSticker?.height ?? 0 ) : 0
+				const prevStickerY = stickerIndex > 0 ? ( prevSticker?.y ?? 0 ) : ( gaps[ gapIndex ].y ?? 0 )
 
-				const stickerFitsThisGap = gapWidth >= widthNeeded
-					&& ( gapHeight >= heightNeeded )
+				let x = ( gaps[ gapIndex ].x ?? 0 ) + margin
+				let y = ( gaps[ gapIndex ].y ?? 0 )
 
-				if ( stickerFitsThisGap ) {
+				let resolved = false
+				while ( !resolved ) {
+					if ( remainingGapHeight >= heightNeeded ) {
 
-					if ( !sticker.x ) {
-						currentSticker.x = ( gaps[ index ].x ?? 0 ) +
-							( [ "top-left", "middle-left", "bottom-left" ].includes( currentSticker.position ) ? margin : 0 ) +
-							( [ "top-center", "middle-center", "bottom-center" ].includes( currentSticker.position ) ? ( gaps[ index ].width / 2 ) - ( currentSticker.width / 2 ) : 0 ) +
-							( [ "top-right", "middle-right", "bottom-right" ].includes( currentSticker.position ) ? ( gaps[ index ].width - margin - currentSticker.width ) : 0 )
-					}
+						if ( remainingGapWidth >= widthNeeded ) {
+							remainingGapHeight -= currentSticker.height
+							if ( stickerCount > 0 ) y = prevStickerY + prevStickerHeight + margin
+							stickerCount++
+							resolved = true
+						}
+						else {
+							if ( gapPositioning === gaps.length )
+								currentSticker.doesNotFit = true
+							else {
+								y = 0
+								x = 0
+								gapPositioning++
+							}
 
-					if ( !sticker.y ) {
-						currentSticker.y = ( gaps[ index ].y ?? 0 ) +
-							( [ "top-left", "top-center", "top-right" ].includes( currentSticker.position ) ? margin : 0 ) +
-							( [ "middle-left", "middle-center", "middle-right" ].includes( currentSticker.position ) ? ( gaps[ index ].height / 2 ) - ( currentSticker.height / 2 ) : 0 ) +
-							( [ "bottom-left", "bottom-center", "bottom-right" ].includes( currentSticker.position ) ? ( gaps[ index ].height - margin * 3 - currentSticker.height ) : 0 )
-					}
-
-					if ( gapHeight > heightNeeded ) {
-						gapHeight -= currentSticker.height
+							resolved = true
+						}
 					}
 					else {
-						gapWidth -= currentSticker.width
-						gapHeight = gap.height
+						remainingGapWidth -= biggestStickerWidth
+						remainingGapHeight = gap.height
 					}
+				}
 
-					stickerCount++
-				}
-				else {
-					currentSticker.gapPositioning++
-				}
-				array[ stickerIndex ] = currentSticker
+				x = freeAlignment && !!sticker.x ? sticker.x : x
+				x = Math.min( x, gap.x + gap.width - currentSticker.width - margin )
+				x = Math.max( x, gap.x + margin )
+
+				y = freeAlignment && !!sticker.y ? sticker.y : y
+				y = Math.min( y, gap.y + gap.height - currentSticker.height - margin )
+				y = Math.max( y, gap.y + margin )
+
+				array[ stickerIndex ] = { ...currentSticker, x, y, gapPositioning, freeAlignment }
 			}
 		} )
-	} )
-	return stickers
-}
-
-export const alignStickersInTheGap = ( gaps: GapsProps[], stickers?: StickersProps[] ) => {
-
-	stickers?.forEach( ( sticker, index, array ) => {
-
-		for ( let nextIndex = index + 1; nextIndex <= stickers.length; nextIndex++ ) {
-
-			let comparingSticker = stickers[ nextIndex ]
-
-			if (
-				comparingSticker !== undefined
-				&& comparingSticker.x !== undefined
-				&& comparingSticker.y !== undefined
-				&& comparingSticker.width !== undefined
-				&& comparingSticker.height !== undefined
-				&& sticker.width !== undefined
-				&& sticker.height !== undefined
-				&& sticker.position !== undefined
-				&& sticker.gapPositioning !== undefined
-				&& sticker.gapPositioning === comparingSticker?.gapPositioning
-				&& sticker.x === comparingSticker?.x
-				&& sticker.y === comparingSticker?.y
-			) {
-
-				const margin = 20
-
-				let comparingStickerX = comparingSticker.x
-				let comparingStickerY = comparingSticker.y
-				let stickerX = sticker.x
-				let stickerY = sticker.y
-
-				const stickersFitsInRemainingGapHeight = gaps[ sticker.gapPositioning ].height > sticker.height + comparingSticker.height + margin * 2
-
-				if ( stickersFitsInRemainingGapHeight ) {
-					if ( [ "top-left", "top-center", "top-right" ].includes( sticker.position ) )
-						comparingStickerY += sticker.height + margin
-
-					else if ( [ "middle-left", "middle-center", "middle-right" ].includes( sticker.position ) ) {
-						stickerY = ( gaps[ sticker.gapPositioning ].height - ( sticker.height + comparingSticker.height + margin ) ) / 2
-						comparingStickerY = stickerY + sticker.height + margin
-					}
-					else {
-						stickerY -= comparingSticker.height + margin
-					}
-				}
-				else {
-					if ( [ "top-left", "middle-left", "bottom-left" ].includes( sticker.position ) )
-						comparingStickerX += sticker.width + margin
-
-					else if ( [ "top-center", "middle-center", "bottom-center" ].includes( sticker.position ) ) {
-						stickerX = ( gaps[ sticker.gapPositioning ].width - ( sticker.width + comparingSticker.width + margin ) ) / 2
-						comparingStickerX = stickerX + sticker.width + margin
-					}
-					else {
-						stickerX -= comparingSticker.width + margin
-					}
-
-				}
-
-				array[ index ] = {
-					...sticker,
-					x: stickerX,
-					y: stickerY
-				}
-				array[ nextIndex ] = {
-					...comparingSticker,
-					x: comparingStickerX,
-					y: comparingStickerY
-				}
-
-			}
-		}
 	} )
 	return stickers
 }

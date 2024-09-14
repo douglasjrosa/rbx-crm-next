@@ -1,8 +1,9 @@
 import React, { useState, ReactNode } from 'react'
 
-export const Tab = ( { title, children }: { title: string, children: ReactNode } ) => <>{ children }</>
+export const Tab = ( { children }: { title: string, children: ReactNode } ) => <>{ children }</>
 
 export const Tabs = ( { children }: { children: ReactNode } ) => {
+
 	const [ activeTab, setActiveTab ] = useState( 0 )
 
 	const tabTitles = React.Children.map( children, ( child, index ) => {
@@ -11,7 +12,10 @@ export const Tabs = ( { children }: { children: ReactNode } ) => {
 				<button
 					key={ index }
 					onClick={ () => setActiveTab( index ) }
-					className={ `px-4 py-2 focus:outline-none ${ activeTab === index ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500' }` }
+					className={ `px-4 focus:outline-none pt-2 text-white text-nowrap shadow-lg w-fit rounded-t-lg bg-sky-500 dark:bg-sky-700 ${ activeTab === index ?
+						'pb-3 font-black'
+						: 'opacity-70 text-sm'
+						}` }
 				>
 					{ child.props.title }
 				</button>
@@ -21,8 +25,8 @@ export const Tabs = ( { children }: { children: ReactNode } ) => {
 
 	return (
 		<div>
-			<div className="flex border-b mb-4">{ tabTitles }</div>
-			<div>{ React.Children.toArray( children )[ activeTab ] }</div>
+			<div className="flex gap-1 items-end scrollbar">{ tabTitles }</div>
+			<div className='bg-sky-500 dark:bg-sky-700 rounded-b pt-3 pb-5 px-3 shadow-cover'>{ React.Children.toArray( children )[ activeTab ] }</div>
 		</div>
 	)
 }

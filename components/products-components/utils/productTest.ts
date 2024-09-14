@@ -18,11 +18,26 @@ export const productTest: ProductProps = {
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ {
-					label: "Frágil",
-					labelCode: "0001",
-					color: "red",
-				} ],
+				stickers: [
+					{
+						name: "sticker1",
+						label: "fragile",
+						labelCode: "0001",
+						color: "red",
+					},
+					{
+						name: "sticker2",
+						label: "logo",
+						labelCode: "0002",
+						color: "black",
+					},
+					{
+						name: "sticker3",
+						label: "spec",
+						labelCode: "0003",
+						color: "black",
+					},
+				],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
@@ -35,11 +50,7 @@ export const productTest: ProductProps = {
 				battenThickness: 18,
 				plywoodThickness: 3,
 				partQty: 2,
-				stickers: [ {
-					label: "Frágil",
-					labelCode: "0001",
-					color: "red",
-				} ],
+				stickers: [ ],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto"
 			} ],
@@ -50,11 +61,7 @@ export const productTest: ProductProps = {
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ {
-					label: "Frágil",
-					labelCode: "0001",
-					color: "red",
-				} ],
+				stickers: [ ],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
@@ -66,11 +73,7 @@ export const productTest: ProductProps = {
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ {
-					label: "Frágil",
-					labelCode: "0001",
-					color: "red",
-				} ],
+				stickers: [ ],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
@@ -82,11 +85,7 @@ export const productTest: ProductProps = {
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ {
-					label: "Frágil",
-					labelCode: "0001",
-					color: "red",
-				} ],
+				stickers: [ ],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1

@@ -11,11 +11,11 @@ export default function Textarea ( {
 	const uid = refreshKey( name )
 
 	return (
-		<div className={ `w-full relative` } >
+		<div className={ `w-full relative bg-white dark:bg-sky-900 rounded shadow-[inset_2px_5px_3px_0.5px_rgba(0,0,0,0.3)]` } >
 			{ label &&
 				<label
 					htmlFor={ uid }
-					className="absolute text-[12px] rounded-tl bg-gradient-to-br from-white from-50% to-transparent dark:bg-gradient-to-br dark:from-sky-700/90 dark:from-50% dark:to-transparent top-0 left-0 right-0 pl-2 text-sky-700 dark:text-white"
+					className="absolute text-[12px] top-0 left-0 right-0 pl-2 text-sky-700 dark:text-white"
 					style={{ maxWidth: "calc( 100% - 12px )" }}
 				>
 					{ label }:
@@ -24,7 +24,7 @@ export default function Textarea ( {
 			<textarea
 				id={ uid }
 				name={ name }
-				className={ `scrollbar px-3 py-1 w-full rounded dark:bg-violet-400 dark:bg-opacity-10 shadow-cover focus:outline-none focus:ring-2 focus:ring-violet-500 text-right ${ !!label ? "pt-4" : "" } ${ className }` }
+				className={ `scrollbar h-full px-3 py-1 w-full rounded bg-transparent focus:outline-none focus:ring-2 focus:ring-violet-500 text-right ${ !!label ? "pt-4" : "" } ${ className }` }
 				{ ...props }
 			>
 				{ children }

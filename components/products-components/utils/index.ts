@@ -30,6 +30,7 @@ export interface PartProps {
 	battenWidthIn?: number[]
 	measureUnit?: "cm" | "mm"
 	hasExportStamp?: boolean
+	stickersQty?: number
 }
 
 export interface FrameParamsProps extends PartProps {
@@ -44,6 +45,7 @@ export interface FrameParamsProps extends PartProps {
 	gaps: GapsProps[]
 	stampSize: string
 	listsMaxWidth: number
+	partName: PartNameType
 }
 
 export interface ProductProps {
@@ -68,26 +70,18 @@ export interface ProductProps {
 }
 
 export interface StickersProps {
+	name: string
+	label: "fragile" | "logo" | "spec"
+	labelCode: string
+	color: "black" | "red" | "colorful"
 	x?: number
 	y?: number
 	width?: number
 	height?: number
-	label: string
-	labelCode: string
-	color: "black" | "red"
 	fontSize?: string
-	position?: (
-		"top-left"
-		| "top-center"
-		| "top-right"
-		| "middle-left"
-		| "middle-center"
-		| "middle-right"
-		| "bottom-left"
-		| "bottom-center"
-		| "bottom-right"
-	)
 	gapPositioning?: number
+	doesNotFit?: boolean
+	freeAlignment?: number
 }
 
 export interface GapsProps {
@@ -118,21 +112,25 @@ export interface PieceProps {
 }
 
 export interface FrameFormFieldProps {
-	name: keyof PartProps
-	element: "select" | "input"
-	label: string
-	type?: "text" | "number"
-	valueType: "number" | "string" | "boolean" | "array"
+	partPropName: keyof PartProps
+	fieldElement: "select" | "input"
+	fieldLabel: string
+	fieldType?: "text" | "number" | "object"
+	fieldProps?: { [ key: string ]: any }
+	fieldValue?: any
+	fieldValueType: "number" | "string" | "boolean" | "array"
 	arrayIndex?: number
+	arrayValueType?: "number" | "string" | "object"
 	options?: {
 		value: string | number | boolean
 		text: string
 	}[]
-	[ key: string ]: any
+	objectKey?: keyof StickersProps | keyof PieceProps | keyof GapsProps
+	objectValueType?: "number" | "string"
 }
 
 export type SelectedPieceType = {
-	name: "none"
+	pieceName: "none"
 	| "plywood"
 	| "battenH1"
 	| "battenH2"
@@ -146,6 +144,12 @@ export type SelectedPieceType = {
 	| "battenIn6"
 	| "battenIn7"
 	| "battenIn8"
+	| "sticker1"
+	| "sticker2"
+	| "sticker3"
+	| "sticker4"
+	| "sticker5"
+	| "sticker6"
 	pieceIndex?: number
 	x?: number
 	y?: number

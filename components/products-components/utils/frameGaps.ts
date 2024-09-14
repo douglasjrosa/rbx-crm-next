@@ -28,13 +28,14 @@ export const calculateFrameGaps = ( {
 	let remainingGapsQty = gapsQty
 	let remainingFrameExtension = frameExtension
 
+
 	let remainingGapsExtension = remainingFrameExtension
 		- ( finalInternalsPosition === "horizontal"
 			? ( battenWidthH?.[ 0 ] || battenWidth ) + ( battenWidthH?.[ 1 ] || battenWidth )
 			: ( battenWidthV?.[ 0 ] || battenWidth ) + ( battenWidthV?.[ 1 ] || battenWidth )
 		)
 
-	for ( let i = 0; internalsQty && i < internalsQty; i++ ) {
+	for ( let i = 0; i < internalsQty; i++ ) {
 		remainingGapsExtension -= ( battenWidthIn?.[ i ] || battenWidth )
 	}
 
@@ -63,10 +64,10 @@ export const calculateFrameGaps = ( {
 		else {
 			gapExtension = gapExtension ?? divisions
 			gapExtension -= ( battenWidthIn?.[ i - 1 ] || battenWidth ) / 2
-			gapExtension -= ( battenWidthIn?.[ 1 ] || battenWidth ) / 2
+			gapExtension -= ( battenWidthIn?.[ i ] || battenWidth ) / 2
 		}
 		
-		gapExtension = Math.max( gapExtension, 200)
+		gapExtension = Math.max( gapExtension, 0)
 
 		remainingFrameExtension -= gapExtension ?? divisions
 		remainingGapsExtension -= gapExtension
@@ -98,6 +99,7 @@ export const calculateFrameGaps = ( {
 			} )
 		}
 	}
+	console.log({gaps})
 
 	return gaps
 }

@@ -9,19 +9,18 @@ import { useEffect, useRef, useState } from "react"
 import { calculateFrameParams } from "@/components/products-components/utils/frameParams"
 import { productTest } from "@/components/products-components/utils/productTest"
 import getProductFormFields from "@/components/products-components/utils/productFields"
+import { spreadStickersAlongTheGaps } from "@/components/products-components/utils/frameStickers"
 
 export default function Products () {
 
 	const boxRef = useRef<HTMLDivElement>( null )
 	const [ scale, setScale ] = useState( 1 )
-	const [ selectedPiece, setSelectedPiece ] = useState<SelectedPieceType>( { name: "none" } )
+	const [ selectedPiece, setSelectedPiece ] = useState<SelectedPieceType>( { pieceName: "none" } )
 	const [ product, setProduct ] = useState( productTest )
-
 
 	useEffect( () => {
 		console.log( { product } )
-		console.log( { selectedPiece } )
-	}, [ selectedPiece ] )
+	}, [ product ] )
 
 	useEffect( () => {
 		if ( !!boxRef.current ) {
@@ -37,40 +36,47 @@ export default function Products () {
 	}, [ boxRef ] )
 
 	const fields = getProductFormFields( selectedPiece )
-	
+
 	return (
-		<div onClick={ () => !!setSelectedPiece && setSelectedPiece( { name: "none" } ) }>
+		<div onClick={ () => !!setSelectedPiece && setSelectedPiece( { pieceName: "none" } ) }>
 
 			<h1 className="text-3xl font-bold mb-6">{ t( 'Products' ) }</h1>
 
 			<div>
 				<Tabs>
 					{
-						Object.entries( product.template.parts ).map( ([ partName, partDivs ]) => partDivs.map( ( partDiv: PartProps, index: number ) => {
+						Object.entries( product.template.parts ).map( ( [ partName, partDivs ] ) => partDivs.map( ( partDiv: PartProps, partDivIndex: number ) => {
+
+							const frameParams = calculateFrameParams( {
+								partName: partName as PartNameType,
+								partDiv
+							} )
 							
-							const frameParams = calculateFrameParams( { partDiv } )
+							const { gaps, stickers, stickersQty } = frameParams
+
+							frameParams.stickers = spreadStickersAlongTheGaps( gaps, stickers || [], stickersQty ?? 0 )
 
 							const partTitle = getPartTitle( partName as PartNameType )
-							
+
 							return (
-								<Tab key={ index } title={ t( partTitle ) }>
-									<div className="flex">
-										<div className="w-1/6 px-3 flex flex-col gap-3 lg:flex-none">
-											<FrameForm
-												partName={ partName as PartNameType }
-												index={ index }
-												frameParams={ frameParams }
-												product={ product }
-												setProduct={ setProduct }
-												fields={ fields }
-											/>
-										</div>
-										<div ref={ boxRef } className="block lg:w-5/6" >
+								<Tab key={ partDivIndex } title={ t( partTitle ) }>
+									<div className="flex flex-col gap-6 md:flex-row md:flex-row-reverse md:gap-0 py-3 max-w-full justify-start scrollbar ">
+										<div ref={ boxRef } className="flex-grow p-3" >
 											<FrameCard
 												frameParams={ frameParams }
 												scale={ scale }
 												selectedPiece={ selectedPiece }
 												setSelectedPiece={ setSelectedPiece }
+											/>
+										</div>
+										<div className="p-3 w-full flex-1">
+											<FrameForm
+												partName={ partName as PartNameType }
+												partDivIndex={ partDivIndex }
+												frameParams={ frameParams }
+												product={ product }
+												setProduct={ setProduct }
+												fields={ fields }
 											/>
 										</div>
 									</div>

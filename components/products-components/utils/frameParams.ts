@@ -1,8 +1,9 @@
-import { FrameParamsProps, PartProps } from "."
+import { FrameParamsProps, PartNameType, PartProps } from "."
 import { calculateFrameGaps } from "./frameGaps"
 import { calculateFramePieces } from "./framePieces"
 
-export const calculateFrameParams = ( { partDiv, scale = 0.25, x0 = 100, y0 = 300 }: {
+export const calculateFrameParams = ( { partName, partDiv, scale = 0.25, x0 = 100, y0 = 300 }: {
+	partName: PartNameType
 	partDiv: PartProps
 	scale?: number
 	x0?: number
@@ -18,7 +19,7 @@ export const calculateFrameParams = ( { partDiv, scale = 0.25, x0 = 100, y0 = 30
 		battenQtyIn,
 		battenWidth,
 		plywoodThickness,
-		battenWidthH,
+		battenWidthH
 	} = partDiv
 
 	const autoInternalsPosition = externalBattenPosition === "horizontal"
@@ -42,7 +43,8 @@ export const calculateFrameParams = ( { partDiv, scale = 0.25, x0 = 100, y0 = 30
 		finalInternalsPosition,
 		internalsQty,
 		gaps
-})
+	} )
+
 	const heightDimensionsDistance = ( internalsQty > 0 && finalInternalsPosition === "horizontal" ) ? 240 : 120
 
 	const viewboxWidth = x0 + frameWidth + 20 + heightDimensionsDistance + 20 + x0
@@ -55,6 +57,7 @@ export const calculateFrameParams = ( { partDiv, scale = 0.25, x0 = 100, y0 = 30
 
 	const frameParams = {
 		...partDiv,
+		partName,
 		x0,
 		y0,
 		finalInternalsPosition,
@@ -65,7 +68,7 @@ export const calculateFrameParams = ( { partDiv, scale = 0.25, x0 = 100, y0 = 30
 		viewboxHeight,
 		viewBox,
 		listsMaxWidth,
-		stampSize,
+		stampSize
 	}
 
 	return frameParams

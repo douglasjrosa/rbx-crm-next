@@ -19,7 +19,7 @@ export default function Select ( {
 	const uid = refreshKey( name )
 
 	return (
-		<div className={ `w-full relative ${ className ?? "" }` }>
+		<div className={ `w-full relative ${ className ?? "" } bg-white dark:bg-sky-900 rounded shadow-[inset_2px_2px_6px_0.8px_rgba(0,0,0,0.2)]` }>
 			{ label && (
 				<span className="absolute text-[12px] left-2 top-1 text-sky-700 dark:text-sky-200 z-10">
 					{ label }:
@@ -28,7 +28,7 @@ export default function Select ( {
 			<select
 				id={ uid }
 				name={ name }
-				className={ `relative p-2 pr-0 w-full rounded bg-white bg-opacity-30 dark:bg-violet-400 dark:bg-opacity-10 shadow-cover focus:outline-none focus:ring-2 focus:ring-violet-500 text-right outline-none z-20 ${ !!label ? "pt-5 h-[44px]" : "h-[32px]" }` }
+				className={ `relative p-2 pr-0 w-full rounded bg-transparent focus:outline-none focus:ring-2 focus:ring-violet-500 text-right outline-none z-20 ${ !!label ? "pt-4 pb-0 h-[44px]" : "h-[32px]" }` }
 				{ ...props }
 			>
 				{ options.map( ( option, optionIndex ) => (
