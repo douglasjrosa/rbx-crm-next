@@ -1,5 +1,5 @@
 import { Archivo_Black } from 'next/font/google'
-import { FrameComponentProps, SelectedPieceType } from "../utils"
+import { FrameComponentProps, GapsProps, SelectedPieceType } from "../utils"
 import PartTitle from "./PartTitle"
 import Dimension from "./Dimension"
 import Stickers from "./Stickers"
@@ -34,16 +34,14 @@ export default function PlywoodFrame ( {
 		viewBox,
 		viewboxWidth,
 		viewboxHeight,
+		x0,
 		y0,
 		pieces,
 		finalInternalsPosition,
-		gaps,
 		stampSize,
-		listsMaxWidth
+		listsMaxWidth,
+		gaps
 	} = frameParams
-
-	let { x0 } = frameParams
-	x0 += 90
 
 	if ( !frameWidth || !frameHeight || !battenWidth ) return null
 	return (
@@ -53,7 +51,7 @@ export default function PlywoodFrame ( {
 				<PartMeasureUnits x={ x0 + frameWidth + 20 } y={ y0 - 100 } >{ measureUnit }</PartMeasureUnits>
 
 				<g id="frame" >
-					{ pieces.map( ( piece, index ) => {
+					{ !!pieces?.length && pieces.map( ( piece, index ) => {
 
 						const x = x0 + piece.x
 						const y = y0 + piece.y
@@ -80,10 +78,7 @@ export default function PlywoodFrame ( {
 									!!setSelectedPiece && setSelectedPiece( {
 										pieceName: name as SelectedPieceType[ "pieceName" ],
 										pieceIndex,
-										x,
-										y,
-										width,
-										height
+										...piece
 									} )
 								} }
 								key={ `piece-${ index }` }
@@ -112,7 +107,7 @@ export default function PlywoodFrame ( {
 					auxiliaryDimensionLine={ finalInternalsPosition === "horizontal" ? 270 : 140 }
 					measureUnit={ measureUnit }
 				/>
-				{ finalInternalsPosition === "vertical" &&
+				{ finalInternalsPosition === "vertical" && !!gaps && 
 					gaps.map( ( gap, index ) => {
 						return (
 							<Dimension
@@ -128,7 +123,7 @@ export default function PlywoodFrame ( {
 					} )
 				}
 
-				{ finalInternalsPosition === "horizontal" &&
+				{ finalInternalsPosition === "horizontal" && !!gaps && 
 					gaps.map( ( gap, index ) => {
 						return (
 							<Dimension

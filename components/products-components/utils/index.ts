@@ -23,14 +23,15 @@ export interface PartProps {
 	internalBattenPosition: "horizontal" | "vertical" | "auto"
 	maxGap?: number
 	stickers?: StickersProps[]
-	battenQtyIn?: number
-	customGapExtensions?: number[]
 	battenWidthV?: [ number, number ]
 	battenWidthH?: [ number, number ]
 	battenWidthIn?: number[]
 	measureUnit?: "cm" | "mm"
 	hasExportStamp?: boolean
 	stickersQty?: number
+	pieces?: PieceProps[]
+	gaps?: GapsProps[]
+	internalsQtyCustom?: number
 }
 
 export interface FrameParamsProps extends PartProps {
@@ -39,10 +40,8 @@ export interface FrameParamsProps extends PartProps {
 	viewboxHeight: number
 	x0: number
 	y0: number
-	pieces: PieceProps[]
 	finalInternalsPosition: "horizontal" | "vertical"
 	internalsQty: number
-	gaps: GapsProps[]
 	stampSize: string
 	listsMaxWidth: number
 	partName: PartNameType
@@ -103,8 +102,8 @@ export interface PieceProps {
 	name: string
 	x: number
 	y: number
-	width?: number
-	height?: number
+	width: number
+	height: number
 	thickness?: number
 	unit?: string
 	fill?: string
@@ -117,7 +116,9 @@ export interface FrameFormFieldProps {
 	fieldLabel: string
 	fieldType?: "text" | "number" | "object"
 	fieldProps?: { [ key: string ]: any }
-	fieldValue?: any
+	fieldValue?: ( frameParams: FrameParamsProps ) => string | number | readonly string[] | undefined
+	min?: ( frameParams: FrameParamsProps ) => number | undefined
+	max?: ( frameParams: FrameParamsProps ) => number | undefined
 	fieldValueType: "number" | "string" | "boolean" | "array"
 	arrayIndex?: number
 	arrayValueType?: "number" | "string" | "object"
@@ -126,7 +127,13 @@ export interface FrameFormFieldProps {
 		text: string
 	}[]
 	objectKey?: keyof StickersProps | keyof PieceProps | keyof GapsProps
-	objectValueType?: "number" | "string"
+	objectValueType?: "number" | "string",
+	onChange?: (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+		partName: PartNameType,
+		partDivIndex: number,
+		frameParams: FrameParamsProps
+	) => void
 }
 
 export type SelectedPieceType = {

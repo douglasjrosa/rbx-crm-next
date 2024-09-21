@@ -12,12 +12,13 @@ export const productTest: ProductProps = {
 		name: "Caixa econômica",
 		parts: {
 			lid: [ {
-				frameWidth: 1200,
+				frameWidth: 1800,
 				frameHeight: 800,
 				frame: "PlywoodFrame",
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
+				internalsQtyCustom: 4,
 				stickers: [
 					{
 						name: "sticker1",

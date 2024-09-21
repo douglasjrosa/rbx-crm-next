@@ -94,7 +94,7 @@ export const calculateFramePieces = ( {
 				x: gaps[ i ].x + gaps[ i ].width,
 				y: gaps[ i ].y,
 				width: battenWidthIn?.[ i ] || battenWidth,
-				height: gaps[ i ].height,
+				height: frameHeight - ( battenWidthH?.[ 0 ] || battenWidth ) - ( battenWidthH?.[ 1 ] || battenWidth ),
 				thickness: battenThickness,
 				fill: eucalyptus,
 				unit: t( "pieces" )
@@ -105,7 +105,7 @@ export const calculateFramePieces = ( {
 				name: `battenIn${ i + 1 }`,
 				x: gaps[ i ].x,
 				y: gaps[ i ].y + gaps[ i ].height,
-				width: gaps[ i ].width,
+				width: frameWidth - ( battenWidthV?.[ 0 ] || battenWidth ) - ( battenWidthV?.[ 1 ] || battenWidth ),
 				height: battenWidthIn?.[ i ] || battenWidth,
 				thickness: battenThickness,
 				fill: eucalyptus,

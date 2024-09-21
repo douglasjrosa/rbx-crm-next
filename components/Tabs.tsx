@@ -1,3 +1,4 @@
+import { refreshKey } from '@/lib/utils'
 import React, { useState, ReactNode } from 'react'
 
 export const Tab = ( { children }: { title: string, children: ReactNode } ) => <>{ children }</>
@@ -8,16 +9,17 @@ export const Tabs = ( { children }: { children: ReactNode } ) => {
 
 	const tabTitles = React.Children.map( children, ( child, index ) => {
 		if ( React.isValidElement( child ) && child.props.title ) {
+			const {title} = child.props
 			return (
 				<button
-					key={ index }
+					key={ refreshKey( title ) }
 					onClick={ () => setActiveTab( index ) }
 					className={ `px-4 focus:outline-none pt-2 text-white text-nowrap shadow-lg w-fit rounded-t-lg bg-sky-500 dark:bg-sky-700 ${ activeTab === index ?
 						'pb-3 font-black'
 						: 'opacity-70 text-sm'
 						}` }
 				>
-					{ child.props.title }
+					{ title }
 				</button>
 			)
 		}
