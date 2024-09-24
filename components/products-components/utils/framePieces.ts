@@ -4,15 +4,15 @@ import { GapsProps, PartProps, PieceProps } from "."
 export const calculateFramePieces = ( {
 	partDiv,
 	finalInternalsPosition,
-	internalsQty,
-	gaps
+	gaps,
+	partDivIndex
 }: {
 	partDiv: PartProps
 	finalInternalsPosition: "horizontal" | "vertical"
-	internalsQty: number
 	gaps: GapsProps[]
-	} ): PieceProps[] => {
-	
+	partDivIndex: number
+} ): PieceProps[] => {
+
 	const {
 		frameWidth,
 		frameHeight,
@@ -22,7 +22,12 @@ export const calculateFramePieces = ( {
 		battenWidth,
 		battenWidthH,
 		battenThickness,
-		battenWidthIn
+		battenWidthIn,
+		hasCrossedBatten,
+		crossedBattenWidth,
+		crossedBattenY,
+		splicingBattenWidth,
+		splicingBattenThickness
 	} = partDiv
 
 	const pine = "#FFFF90"
@@ -86,7 +91,20 @@ export const calculateFramePieces = ( {
 		},
 	)
 
-	for ( let i = 0; internalsQty && i < internalsQty; i++ ) {
+	if ( partDivIndex > 0 ) {
+		pieces.push( {
+			name: `splicingBatten`,
+			x: 0 - ( splicingBattenWidth || 60 ) - 50,
+			y: 0,
+			width: splicingBattenWidth || 60,
+			height: frameHeight,
+			thickness: splicingBattenThickness || battenThickness,
+			fill: eucalyptus,
+			unit: t( "pieces" )
+		} )
+	}
+
+	for ( let i = 0; i < gaps?.length - 1; i++ ) {
 		if ( finalInternalsPosition === "vertical" ) {
 
 			pieces.push( {
@@ -112,6 +130,25 @@ export const calculateFramePieces = ( {
 				unit: t( "pieces" )
 			} )
 		}
+	}
+
+	for ( let i = 0; !!hasCrossedBatten && finalInternalsPosition === "vertical" && i < gaps?.length; i++ ) {
+		const halfBattenWidth = ( crossedBattenWidth || battenWidth ) / 2
+		let y = gaps[ i ].height >= 2200 - halfBattenWidth
+			? 2200
+			: ( gaps[ i ].height >= 1600 - halfBattenWidth ? 1600 : frameHeight / 2 )
+		y -= halfBattenWidth
+		y = crossedBattenY || y
+		pieces.push( {
+			name: `crossedBatten${ i + 1 }`,
+			x: gaps[ i ].x,
+			y,
+			width: gaps[ i ].width,
+			height: crossedBattenWidth || battenWidth,
+			thickness: battenThickness,
+			fill: eucalyptus,
+			unit: t( "pieces" )
+		} )
 	}
 
 	return pieces

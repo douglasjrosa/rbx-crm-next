@@ -64,7 +64,7 @@ export const calculateInitialFrameGaps = ( {
 	let gaps: GapsProps[] = []
 	const divisions: number[] = []
 
-	const defaultDivision = frameLength / gapsQty
+	const defaultDivision = Math.round( frameLength / gapsQty )
 
 	for ( let i = 0; i < gapsQty; i++ ) {
 		const isFirstGap = i === 0

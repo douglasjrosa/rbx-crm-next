@@ -1,20 +1,27 @@
 import { GapsProps, StickersProps } from "."
 
-export const spreadStickersAlongTheGaps = ( gaps: GapsProps[], stickers: StickersProps[], stickersQty: number ) => {
-
+export const spreadStickersAlongTheGaps = (
+	gaps: GapsProps[],
+	stickers: StickersProps[],
+	stickersQty: number,
+	hasCrossedBatten: boolean,
+	crossedBattenY: number,
+	crossedBattenWidth: number
+) => {
+	
 	const newStickers = []
 	for ( let i = 0; i < stickersQty; i++ ) {
 		if ( stickers[ i ] !== undefined ) {
 			newStickers.push( stickers[ i ] )
 		}
 		else {
-			stickers.push(
-				{
-					name: `sticker${ i + 1 }`,
-					label: "fragile",
-					labelCode: "0001",
-					color: "red",
-				} )
+			const newSticker: StickersProps = {
+				name: `sticker${ i + 1 }`,
+				label: "fragile",
+				labelCode: "0001",
+				color: "red",
+			} 
+			newStickers.push( newSticker )
 		}
 	}
 	stickers = newStickers
@@ -51,7 +58,7 @@ export const spreadStickersAlongTheGaps = ( gaps: GapsProps[], stickers: Sticker
 					if ( stickers[ i ].gapPositioning === positionIndex ) prevSticker = stickers[ i ]
 				}
 
-				const freeAlignment = !!sticker.freeAlignment ? 1 : 0
+				const freeAlignment = sticker.freeAlignment === "free"
 				const heightNeeded = currentSticker.height + margin * 3
 				const widthNeeded = margin * 2 + currentSticker.width
 				const prevStickerHeight = stickerIndex > 0 ? ( prevSticker?.height ?? 0 ) : 0
@@ -92,11 +99,22 @@ export const spreadStickersAlongTheGaps = ( gaps: GapsProps[], stickers: Sticker
 				x = Math.min( x, gap.x + gap.width - currentSticker.width - margin )
 				x = Math.max( x, gap.x + margin )
 
+				if (
+					hasCrossedBatten
+					&& y + currentSticker.height + margin > crossedBattenY
+					&& y < crossedBattenY + crossedBattenWidth
+				) {
+					console.log({crossedBattenWidth})
+					y += currentSticker.height + margin + crossedBattenWidth
+				}
+
+				const maxY = gap.y + gap.height - currentSticker.height - margin
+
 				y = freeAlignment && !!sticker.y ? sticker.y : y
-				y = Math.min( y, gap.y + gap.height - currentSticker.height - margin )
+				y = Math.min( y, maxY )
 				y = Math.max( y, gap.y + margin )
 
-				array[ stickerIndex ] = { ...currentSticker, x, y, gapPositioning, freeAlignment }
+				array[ stickerIndex ] = { ...currentSticker, x, y, gapPositioning }
 			}
 		} )
 	} )

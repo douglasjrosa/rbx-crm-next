@@ -1,5 +1,5 @@
 import { Archivo_Black } from 'next/font/google'
-import { FrameComponentProps, GapsProps, SelectedPieceType } from "../utils"
+import { FrameComponentProps, SelectedPieceType } from "../utils"
 import PartTitle from "./PartTitle"
 import Dimension from "./Dimension"
 import Stickers from "./Stickers"
@@ -10,6 +10,7 @@ import ListOfOthers from '../ListOfOthers'
 const archivo = Archivo_Black( { weight: "400", subsets: [ "latin" ] } )
 
 export default function PlywoodFrame ( {
+	partDivIndex,
 	partTitle,
 	frameParams,
 	scale,
@@ -40,7 +41,9 @@ export default function PlywoodFrame ( {
 		finalInternalsPosition,
 		stampSize,
 		listsMaxWidth,
-		gaps
+		gaps,
+		hasCrossedBatten,
+		crossedBattenY
 	} = frameParams
 
 	if ( !frameWidth || !frameHeight || !battenWidth ) return null
@@ -69,13 +72,17 @@ export default function PlywoodFrame ( {
 							<rect
 								fill={ fill }
 								stroke="black"
-								className={ `active:fill-[rgb(0,100,255)] ${ name === selectedPiece?.pieceName
+								className={ `active:fill-[rgb(0,100,255)] ${ (
+									name === selectedPiece?.pieceName
+									&&  selectedPiece?.partDivIndex === partDivIndex
+								)
 									? "fill-[rgba(0,150,255,0.3)] stroke-[10px] stroke-[rgb(0,150,255)]"
 									: "hover:fill-[rgb(0,255,255)] hover:stroke-[10px] hover:stroke-[rgb(0,150,255)]" }`
 								}
 								onClick={ ( e ) => {
 									e.stopPropagation()
 									!!setSelectedPiece && setSelectedPiece( {
+										partDivIndex,
 										pieceName: name as SelectedPieceType[ "pieceName" ],
 										pieceIndex,
 										...piece
@@ -104,10 +111,10 @@ export default function PlywoodFrame ( {
 					y={ y0 }
 					dimension={ frameHeight }
 					type="right"
-					auxiliaryDimensionLine={ finalInternalsPosition === "horizontal" ? 270 : 140 }
+					auxiliaryDimensionLine={ finalInternalsPosition === "horizontal" || hasCrossedBatten ? 270 : 140 }
 					measureUnit={ measureUnit }
 				/>
-				{ finalInternalsPosition === "vertical" && !!gaps && 
+				{ finalInternalsPosition === "vertical" && !!gaps &&
 					gaps.map( ( gap, index ) => {
 						return (
 							<Dimension
@@ -123,7 +130,7 @@ export default function PlywoodFrame ( {
 					} )
 				}
 
-				{ finalInternalsPosition === "horizontal" && !!gaps && 
+				{ finalInternalsPosition === "horizontal" && !!gaps &&
 					gaps.map( ( gap, index ) => {
 						return (
 							<Dimension
@@ -138,6 +145,15 @@ export default function PlywoodFrame ( {
 					} )
 				}
 
+				{ hasCrossedBatten && !!gaps?.length && !!crossedBattenY &&
+					<Dimension
+						x={ x0 + frameWidth + 20 }
+						y={ y0 + gaps[ 0 ].y || 0 }
+						dimension={ crossedBattenY - gaps[ 0 ].y }
+						type="right"
+						measureUnit={ measureUnit }
+					/>
+				}
 
 				{ !!stickers && stickers.length > 0 && !!plywoodThickness &&
 					<Stickers

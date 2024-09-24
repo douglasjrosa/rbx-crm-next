@@ -3,15 +3,19 @@ import { calculateInitialFrameGaps } from "./initialFrameGaps"
 import { calculateFramePieces } from "./framePieces"
 import { spreadStickersAlongTheGaps } from "./frameStickers"
 import { recalculateFrameGaps } from "./recalculateFrameGaps"
+import { calculatePlywoodFrameFasteners, calculatePlywoodFrameKpis } from "./handleProduct"
 
-export const calculateFrameParams = ( { partName, partDiv, scale = 0.25, x0 = 100, y0 = 300 }: {
+export const calculateFrameParams = ( { partName, partDiv, partDivIndex, scale = 0.25, x0 = 100, y0 = 300 }: {
 	partName: PartNameType
 	partDiv: PartProps
+	partDivIndex: number
 	scale?: number
 	x0?: number
 	y0?: number
-} ): FrameParamsProps => {
+} ): FrameParamsProps | null => {
 
+	if ( !partDiv ) return null
+	
 	const {
 		maxGap = 500,
 		internalBattenPosition,
@@ -23,14 +27,20 @@ export const calculateFrameParams = ( { partName, partDiv, scale = 0.25, x0 = 10
 		battenWidthH,
 		stickersQty,
 		stickers,
-		internalsQtyCustom
+		internalsQtyCustom,
+		hasCrossedBatten,
+		crossedBattenY,
+		crossedBattenWidth,
+		hasExportStamp
 	} = partDiv
 	
 	const autoInternalsPosition = externalBattenPosition === "horizontal"
 	? ( frameHeight > ( frameWidth + 200 ) ? "horizontal" : "vertical" )
-	: ( frameWidth > ( frameHeight + 200 ) ? "vertical" : "horizontal" )
+		: ( frameWidth > ( frameHeight + 200 ) ? "vertical" : "horizontal" )
 
-	const finalInternalsPosition = internalBattenPosition === "auto" ? autoInternalsPosition : internalBattenPosition
+	const finalInternalsPosition = !!hasCrossedBatten ? "vertical" : (
+		internalBattenPosition === "auto" ? autoInternalsPosition : internalBattenPosition
+	)
 
 	const frameLength = finalInternalsPosition === "horizontal" ? frameHeight : frameWidth
 	const internalsQty = internalsQtyCustom || Math.ceil( frameLength / maxGap ) - 1
@@ -41,17 +51,28 @@ export const calculateFrameParams = ( { partName, partDiv, scale = 0.25, x0 = 10
 		frameLength,
 		internalsQty,
 	} )
-	
+
 	const pieces = calculateFramePieces( {
 		partDiv,
 		finalInternalsPosition,
-		internalsQty,
-		gaps
+		gaps,
+		partDivIndex
 	} )
-
-	gaps = recalculateFrameGaps( pieces, finalInternalsPosition )
 	
-	const updatedStickers = spreadStickersAlongTheGaps( gaps || [], stickers || [], stickersQty ?? 0 )
+	gaps = recalculateFrameGaps( pieces, finalInternalsPosition )
+
+	const fasteners = calculatePlywoodFrameFasteners( pieces )
+
+	const kpis = calculatePlywoodFrameKpis( fasteners, stickers, hasExportStamp )
+	
+	const updatedStickers = spreadStickersAlongTheGaps(
+		gaps || [],
+		stickers || [],
+		stickersQty ?? 0,
+		!!hasCrossedBatten,
+		crossedBattenY ?? 0,
+		crossedBattenWidth ?? battenWidth
+	)
 
 	const heightDimensionsDistance = ( internalsQty > 0 && finalInternalsPosition === "horizontal" ) ? 240 : 120
 
@@ -78,7 +99,9 @@ export const calculateFrameParams = ( { partName, partDiv, scale = 0.25, x0 = 10
 		viewBox,
 		listsMaxWidth,
 		stampSize,
-		stickers: updatedStickers
+		stickers: updatedStickers,
+		fasteners,
+		kpis
 	}
 
 	return frameParams

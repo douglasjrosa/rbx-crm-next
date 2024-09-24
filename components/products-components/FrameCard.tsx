@@ -1,12 +1,13 @@
 "use client"
 
-import t from "@/lib/translations"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import ZoomButtons from "./ZoomButtons"
-import { FrameParamsProps, getPartTitle, SelectedPieceType } from "./utils/"
+import { FrameParamsProps, SelectedPieceType } from "./utils/"
 import { mountFrameComponent } from "./utils/frameComponent"
 
-export default function FrameCard ( { frameParams, scale, selectedPiece, setSelectedPiece }: {
+export default function FrameCard ( { partDivIndex, frameTitle, frameParams, scale, selectedPiece, setSelectedPiece }: {
+	partDivIndex: number
+	frameTitle: string
 	frameParams: FrameParamsProps
 	scale: number
 	selectedPiece: SelectedPieceType
@@ -19,14 +20,14 @@ export default function FrameCard ( { frameParams, scale, selectedPiece, setSele
 		setZoom( scale )
 	}, [ scale ] )
 
-	const { frame, partName } = frameParams
+	const { frame } = frameParams
 	const FrameComponent = mountFrameComponent( frame )
-	const partTitle = getPartTitle( partName )
 
 	return (
 		<div className="block lg:flex">
 			<FrameComponent
-				partTitle={ t( partTitle ) }
+				partDivIndex={ partDivIndex }
+				partTitle={ frameTitle }
 				frameParams={ frameParams }
 				scale={ zoom }
 				selectedPiece={ selectedPiece }

@@ -26,12 +26,27 @@ export interface PartProps {
 	battenWidthV?: [ number, number ]
 	battenWidthH?: [ number, number ]
 	battenWidthIn?: number[]
+	crossedBattenWidth?: number
+	crossedBattenY?: number
 	measureUnit?: "cm" | "mm"
 	hasExportStamp?: boolean
 	stickersQty?: number
 	pieces?: PieceProps[]
 	gaps?: GapsProps[]
 	internalsQtyCustom?: number
+	hasCrossedBatten?: boolean
+	splicingBattenWidth?: number
+	splicingBattenThickness?: number
+	fasteners?: {
+		mountingQty?: number
+		closingQty?: number
+	}
+	kpis?: {
+		mounting?: number
+		closing?: number
+		stickerPlacing?: number
+		stamping?: number
+	}
 }
 
 export interface FrameParamsProps extends PartProps {
@@ -80,7 +95,7 @@ export interface StickersProps {
 	fontSize?: string
 	gapPositioning?: number
 	doesNotFit?: boolean
-	freeAlignment?: number
+	freeAlignment?: "top-left" | "free"
 }
 
 export interface GapsProps {
@@ -89,13 +104,6 @@ export interface GapsProps {
 	width: number
 	height: number
 
-}
-
-export interface FastenerProps {
-	id?: number
-	name: string
-	unit?: string
-	qty: number
 }
 
 export interface PieceProps {
@@ -107,12 +115,11 @@ export interface PieceProps {
 	thickness?: number
 	unit?: string
 	fill?: string
-	fasteners?: FastenerProps[]
 }
 
 export interface FrameFormFieldProps {
 	partPropName: keyof PartProps
-	fieldElement: "select" | "input"
+	fieldElement: "select" | "input" | "switch"
 	fieldLabel: string
 	fieldType?: "text" | "number" | "object"
 	fieldProps?: { [ key: string ]: any }
@@ -137,27 +144,9 @@ export interface FrameFormFieldProps {
 }
 
 export type SelectedPieceType = {
-	pieceName: "none"
-	| "plywood"
-	| "battenH1"
-	| "battenH2"
-	| "battenV1"
-	| "battenV2"
-	| "battenIn1"
-	| "battenIn2"
-	| "battenIn3"
-	| "battenIn4"
-	| "battenIn5"
-	| "battenIn6"
-	| "battenIn7"
-	| "battenIn8"
-	| "sticker1"
-	| "sticker2"
-	| "sticker3"
-	| "sticker4"
-	| "sticker5"
-	| "sticker6"
+	pieceName: string
 	pieceIndex?: number
+	partDivIndex?: number
 	x?: number
 	y?: number
 	width?: number
@@ -165,6 +154,7 @@ export type SelectedPieceType = {
 }
 
 export interface FrameComponentProps {
+	partDivIndex: number
 	partTitle: string
 	frameParams: FrameParamsProps
 	scale: number

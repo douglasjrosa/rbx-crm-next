@@ -2,6 +2,8 @@ import Select from "../form-components/Select"
 import { FrameFormFieldProps, FrameParamsProps, PartNameType } from "./utils"
 import Input from "../form-components/Input"
 import { updatePartProp } from "./utils/handleProduct"
+import { formatBoolean } from "@/lib/utils"
+import SwitchButton from "../form-components/SwitchButton"
 
 export default function FrameForm ( {
 	partName,
@@ -49,6 +51,10 @@ export default function FrameForm ( {
 				throw new Error( `Error mounting frame form value of propriety "${ partPropName }" of part "${ partName }"` )
 			}
 		}
+		else if ( fieldValueType === "boolean" ) {
+			const value = frameParams[ partPropName ]
+			newValue = formatBoolean( value )
+		}
 		else newValue = fieldValueType === "string"
 			? String( frameParams[ partPropName ] || "" )
 			: Number( frameParams[ partPropName ] || 0 )
@@ -60,7 +66,7 @@ export default function FrameForm ( {
 		<div>
 			{ !!fields && fields.map( ( field, i ) => {
 
-				
+
 				const {
 					fieldElement,
 					fieldLabel,
@@ -74,58 +80,84 @@ export default function FrameForm ( {
 					max
 				} = field
 
-				const value = !!fieldValue ? fieldValue( frameParams ) : handleFieldValue( field )
+				let value = !!fieldValue ? fieldValue( frameParams ) : handleFieldValue( field )
 
 				if ( fieldElement === "select" && !!options ) {
+					value = typeof value === "boolean" ? ( !!value ? "true" : "false" ) : value
 					return (
-						<Select
-							key={ i }
-							name={ partPropName }
-							label={ fieldLabel }
-							value={ value }
-							className="flex-none mb-3"
-							onChange={ e => {
-								if ( onChange )
-									onChange( e, partName, partDivIndex, frameParams )
-								else
-									updatePartProp( {
-										partName,
-										partDivIndex,
-										partPropName,
-										value: e.target.value,
-										field
-									} )
-							} }
-							options={ options }
-							{ ...fieldProps }
-						/>
+						<div key={ i } className="flex-none mb-3" >
+							<Select
+								name={ partPropName }
+								label={ fieldLabel }
+								value={ value }
+								onChange={ e => {
+									if ( onChange )
+										onChange( e, partName, partDivIndex, frameParams )
+									else
+										updatePartProp( {
+											partName,
+											partDivIndex,
+											partPropName,
+											value: e.target.value,
+											field
+										} )
+								} }
+								options={ options }
+								{ ...fieldProps }
+							/>
+						</div>
 					)
 				}
 				if ( fieldElement === "input" && fieldType ) {
+					value = typeof value === "boolean" ? ( !!value ? "true" : "false" ) : value
 					return (
-						<Input
-							key={ i }
-							type={ fieldType }
-							name={ partPropName }
-							label={ fieldLabel }
-							value={ value }
-							className="flex-none mb-3"
-							min={ !!min && min( frameParams ) || undefined }
-							max={ !!max && max( frameParams ) || undefined }
-							onChange={ e => {
-								if ( onChange )
-									onChange( e, partName, partDivIndex, frameParams )
-								else
-									updatePartProp( {
-										partName,
-										partDivIndex,
-										partPropName,
-										value: e.target.value,
-										field
-									} )
-							} }
-							{ ...fieldProps }
-						/>
+						<div key={ i } className="flex-none mb-3" >
+							<Input
+								type={ fieldType }
+								name={ partPropName }
+								label={ fieldLabel }
+								value={ value }
+								min={ !!min && min( frameParams ) || undefined }
+								max={ !!max && max( frameParams ) || undefined }
+								onChange={ e => {
+									if ( onChange )
+										onChange( e, partName, partDivIndex, frameParams )
+									else
+										updatePartProp( {
+											partName,
+											partDivIndex,
+											partPropName,
+											value: e.target.value,
+											field
+										} )
+								} }
+								{ ...fieldProps }
+							/>
+						</div>
+					)
+				}
+				if ( fieldElement === "switch" ) {
+					return (
+						<div key={ i } className="flex-none mb-3" >
+							<SwitchButton
+								name={ partPropName }
+								label={ fieldLabel }
+								checked={ formatBoolean( value ) }
+								onChange={ e => {
+									if ( onChange )
+										onChange( e, partName, partDivIndex, frameParams )
+									else
+										updatePartProp( {
+											partName,
+											partDivIndex,
+											partPropName,
+											value: e.target.checked,
+											field
+										} )
+								} }
+								{ ...fieldProps }
+							/>
+						</div>
 					)
 				}
 			} ) }

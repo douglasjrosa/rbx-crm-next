@@ -1,12 +1,12 @@
 import t from "@/lib/translations"
-import { FrameFormFieldProps, SelectedPieceType } from "."
+import { FrameFormFieldProps, PartProps, SelectedPieceType } from "."
 import { recalculateFrameGaps } from "./recalculateFrameGaps"
 import { updatePartDiv, updatePartProp } from "./handleProduct"
-import { calculateInitialFrameGaps } from "./initialFrameGaps"
 import { calculateFrameParams } from "./frameParams"
+import { formatBoolean } from "@/lib/utils"
 
 const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormFieldProps[] => {
-	const { pieceName, pieceIndex, x, y } = selectedPiece
+	const { pieceName, pieceIndex } = selectedPiece
 	return [
 		{
 			fieldElement: "input",
@@ -38,6 +38,37 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 			fieldType: "number",
 			fieldProps: {
 				min: 0
+			}
+		},
+		{
+			fieldElement: "input",
+			partPropName: "crossedBattenWidth",
+			fieldLabel: t( "Crossed batten widths" ),
+			fieldValueType: "number",
+			fieldType: "number",
+			fieldProps: {
+				min: 0
+			}
+		},
+		{
+			fieldElement: "input",
+			partPropName: "crossedBattenY",
+			fieldLabel: t( "Crossed batten placement" ),
+			fieldValueType: "number",
+			fieldType: "number",
+			fieldProps: {
+				step: 5
+			},
+			min: frameParams => {
+				const { pieces } = frameParams
+				const battenH1 = pieces?.find( piece => piece.name === "battenH1")
+				return  !!battenH1 ? battenH1.y + battenH1.height : 0
+			},
+			max: frameParams => {
+				const { pieces, crossedBattenWidth, battenWidth } = frameParams
+				const battenH2 = pieces?.find( piece => piece.name === "battenH2" )
+				const finalBattenWidth = crossedBattenWidth ?? battenWidth
+				return !!battenH2 ? battenH2.y - finalBattenWidth : 0
 			}
 		},
 		{
@@ -94,24 +125,44 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 						...frameParams,
 						gaps: undefined,
 						internalsQtyCustom
-					}
+					},
+					partDivIndex
 				} )
 				updatePartDiv( {
 					partName,
 					partDivIndex,
 					frameParams: newFrameParams
-				})
+				} )
 			}
 		},
 		{
-			fieldElement: "select",
+			fieldElement: "switch",
 			partPropName: "hasExportStamp",
 			fieldLabel: t( "Export" ),
-			fieldValueType: "string",
-			options: [
-				{ value: "false", text: t( "No" ) },
-				{ value: "true", text: t( "Yes" ) }
-			]
+			fieldValueType: "boolean",
+		},
+		{
+			fieldElement: "switch",
+			partPropName: "hasCrossedBatten",
+			fieldLabel: t( "Crossed batten" ),
+			fieldValueType: "boolean",
+			onChange: ( e, partName, partDivIndex, frameParams ) => {
+				const hasCrossedBatten = e.target instanceof HTMLInputElement && formatBoolean( e.target.checked )
+				const newFrameParams = calculateFrameParams( {
+					partName,
+					partDiv: {
+						...frameParams,
+						gaps: undefined,
+						hasCrossedBatten
+					},
+					partDivIndex
+				} )
+				updatePartDiv( {
+					partName,
+					partDivIndex,
+					frameParams: newFrameParams
+				} )
+			}
 		},
 		{
 			fieldElement: "input",
@@ -132,7 +183,24 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 				{ value: "auto", text: t( "Auto" ) },
 				{ value: "horizontal", text: t( "Horizontal" ) },
 				{ value: "vertical", text: t( "Vertical" ) }
-			]
+			],
+			onChange: ( e, partName, partDivIndex, frameParams ) => {
+				const internalBattenPosition = e.target.value as PartProps[ "internalBattenPosition" ]
+				const newFrameParams = calculateFrameParams( {
+					partName,
+					partDiv: {
+						...frameParams,
+						gaps: undefined,
+						internalBattenPosition
+					},
+					partDivIndex
+				} )
+				updatePartDiv( {
+					partName,
+					partDivIndex,
+					frameParams: newFrameParams
+				} )
+			}
 		},
 		{
 			fieldElement: "input",
@@ -184,26 +252,26 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 			},
 			min: frameParams => {
 				const { gaps, finalInternalsPosition } = frameParams
-				if ( !!gaps && !!pieceIndex ) {
+				if ( !!gaps && !!gaps.length && !!pieceIndex ) {
 					const prevGap = gaps[ pieceIndex ]
 					return finalInternalsPosition === "vertical"
-						? prevGap.x || 0
-						: prevGap.y || 0
+						? prevGap?.x || 0
+						: prevGap?.y || 0
 				}
 			},
 			max: frameParams => {
 				const { pieces, finalInternalsPosition } = frameParams
 				const internalBattens = pieces?.filter( piece => piece.name.replace( /\d/g, "" ) === "battenIn" )
 				if ( Array.isArray( internalBattens ) && internalBattens.length > 0 && pieceIndex !== undefined ) {
-					const isLastInternalBatten = pieceIndex === internalBattens.length - 1
-					console.log( { isLastInternalBatten } )
+					const isLastInternalBatten = pieceIndex === ( internalBattens.length - 1 )
+
 					if ( finalInternalsPosition === "vertical" ) {
 						if ( isLastInternalBatten ) {
 							const battenV2 = pieces?.find( piece => piece.name === "battenV2" )
 							return !!battenV2 && battenV2.x - internalBattens[ pieceIndex ].width || undefined
 						}
 						else {
-							return internalBattens[ pieceIndex + 1 ].x - internalBattens[ pieceIndex ].width
+							return !!internalBattens[ pieceIndex + 1 ] && internalBattens[ pieceIndex + 1 ].x - internalBattens[ pieceIndex ].width
 						}
 					}
 					else {
@@ -212,7 +280,7 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 							return !!battenH2 && battenH2.y - internalBattens[ pieceIndex ].height || undefined
 						}
 						else {
-							const max = internalBattens[ pieceIndex + 1 ].y - internalBattens[ pieceIndex ].height
+							const max = !!internalBattens[ pieceIndex + 1 ] && internalBattens[ pieceIndex + 1 ].y - internalBattens[ pieceIndex ].height
 							return max
 						}
 					}
@@ -231,7 +299,7 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 					}
 					else return piece
 				} )
-				console.log( { newPieces } )
+
 				const newGaps = recalculateFrameGaps( newPieces ?? [], finalInternalsPosition )
 
 				updatePartProp( {
@@ -341,14 +409,14 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 			fieldElement: "select",
 			fieldValueType: "array",
 			arrayValueType: "object",
-			objectValueType: "number",
+			objectValueType: "string",
 			partPropName: "stickers",
 			fieldLabel: t( "Alignment" ),
 			arrayIndex: pieceIndex,
 			objectKey: "freeAlignment",
 			options: [
-				{ value: 0, text: t( "Top-left" ) },
-				{ value: 1, text: t( "Free" ) }
+				{ value: "top-left", text: t( "Top-left" ) },
+				{ value: "free", text: t( "Free" ) }
 			]
 		},
 		{
@@ -389,21 +457,36 @@ const getAllProductFormfields = ( selectedPiece: SelectedPieceType ): FrameFormF
 			fieldValueType: "number",
 			fieldProps: {
 				min: 0,
-				max: 6
+			},
+			onChange: ( e, partName, partDivIndex, frameParams ) => {
+				const stickersQty = Number( e.target.value )
+				
+				const newFrameParams = calculateFrameParams( {
+					partName,
+					partDiv: {
+						...frameParams,
+						stickersQty
+					},
+					partDivIndex
+				} )
+				updatePartDiv( {
+					partName,
+					partDivIndex,
+					frameParams: newFrameParams
+				} )
 			}
 		},
 	]
 }
 
-export default function getProductFormFields ( selectedPiece: SelectedPieceType ): FrameFormFieldProps[] {
+export default function getProductFormFields ( selectedPiece: SelectedPieceType, partDivIndex: number ): FrameFormFieldProps[] {
 
 	const fields = getAllProductFormfields( selectedPiece )
 
-	const filteredFieldsMap: { [ key in SelectedPieceType[ "pieceName" ] ]?: FrameFormFieldProps[] } = {
+	const filteredFieldsMap: { [ key: string ]: FrameFormFieldProps[] } = {
 		none: fields.filter( field => [
 			"battenWidth",
 			"battenThickness",
-			"externalBattenPosition",
 			"internalsQtyCustom",
 			"hasExportStamp",
 			"partQty",
@@ -414,68 +497,31 @@ export default function getProductFormFields ( selectedPiece: SelectedPieceType 
 			"plywoodThickness",
 			"stickersQty"
 		].includes( field.partPropName ) ),
-		battenH1: fields.filter( field => [
+		battenH: fields.filter( field => [
 			"battenWidthH",
+			"externalBattenPosition",
 		].includes( field.partPropName ) ),
-		battenH2: fields.filter( field => [
-			"battenWidthH",
-		].includes( field.partPropName ) ),
-		battenV1: fields.filter( field => [
+		battenV: fields.filter( field => [
 			"battenWidthV",
+			"externalBattenPosition",
 		].includes( field.partPropName ) ),
-		battenV2: fields.filter( field => [
-			"battenWidthV",
-		].includes( field.partPropName ) ),
-		battenIn1: fields.filter( field => [
+		battenIn: fields.filter( field => [
 			"battenWidthIn",
-			"gaps"
+			"gaps",
+			"internalBattenPosition",
+			"internalsQtyCustom",
+			"hasCrossedBatten"
 		].includes( field.partPropName ) ),
-		battenIn2: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		battenIn3: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		battenIn4: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		battenIn5: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		battenIn6: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		battenIn7: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		battenIn8: fields.filter( field => [
-			"battenWidthIn",
-			"gaps"
-		].includes( field.partPropName ) ),
-		sticker1: fields.filter( field => [
+		sticker: fields.filter( field => [
 			"stickers"
 		].includes( field.partPropName ) ),
-		sticker2: fields.filter( field => [
-			"stickers"
-		].includes( field.partPropName ) ),
-		sticker3: fields.filter( field => [
-			"stickers"
-		].includes( field.partPropName ) ),
-		sticker4: fields.filter( field => [
-			"stickers"
-		].includes( field.partPropName ) ),
-		sticker5: fields.filter( field => [
-			"stickers"
-		].includes( field.partPropName ) ),
-		sticker6: fields.filter( field => [
-			"stickers"
+		crossedBatten: fields.filter( field => [
+			"crossedBattenWidth",
+			"crossedBattenY",
+			"hasCrossedBatten"
 		].includes( field.partPropName ) )
 	}
-	return filteredFieldsMap[ selectedPiece.pieceName ] || []
+	let pieceName = selectedPiece.pieceName.replace( /\d/g, "" )
+	pieceName = selectedPiece.partDivIndex === partDivIndex ? pieceName : "none"
+	return filteredFieldsMap[ pieceName ] || []
 }

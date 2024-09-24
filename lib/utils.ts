@@ -107,9 +107,9 @@ export const formatCEP = ( cep: number | string | undefined ): string => {
 export const formatNumberToBR = ( value: number | string = 0, decimals?: number ): string => {
 
 	let formatted: number | string = formatNumber( value )
-	
+
 	decimals = decimals === undefined && formatted !== Math.round( formatted ) ? 1 : 0
-	
+
 	formatted = formatted.toFixed( decimals )
 	return formatted.replace( ".", "," )
 }
@@ -181,6 +181,17 @@ export const formatFutureDate = ( daysFromToday = 0 ): string => {
 
 	return futureDate.toISOString().split( 'T' )[ 0 ]
 }
+
+export const formatBoolean = ( value: any ): boolean => (
+	value !== false
+	&& value !== "false"
+	&& value !== 0
+	&& value !== "0"
+	&& value !== null
+	&& value !== undefined
+	&& value !== ""
+	&& value !== "NaN"
+)
 
 export const formatDateToBR = ( date: string ): string => {
 	const [ year, month, day ] = date.split( '-' )

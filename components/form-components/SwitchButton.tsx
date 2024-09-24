@@ -1,6 +1,6 @@
 "use client"
 import { refreshKey } from "@/lib/utils"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 
 type Sizes = "xs" | "sm" | "md" | "lg"
 
@@ -10,9 +10,10 @@ interface SwitchButtonProps {
 	label: string
 	checked: boolean
 	size?: Sizes
+	onChange?: ( e: React.ChangeEvent<HTMLInputElement> ) => void
 }
 
-const SwitchButton = ( { index, name, label, checked, size }: SwitchButtonProps ) => {
+const SwitchButton = ( { index, name, label, checked, size, onChange }: SwitchButtonProps ) => {
 	const [ enabled, setEnabled ] = useState( checked )
 	
 	useEffect( () => {
@@ -40,7 +41,11 @@ const SwitchButton = ( { index, name, label, checked, size }: SwitchButtonProps 
 					type="checkbox"
 					className="sr-only"
 					checked={ enabled }
-					onChange={ () => setEnabled( !enabled ) }
+					onChange={ e => {
+						const isChecked = e.target.checked
+						setEnabled( isChecked )
+						onChange && onChange( e )
+					}}
 				/>
 				<label htmlFor={ uid }>
 					<span
@@ -50,7 +55,7 @@ const SwitchButton = ( { index, name, label, checked, size }: SwitchButtonProps 
 					</span>
 				</label>
 			</span>
-			<span className="texty-sm">{ label }</span>
+			<span className="text-sm">{ label }</span>
 		</div>
 	)
 }

@@ -10,6 +10,8 @@ import { calculateFrameParams } from "@/components/products-components/utils/fra
 import { productTest } from "@/components/products-components/utils/productTest"
 import getProductFormFields from "@/components/products-components/utils/productFields"
 import { clearLiveProduct, getLiveProduct, getPart, storeLiveProduct, updatePartProp } from "@/components/products-components/utils/handleProduct"
+import ArrowsInput from "@/components/form-components/ArrowsInput"
+import { refreshKey } from "@/lib/utils"
 
 export default function Products () {
 	const boxRef = useRef<HTMLDivElement>( null )
@@ -18,25 +20,26 @@ export default function Products () {
 	const [ product, setProduct ] = useState<any>( null )
 
 	useEffect( () => {
-		console.log( selectedPiece, product )
-	}, [ selectedPiece ] )
+		if ( typeof window !== 'undefined' ) {
 
-	useEffect( () => {
-		
-		const liveProduct = getLiveProduct()
-		if ( liveProduct ) {
-			console.log( liveProduct )
-			setProduct( liveProduct )
-		}
-		
-		const updateProduct = () => setProduct( getLiveProduct() )
+			const updateProduct = () => {
+				try {
+					const liveProduct = getLiveProduct()
+					setProduct( liveProduct )
+				} catch ( error ) {
+					console.error( 'Error getting live product:', error )
+				}
+			}
 
-		window.addEventListener( 'liveProductUpdated', updateProduct )
+			updateProduct()
 
-		return () => {
-			window.removeEventListener( 'liveProductUpdated', updateProduct )
+			window.addEventListener( 'liveProductUpdated', updateProduct )
+			return () => {
+				window.removeEventListener( 'liveProductUpdated', updateProduct )
+			}
 		}
 	}, [] )
+
 
 	useEffect( () => {
 		if ( !!boxRef.current && product ) {
@@ -52,62 +55,85 @@ export default function Products () {
 		}
 	}, [ boxRef, product ] )
 
-	const lid = getPart( "lid" )
 
-	const fields = getProductFormFields( selectedPiece )
 
+
+	
 	return (
-		<div onClick={ () => !!setSelectedPiece && setSelectedPiece( { pieceName: "none" } ) }>
+		<div onClick={ () => setSelectedPiece( { pieceName: "none" } ) } >
 			<h1 className="text-3xl font-bold mb-6">{ t( 'Products' ) }</h1>
 
 			<Tabs>
-				{ product !== null && !!lid && lid.map( ( partDiv, partDivIndex ) => {
-					const partName = "lid"
-					const frameParams = calculateFrameParams( {
-						partName,
-						partDiv,
-					} )
+				{ product !== null && Object.entries( product.template.parts ).map( ( [ key, part ] ) => {
 
-					const { gaps } = frameParams
-
-					if ( !partDiv.gaps?.length && !!gaps?.length )
-						updatePartProp( {
-							partName,
-							partDivIndex,
-							partPropName: "gaps",
-							value: gaps,
-						} )
-
-					const partTitle = getPartTitle( partName as PartNameType )
-
+					const partName = key as PartNameType
+					const partIsArray = Array.isArray( part )
+					const isMultiPart = partIsArray && part.length > 1
+					const partTitle = t( getPartTitle( partName ) )
+					
 					return (
-						<Tab key={ partDivIndex } title={ t( partTitle ) }>
-							<div className="flex flex-col gap-6 md:flex-row md:flex-row-reverse md:gap-0 py-3 max-w-full justify-start scrollbar ">
-								<div ref={ boxRef } className="flex-grow p-3">
-									<FrameCard
-										frameParams={ frameParams }
-										scale={ scale }
-										selectedPiece={ selectedPiece }
-										setSelectedPiece={ setSelectedPiece }
-									/>
-								</div>
-								<div onClick={ ( e ) => e.stopPropagation() } className="p-3 w-full flex-1">
-									<div className="flex gap-3 flex-wrap justify-around">
-										<div className="flex-none w-52">
-											<FrameForm
-												partName={ partName as PartNameType }
+						<Tab key={ partName } title={ t( partTitle ) }>
+							{ partIsArray && part.map( ( partDiv, partDivIndex ) => {
+								
+								const frameParams = calculateFrameParams( {
+									partName,
+									partDiv,
+									partDivIndex
+								} )
+								if ( !frameParams ) return null
+
+								const { gaps } = frameParams
+
+
+								if ( !product.template.parts[ partName ][ partDivIndex ].gaps?.length && !!gaps?.length )
+									updatePartProp( {
+										partName,
+										partDivIndex,
+										partPropName: "gaps",
+										value: gaps,
+									} )
+
+								const frameTitle = partTitle + ( isMultiPart ? ` - ${ t( "part" ) } ${ partDivIndex + 1 }` : "" )
+
+								const fields = getProductFormFields( selectedPiece, partDivIndex )
+
+								return (
+									<div key={ partDivIndex } className="flex flex-col gap-6 md:flex-row md:flex-row-reverse md:gap-0 py-3 max-w-full justify-start scrollbar ">
+										<div ref={ boxRef } className="flex-grow p-3">
+											<FrameCard
 												partDivIndex={ partDivIndex }
+												frameTitle={ frameTitle }
 												frameParams={ frameParams }
-												fields={ fields }
+												scale={ scale }
+												selectedPiece={ selectedPiece }
+												setSelectedPiece={ setSelectedPiece }
 											/>
 										</div>
+										<div onClick={ ( e ) => e.stopPropagation() } className="p-3 w-full flex-1">
+											<div className="flex gap-3 flex-wrap justify-around">
+												<div className="flex-none w-52">
+													<button type="button" onClick={ () => {
+														console.log( product.template.parts.lid[ 0 ] )
+													} }>
+														Log
+													</button>
+												</div>
+												<div className="flex-none w-52">
+													<FrameForm
+														partName={ partName }
+														partDivIndex={ partDivIndex }
+														frameParams={ frameParams }
+														fields={ fields }
+													/>
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
+								)
+							} ) }
 						</Tab>
 					)
 				} ) }
-
 				<Tab title={ t( "Budget" ) }>
 					<div className="flex gap-3">
 						<button type="button" onClick={ () => {
@@ -128,8 +154,8 @@ export default function Products () {
 						</button>
 					</div>
 				</Tab>
-
 			</Tabs>
+			<ArrowsInput axeX={ true } reverseX={ true } axeY={ true } step={ 5 } />
 		</div>
 	)
 }

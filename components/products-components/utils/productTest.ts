@@ -42,27 +42,59 @@ export const productTest: ProductProps = {
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
+			},
+			{
+				frameWidth: 1200,
+				frameHeight: 800,
+				frame: "PlywoodFrame",
+				battenWidth: 30,
+				battenThickness: 18,
+				plywoodThickness: 3,
+				internalsQtyCustom: 4,
+				stickers: [
+					{
+						name: "sticker1",
+						label: "fragile",
+						labelCode: "0001",
+						color: "red",
+					},
+					{
+						name: "sticker2",
+						label: "logo",
+						labelCode: "0002",
+						color: "black",
+					},
+					{
+						name: "sticker3",
+						label: "spec",
+						labelCode: "0003",
+						color: "black",
+					},
+				],
+				externalBattenPosition: "horizontal",
+				internalBattenPosition: "auto",
+				partQty: 1
 			} ],
 			leftSide: [ {
-				frameWidth: 1200,
+				frameWidth: 1100,
 				frameHeight: 800,
 				frame: "PlywoodFrame",
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
 				partQty: 2,
-				stickers: [ ],
+				stickers: [],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto"
 			} ],
 			rightSide: [ {
-				frameWidth: 1200,
+				frameWidth: 1000,
 				frameHeight: 800,
 				frame: "PlywoodFrame",
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ ],
+				stickers: [],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
@@ -74,7 +106,7 @@ export const productTest: ProductProps = {
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ ],
+				stickers: [],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
@@ -86,7 +118,7 @@ export const productTest: ProductProps = {
 				battenWidth: 30,
 				battenThickness: 18,
 				plywoodThickness: 3,
-				stickers: [ ],
+				stickers: [],
 				externalBattenPosition: "horizontal",
 				internalBattenPosition: "auto",
 				partQty: 1
